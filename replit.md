@@ -37,6 +37,13 @@ Testing approach: Skip full automated UI tests, check basic functionality only t
 - **Asset Contributions**: New `asset_contributions` table for tracking non-cash investments with valuation, PAD tokens, and contract documents
 - **Enhanced Transactions**: Added `contribution_type` (cash/asset/effort/card) and `pad_token_amount` fields to transactions table
 - **Profit Distribution Types**: Enhanced `profit_distribution` with `distribution_type` to differentiate between capital-based (30%) and labor-based (19%) profit sharing
+- **Staff PAD Token Tracking** (October 2025):
+  - Added `pad_token` field to `staff` table for tracking PAD Tokens earned from KPI (1 KPI point = 10 PAD)
+  - Added `pad_token_earned` field to `staff_kpis` table to record PAD Token awards per period
+  - Added `pad_token_amount` field to `referrals` table for 8% CTV commission tracking
+  - New endpoint `/api/staff/labor-pool` for 19% labor pool display (Sweat Equity & branches meeting KPI)
+  - New endpoint `/api/referrals/ctv-pool` for 8% CTV pool display (collaborator/referral commissions)
+  - Enhanced Staff & Equity tab with 5 sub-tabs: KPI Performance, Labor Pool (19%), Referrals, CTV Pool (8%), and Share Management
 
 ## Authentication and Authorization
 - **Strategy**: Session-based authentication with Passport.js local strategy
