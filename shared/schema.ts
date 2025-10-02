@@ -99,6 +99,7 @@ export const staff = pgTable("staff", {
   branchId: varchar("branch_id").references(() => branches.id),
   equityPercentage: decimal("equity_percentage", { precision: 5, scale: 2 }).default("0"),
   shares: integer("shares").default(0), // Number of shares owned
+  padToken: decimal("pad_token", { precision: 15, scale: 2 }).default("0"), // PAD Token earned from KPI (1 KPI point = 10 PAD)
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
@@ -163,6 +164,7 @@ export const staffKpis = pgTable("staff_kpis", {
   bonusAmount: decimal("bonus_amount", { precision: 15, scale: 2 }).default("0"), // Bonus earned
   slotsEarned: integer("slots_earned").default(0), // Number of slots (1 slot = 50 shares)
   sharesAwarded: decimal("shares_awarded", { precision: 15, scale: 2 }).default("0"), // Total shares from this period
+  padTokenEarned: decimal("pad_token_earned", { precision: 15, scale: 2 }).default("0"), // PAD Token earned (1 KPI point = 10 PAD)
   profitShareAmount: decimal("profit_share_amount", { precision: 15, scale: 2 }).default("0"), // 49% profit share
   isProcessed: boolean("is_processed").default(false), // End-of-quarter processing status
   createdAt: timestamp("created_at").defaultNow(),
@@ -180,6 +182,7 @@ export const referrals = pgTable("referrals", {
   commissionRate: decimal("commission_rate", { precision: 5, scale: 2 }).default("8.0"), // 8% commission
   commissionAmount: decimal("commission_amount", { precision: 15, scale: 2 }).default("0"), // Calculated commission
   commissionPaid: decimal("commission_paid", { precision: 15, scale: 2 }).default("0"), // Amount already paid
+  padTokenAmount: decimal("pad_token_amount", { precision: 15, scale: 2 }).default("0"), // PAD Token from 8% CTV commission
   status: text("status").notNull().default("pending"), // pending, paid, cancelled
   referralDate: timestamp("referral_date").defaultNow(),
   paidDate: timestamp("paid_date"),
