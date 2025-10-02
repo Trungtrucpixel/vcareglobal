@@ -668,6 +668,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const points = await storage.calculateStaffKpiPoints(staffId, period, periodValue);
       const slotsEarned = Math.floor(points / 50); // ≥50 points = 1 slot
       const sharesEarned = slotsEarned * 50; // 1 slot = 50 shares
+      const padTokenEarned = points * 10; // 1 KPI point = 10 PAD Token
       
       res.json({
         staffId,
@@ -676,6 +677,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalPoints: points,
         slotsEarned,
         sharesEarned,
+        padTokenEarned,
         isEligible: points >= 50
       });
     } catch (error) {
@@ -700,6 +702,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to process quarterly shares" });
+    }
+  });
+
+  // Labor pool (19%) - Phân bổ pool công cho Sweat Equity và Chi nhánh đạt KPI
+  app.get("/api/staff/labor-pool", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    try {
+      const staffKpis = await storage.getStaffKpis();
+      const allStaff = await storage.getStaff();
+      
+      // Calculate total PAD Token earned from KPI (19% labor pool)
+      const totalPadTokenFromKpi = staffKpis.reduce((sum, kpi) => {
+        return sum + parseFloat(kpi.padTokenEarned || "0");
+      }, 0);
+      
+      // Calculate total shares from sweat equity
+      const totalSweatEquityShares = staffKpis.reduce((sum, kpi) => {
+        return sum + parseFloat(kpi.sharesAwarded || "0");
+      }, 0);
+      
+      // Get staff with PAD tokens
+      const staffWithPadTokens = allStaff.map(s => ({
+        id: s.id,
+        name: s.name,
+        position: s.position,
+        padToken: parseFloat(s.padToken || "0"),
+        shares: s.shares || 0
+      })).filter(s => s.padToken > 0 || s.shares > 0);
+      
+      res.json({
+        totalPadTokenFromKpi,
+        totalSweatEquityShares,
+        laborPoolPercentage: 19,
+        staffDistribution: staffWithPadTokens,
+        poolValueInVnd: totalPadTokenFromKpi * 10000 // 100 PAD = 1M VND, so 1 PAD = 10,000 VND
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch labor pool data" });
     }
   });
 
@@ -801,6 +841,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to generate referral code" });
+    }
+  });
+
+  // CTV Pool (8%) - Pool hoa hồng từ kết nối/giới thiệu
+  app.get("/api/referrals/ctv-pool", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    try {
+      const referrals = await storage.getReferrals();
+      
+      // Calculate total commission from 8% CTV pool
+      const totalCommissionEarned = referrals.reduce((sum, r) => {
+        return sum + parseFloat(r.commissionAmount || "0");
+      }, 0);
+      
+      const totalCommissionPaid = referrals.reduce((sum, r) => {
+        return sum + parseFloat(r.commissionPaid || "0");
+      }, 0);
+      
+      const pendingCommission = totalCommissionEarned - totalCommissionPaid;
+      
+      // Calculate total PAD Token from referrals
+      const totalPadTokenFromReferrals = referrals.reduce((sum, r) => {
+        return sum + parseFloat(r.padTokenAmount || "0");
+      }, 0);
+      
+      // Group by referrer
+      const referrerSummary: Record<string, { name: string; totalCommission: number; totalPaid: number; pending: number; padToken: number; count: number }> = {};
+      
+      for (const ref of referrals) {
+        const referrerId = ref.referrerId || 'unknown';
+        if (!referrerSummary[referrerId]) {
+          referrerSummary[referrerId] = {
+            name: 'Unknown',
+            totalCommission: 0,
+            totalPaid: 0,
+            pending: 0,
+            padToken: 0,
+            count: 0
+          };
+        }
+        
+        referrerSummary[referrerId].totalCommission += parseFloat(ref.commissionAmount || "0");
+        referrerSummary[referrerId].totalPaid += parseFloat(ref.commissionPaid || "0");
+        referrerSummary[referrerId].pending = referrerSummary[referrerId].totalCommission - referrerSummary[referrerId].totalPaid;
+        referrerSummary[referrerId].padToken += parseFloat(ref.padTokenAmount || "0");
+        referrerSummary[referrerId].count += 1;
+      }
+      
+      res.json({
+        totalCommissionEarned,
+        totalCommissionPaid,
+        pendingCommission,
+        totalPadTokenFromReferrals,
+        commissionRate: 8,
+        referrerSummary,
+        totalReferrals: referrals.length
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch CTV pool data" });
     }
   });
 
