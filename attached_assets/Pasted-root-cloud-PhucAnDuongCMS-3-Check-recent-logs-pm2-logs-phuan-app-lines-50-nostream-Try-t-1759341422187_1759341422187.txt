@@ -1,0 +1,148 @@
+root@cloud:~/PhucAnDuongCMS-3# # Check recent logs
+pm2 logs phuan-app --lines 50 --nostream
+
+# Try to restart PostgreSQL properly
+sudo systemctl restart postgresql
+sleep 3
+sudo systemctl status postgresql
+
+# Restart app to reconnect
+pm2 restart phuan-app
+sleep 5
+
+# Test login again
+curl -X POST http://103.72.96.173:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@phuan.com","password":"admin123"}' \
+  -v 2>&1 | grep -E "HTTP|Set-Cookie|Bad Request"
+[TAILING] Tailing last 50 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-error.log last 50 lines:
+0|phuan-ap |       idle_in_transaction_session_timeout: false,
+0|phuan-ap |       query_timeout: false,
+0|phuan-ap |       connect_timeout: 0
+0|phuan-ap |     },
+0|phuan-ap |     user: 'postgres',
+0|phuan-ap |     database: 'phuanduong_db',
+0|phuan-ap |     port: 5432,
+0|phuan-ap |     host: 'localhost',
+0|phuan-ap |     replication: undefined,
+0|phuan-ap |     _Promise: [Function: Promise],
+0|phuan-ap |     _types: TypeOverrides { _types: [Object], text: {}, binary: {} },
+0|phuan-ap |     _ending: true,
+0|phuan-ap |     _ended: false,
+0|phuan-ap |     _connecting: false,
+0|phuan-ap |     _connected: true,
+0|phuan-ap |     _connectionError: false,
+0|phuan-ap |     _queryable: false,
+0|phuan-ap |     connection: Connection {
+0|phuan-ap |       _events: [Object: null prototype],
+0|phuan-ap |       _eventsCount: 23,
+0|phuan-ap |       _maxListeners: undefined,
+0|phuan-ap |       stream: [Socket],
+0|phuan-ap |       _keepAlive: false,
+0|phuan-ap |       _keepAliveInitialDelayMillis: 0,
+0|phuan-ap |       lastBuffer: false,
+0|phuan-ap |       parsedStatements: {},
+0|phuan-ap |       ssl: false,
+0|phuan-ap |       _ending: false,
+0|phuan-ap |       _emitMessage: false,
+0|phuan-ap |       _connecting: true,
+0|phuan-ap |       [Symbol(shapeMode)]: false,
+0|phuan-ap |       [Symbol(kCapture)]: false
+0|phuan-ap |     },
+0|phuan-ap |     queryQueue: [],
+0|phuan-ap |     binary: false,
+0|phuan-ap |     processID: 2728983,
+0|phuan-ap |     secretKey: 547022789,
+0|phuan-ap |     ssl: false,
+0|phuan-ap |     _connectionTimeoutMillis: 0,
+0|phuan-ap |     _connectionCallback: null,
+0|phuan-ap |     saslSession: null,
+0|phuan-ap |     release: [Function (anonymous)],
+0|phuan-ap |     activeQuery: null,
+0|phuan-ap |     readyForQuery: true,
+0|phuan-ap |     hasExecuted: true,
+0|phuan-ap |     _poolUseCount: 4,
+0|phuan-ap |     [Symbol(shapeMode)]: false,
+0|phuan-ap |     [Symbol(kCapture)]: false
+0|phuan-ap |   }
+0|phuan-ap | }
+
+/root/.pm2/logs/phuan-app-out.log last 50 lines:
+0|phuan-ap | 12:31:08 AM [express] GET /api/cash-flow/transactions 200 in 76ms :: []
+0|phuan-ap | 12:31:08 AM [express] GET /api/investment-packages/active 200 in 77ms :: []
+0|phuan-ap | 12:31:12 AM [express] serving on port 5000
+0|phuan-ap | 12:31:15 AM [express] POST /api/logout 200 in 67ms
+0|phuan-ap | 12:31:17 AM [express] serving on port 5000
+0|phuan-ap | 12:31:48 AM [express] POST /api/register 201 in 163ms :: {"id":"1b0a3632-1aed-46c9-b901-43d2a024c015"…
+0|phuan-ap | 12:31:50 AM [express] serving on port 5000
+0|phuan-ap | 12:33:10 AM [express] serving on port 5000
+0|phuan-ap | 12:33:16 AM [express] GET /api/user 401 in 3ms
+0|phuan-ap | 12:34:11 AM [express] POST /api/login 200 in 142ms :: {"id":"admin-001","email":"admin@phuan.com","ro…
+0|phuan-ap | 12:34:11 AM [express] GET /api/dashboard/metrics 200 in 22ms :: {"totalRevenue":"0","activeCards":0,"…
+0|phuan-ap | 12:34:11 AM [express] GET /api/dashboard/business-overview 200 in 18ms :: {"quarterlyData":{"labels":…
+0|phuan-ap | 12:34:13 AM [express] serving on port 5000
+0|phuan-ap | 12:34:16 AM [express] GET /api/admin/users 200 in 74ms :: [{"id":"admin-001","email":"admin@phuan.com…
+0|phuan-ap | 12:34:18 AM [express] serving on port 5000
+0|phuan-ap | 12:34:34 AM [express] POST /api/logout 200 in 63ms
+0|phuan-ap | 12:34:38 AM [express] serving on port 5000
+0|phuan-ap | 12:40:01 AM [express] GET /api/user 401 in 6ms
+0|phuan-ap | 12:40:10 AM [express] GET /api/user 401 in 2ms
+0|phuan-ap | 12:40:20 AM [express] POST /api/login 200 in 168ms :: {"id":"admin-001","email":"admin@phuan.com","ro…
+0|phuan-ap | 12:40:20 AM [express] GET /api/dashboard/metrics 200 in 25ms :: {"totalRevenue":"0","activeCards":0,"…
+0|phuan-ap | 12:40:20 AM [express] GET /api/dashboard/business-overview 200 in 32ms :: {"quarterlyData":{"labels":…
+0|phuan-ap | 12:40:22 AM [express] serving on port 5000
+0|phuan-ap | 12:40:29 AM [express] GET /api/cards/types 200 in 104ms :: [{"type":"Standard","price":2000000,"maxSe…
+0|phuan-ap | 12:40:29 AM [express] GET /api/cards 200 in 105ms :: []
+0|phuan-ap | 12:40:30 AM [express] serving on port 5000
+0|phuan-ap | 12:40:30 AM [express] GET /api/branches/performance 200 in 89ms :: []
+0|phuan-ap | 12:40:30 AM [express] GET /api/kpis/alerts 200 in 73ms :: []
+0|phuan-ap | 12:40:32 AM [express] GET /api/staff 200 in 44ms :: []
+0|phuan-ap | 12:40:32 AM [express] GET /api/staff-kpis 200 in 49ms :: []
+0|phuan-ap | 12:40:33 AM [express] serving on port 5000
+0|phuan-ap | 12:40:33 AM [express] GET /api/cash-flow/transactions 200 in 71ms :: []
+0|phuan-ap | 12:40:33 AM [express] GET /api/investment-packages/active 200 in 83ms :: []
+0|phuan-ap | 12:40:34 AM [express] GET /api/admin/users 200 in 41ms :: [{"id":"admin-001","email":"admin@phuan.com…
+0|phuan-ap | 12:40:35 AM [express] serving on port 5000
+0|phuan-ap | 12:40:41 AM [express] GET /api/referrals 200 in 95ms :: []
+0|phuan-ap | 12:40:44 AM [express] serving on port 5000
+0|phuan-ap | 12:41:07 AM [express] GET /api/user 401 in 4ms
+0|phuan-ap | 12:41:27 AM [express] POST /api/login 200 in 138ms :: {"id":"admin-001","email":"admin@phuan.com","ro…
+0|phuan-ap | 12:41:27 AM [express] GET /api/dashboard/metrics 200 in 56ms :: {"totalRevenue":"0","activeCards":0,"…
+0|phuan-ap | 12:41:27 AM [express] GET /api/dashboard/business-overview 200 in 58ms :: {"quarterlyData":{"labels":…
+0|phuan-ap | 12:41:30 AM [express] serving on port 5000
+0|phuan-ap | 12:41:35 AM [express] GET /api/cards 500 in 218ms :: {"message":"connect ECONNREFUSED 127.0.0.1:5432"}
+0|phuan-ap | 12:41:35 AM [express] GET /api/cards/types 500 in 121ms :: {"message":"connect ECONNREFUSED 127.0.0.1…
+0|phuan-ap | 12:41:36 AM [express] GET /api/branches/performance 500 in 5ms :: {"message":"connect ECONNREFUSED 12…
+0|phuan-ap | 12:41:36 AM [express] GET /api/kpis/alerts 500 in 2ms :: {"message":"connect ECONNREFUSED 127.0.0.1:5…
+0|phuan-ap | 12:46:18 AM [express] serving on port 5000
+0|phuan-ap | 12:49:40 AM [express] POST /api/login 400 in 2ms
+0|phuan-ap | 12:49:40 AM [express] GET /api/dashboard/metrics 200 in 76ms :: {"totalRevenue":"0","activeCards":0,"…
+0|phuan-ap | 12:49:42 AM [express] serving on port 5000
+
+Job for postgresql.service failed because the control process exited with error code.
+See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
+○ postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) (Result: exit-code) since Thu 2025-10-02 00:56:24 +07; 31ms ago
+    Process: 2733005 ExecStart=/usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf (code=exited, status=1/FAILURE)
+   Main PID: 2733005 (code=exited, status=1/FAILURE)
+        CPU: 29ms
+
+Oct 02 00:56:24 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 02 00:56:24 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 02 00:56:24 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 02 00:56:24 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 989.
+Oct 02 00:56:24 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2733034  │ 0s     │ 239  │ online    │ 0%       │ 11.9mb   │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+> POST /api/login HTTP/1.1
+< HTTP/1.1 400 Bad Request
+Bad Request
+root@cloud:~/PhucAnDuongCMS-3# 

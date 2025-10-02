@@ -1,0 +1,49 @@
+root@cloud:~/PhucAnDuongCMS-3# # Stop systemd from restarting
+sudo systemctl stop postgresql
+
+# Kill zombie PostgreSQL processes
+sudo pkill -9 postgres
+
+# Remove lock file
+sudo rm -f /var/lib/postgresql/14/main/postmaster.pid
+
+# Remove socket files
+sudo rm -f /var/run/postgresql/.s.PGSQL.5432*
+
+# Start PostgreSQL clean
+sudo systemctl start postgresql
+
+# Check status
+sudo systemctl status postgresql
+
+# Verify connection works
+PGPASSWORD='PhucAn2025!' psql -h localhost -U postgres -d phuanduong_db -c "SELECT NOW();"
+
+# Restart app
+pm2 restart phuan-app
+Job for postgresql.service failed because the control process exited with error code.
+See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Thu 2025-10-02 00:46:17 +07; 22ms ago
+    Process: 2726935 ExecStart=/usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf (code=exited, status=1/FAILURE)
+   Main PID: 2726935 (code=exited, status=1/FAILURE)
+        CPU: 24ms
+
+Oct 02 00:46:17 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 02 00:46:17 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 02 00:46:17 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+              now              
+-------------------------------
+ 2025-10-02 00:46:17.620901+07
+(1 row)
+
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2726959  │ 0s     │ 237  │ online    │ 0%       │ 8.0mb    │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+root@cloud:~/PhucAnDuongCMS-3# 

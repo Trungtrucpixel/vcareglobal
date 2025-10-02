@@ -1,0 +1,39 @@
+root@cloud:~/PhucAnDuongCMS-3# # Stop systemd từ restart
+sudo systemctl stop postgresql
+sudo systemctl disable postgresql
+
+# Check tất cả postgres processes
+ps aux | grep postgres
+
+# Kill ALL postgres (bao gồm zombie)
+sudo killall -9 postgres
+sleep 2
+
+# Remove lock file
+sudo rm -f /var/lib/postgresql/14/main/postmaster.pid
+
+# Re-enable và start
+sudo systemctl enable postgresql
+sudo systemctl start postgresql
+sudo systemctl status postgresql
+Synchronizing state of postgresql.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install disable postgresql
+Removed /etc/systemd/system/multi-user.target.wants/postgresql.service.
+root     2701072  0.0  0.1   7008  2232 pts/0    S+   00:04   0:00 grep postgres
+postgres: no process found
+Synchronizing state of postgresql.service with SysV service script with /lib/systemd/systemd-sysv-install.
+Executing: /lib/systemd/systemd-sysv-install enable postgresql
+Created symlink /etc/systemd/system/multi-user.target.wants/postgresql.service → /lib/systemd/system/postgresql.service.
+Job for postgresql.service failed because the control process exited with error code.
+See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Thu 2025-10-02 00:04:51 +07; 30ms ago
+    Process: 2701651 ExecStart=/usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf (code=exited, status=1/FAILURE)
+   Main PID: 2701651 (code=exited, status=1/FAILURE)
+        CPU: 15ms
+
+Oct 02 00:04:51 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 02 00:04:51 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 02 00:04:51 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+root@cloud:~/PhucAnDuongCMS-3# 

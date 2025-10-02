@@ -1,0 +1,124 @@
+root@cloud:~/PhucAnDuongCMS-3# #!/bin/bash
+echo "╔════════════════════════════════════════════╗"
+echo "║     FULL SYSTEM DIAGNOSTIC TEST           ║"
+echo "╔════════════════════════════════════════════╗"
+echo ""
+
+# 1. Check App Status
+echo "1️⃣  APP STATUS"
+pm2 list | grep -E "phuan-app|name.*pid.*status"
+APP_STATUS=$(pm2 list | grep phuan-app | grep -o "online\|stopped\|errored")
+if [ "$APP_STATUS" = "online" ]; then
+  echo "✅ App is running"
+else
+  echo "❌ App is NOT running: $APP_STATUS"
+fi
+echo ""
+
+# 2. Check PostgreSQL
+echo "2️⃣  DATABASE STATUS"
+PG_RUNNING=$(ps aux | grep postgres | grep -v grep | wc -l)
+if [ $PG_RUNNING -gt 0 ]; then
+  echo "✅ PostgreSQL is running ($PG_RUNNING processes)"
+  PGPASSWORD='PhucAn2025!' psql -h localhost -U postgres -d phuanduong_db -c "SELECT version();" 2>&1 | grep -q "PostgreSQL" && echo "✅ Database connection OK" || echo "❌ Database connection FAILED"
+else
+  echo "❌ PostgreSQL is NOT running"
+fi
+echo ""
+
+# 3. Check Database Tables
+echo "3️⃣  DATABASE TABLES"
+PGPASSWORD='PhucAn2025!' psql -h localhost -U postgres -d phuanduong_db -c "
+  SELECT 
+    'users' as table_name, COUNT(*) as records FROM users
+  UNION ALL SELECT 'branches', COUNT(*) FROM branches
+  UNION ALL SELECT 'cards', COUNT(*) FROM cards
+  UNION ALL SELECT 'staff', COUNT(*) FROM staff
+  UNION ALL SELECT 'session', COUNT(*) FROM session;
+" 2>&1 | grep -E "table_name|users|branches|cards|staff|session"
+echo ""
+
+# 4. Test Authentication
+echo "4️⃣  AUTHENTICATION TEST"
+LOGIN_RESPONSE=$(curl -s -X POST http://103.72.96.173:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@phuan.com","password":"admin123"}' \
+  -c /tmp/health_check.txt -w "\n%{http_code}")
+LOGIN_CODE=$(echo "$LOGIN_RESPONSE" | tail -1)
+if [ "$LOGIN_CODE" = "200" ]; then
+  echo "✅ Login works (HTTP $LOGIN_CODE)"
+else
+  echo "❌ Login failed (HTTP $LOGIN_CODE)"
+fi
+echo ""
+
+# 5. Test Core APIs
+echo "5️⃣  API ENDPOINTS TEST"
+declare -a endpoints=("/api/user" "/api/dashboard/metrics" "/api/cards" "/api/branches" "/api/staff")
+for endpoint in "${endpoints[@]}"; do
+  HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://103.72.96.173:5000$endpoint -b /tmp/health_check.txt)
+  if [ "$HTTP_CODE" = "200" ]; then
+    echo "✅ $endpoint → HTTP $HTTP_CODE"
+  else
+    echo "❌ $endpoint → HTTP $HTTP_CODE"
+echo "Admin: admin@phuan.com / admin123"N"IN_CODE" = "200" ] && [ $ERROR_COUNT -lt 10 ]; thenxception\|fatal" | wc -l)
+╔════════════════════════════════════════════╗
+║     FULL SYSTEM DIAGNOSTIC TEST           ║
+╔════════════════════════════════════════════╗
+
+1️⃣  APP STATUS
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2734108  │ 7m     │ 244  │ online    │ 0%       │ 123.4mb  │ root     │ disabled │
+✅ App is running
+
+2️⃣  DATABASE STATUS
+✅ PostgreSQL is running (7 processes)
+✅ Database connection OK
+
+3️⃣  DATABASE TABLES
+ table_name | records 
+ users      |       2
+ branches   |       2
+ cards      |       3
+ staff      |       3
+ session    |       8
+
+4️⃣  AUTHENTICATION TEST
+✅ Login works (HTTP 200)
+
+5️⃣  API ENDPOINTS TEST
+✅ /api/user → HTTP 200
+✅ /api/dashboard/metrics → HTTP 200
+✅ /api/cards → HTTP 200
+✅ /api/branches → HTTP 200
+✅ /api/staff → HTTP 200
+
+6️⃣  ERROR LOGS (last 10 lines)
+Total errors in last 100 lines: 6
+⚠️  Warning: High error count detected
+0|phuan-ap |     release: [Function (anonymous)],
+0|phuan-ap |     activeQuery: null,
+0|phuan-ap |     readyForQuery: true,
+0|phuan-ap |     hasExecuted: true,
+0|phuan-ap |     _poolUseCount: 4,
+0|phuan-ap |     [Symbol(shapeMode)]: false,
+0|phuan-ap |     [Symbol(kCapture)]: false
+0|phuan-ap |   }
+0|phuan-ap | }
+
+
+7️⃣  PERFORMANCE METRICS
+CPU: fork | Memory: │ | Restarts: 1.0.0
+
+8️⃣  DISK SPACE
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        20G  9.1G   11G  46% /
+
+╔════════════════════════════════════════════╗
+║            TEST SUMMARY                    ║
+╚════════════════════════════════════════════╝
+🎉 System Status: HEALTHY
+
+URL: http://103.72.96.173:5000
+Admin: admin@phuan.com / admin123
+root@cloud:~/PhucAnDuongCMS-3# 

@@ -1,0 +1,59 @@
+root@cloud:~/PhucAnDuongCMS-3# # Check ONLY error logs
+pm2 logs phuan-app --err --lines 100 --nostream | grep -A 5 -B 5 "Error\|error\|FATAL\|Fatal\|Exception"
+
+# If nothing, check if postgres-storage has init issues
+pm2 logs phuan-app --lines 100 --nostream | grep -i "database\|init\|postgres"
+[TAILING] Tailing last 100 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-error.log last 100 lines:
+0|phuan-ap |     [Symbol(shapeMode)]: false,
+0|phuan-ap |     [Symbol(kCapture)]: false
+0|phuan-ap |   }
+0|phuan-ap | }
+0|phuan-ap | error: terminating connection due to administrator command
+0|phuan-ap |     at Parser.parseErrorMessage (/root/PhucAnDuongCMS-3/node_modules/pg-protocol/dist/parser.js:283:98)
+0|phuan-ap |     at Parser.handlePacket (/root/PhucAnDuongCMS-3/node_modules/pg-protocol/dist/parser.js:122:29)
+0|phuan-ap |     at Parser.parse (/root/PhucAnDuongCMS-3/node_modules/pg-protocol/dist/parser.js:35:38)
+0|phuan-ap |     at Socket.<anonymous> (/root/PhucAnDuongCMS-3/node_modules/pg-protocol/dist/index.js:11:42)
+0|phuan-ap |     at Socket.emit (node:events:524:28)
+0|phuan-ap |     at addChunk (node:internal/streams/readable:561:12)
+0|phuan-ap |     at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+0|phuan-ap |     at Readable.push (node:internal/streams/readable:392:5)
+0|phuan-ap |     at TCP.onStreamRead (node:internal/stream_base_commons:191:23) {
+0|phuan-ap |   length: 116,
+0|phuan-ap |   severity: 'FATAL',
+0|phuan-ap |   code: '57P01',
+0|phuan-ap |   detail: undefined,
+0|phuan-ap |   hint: undefined,
+0|phuan-ap |   position: undefined,
+0|phuan-ap |   internalPosition: undefined,
+--
+0|phuan-ap |   constraint: undefined,
+0|phuan-ap |   file: 'postgres.c',
+0|phuan-ap |   line: '3197',
+0|phuan-ap |   routine: 'ProcessInterrupts',
+0|phuan-ap |   client: Client {
+0|phuan-ap |     _events: [Object: null prototype] { error: [Function (anonymous)] },
+0|phuan-ap |     _eventsCount: 1,
+0|phuan-ap |     _maxListeners: undefined,
+0|phuan-ap |     connectionParameters: ConnectionParameters {
+0|phuan-ap |       user: 'postgres',
+0|phuan-ap |       database: 'phuanduong_db',
+--
+0|phuan-ap |     _types: TypeOverrides { _types: [Object], text: {}, binary: {} },
+0|phuan-ap |     _ending: true,
+0|phuan-ap |     _ended: false,
+0|phuan-ap |     _connecting: false,
+0|phuan-ap |     _connected: true,
+0|phuan-ap |     _connectionError: false,
+0|phuan-ap |     _queryable: false,
+0|phuan-ap |     connection: Connection {
+0|phuan-ap |       _events: [Object: null prototype],
+0|phuan-ap |       _eventsCount: 23,
+0|phuan-ap |       _maxListeners: undefined,
+0|phuan-ap |   file: 'postgres.c',
+0|phuan-ap |       user: 'postgres',
+0|phuan-ap |       database: 'phuanduong_db',
+0|phuan-ap |     user: 'postgres',
+0|phuan-ap |     database: 'phuanduong_db',
+0|phuan-ap |       _keepAliveInitialDelayMillis: 0,
+root@cloud:~/PhucAnDuongCMS-3# 

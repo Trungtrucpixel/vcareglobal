@@ -1,0 +1,39 @@
+root@cloud:~/PhucAnDuongCMS-3# # Check detailed PostgreSQL logs
+sudo journalctl -u postgresql -n 100 --no-pager | grep -i "error\|fatal\|panic"
+
+# Try to start PostgreSQL manually
+sudo systemctl start postgresql
+
+# Check status
+sudo systemctl status postgresql
+
+# If failed, check config
+sudo -u postgres /usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main --check
+Oct 02 00:00:35 cloud postgres[2699030]: 2025-10-02 00:00:35.588 +07 [2699030] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:00:42 cloud postgres[2699082]: 2025-10-02 00:00:42.344 +07 [2699082] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:00:49 cloud postgres[2699134]: 2025-10-02 00:00:49.077 +07 [2699134] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:00:55 cloud postgres[2699186]: 2025-10-02 00:00:55.792 +07 [2699186] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:02 cloud postgres[2699238]: 2025-10-02 00:01:02.575 +07 [2699238] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:09 cloud postgres[2699291]: 2025-10-02 00:01:09.355 +07 [2699291] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:16 cloud postgres[2699343]: 2025-10-02 00:01:16.094 +07 [2699343] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:22 cloud postgres[2699395]: 2025-10-02 00:01:22.858 +07 [2699395] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:29 cloud postgres[2699447]: 2025-10-02 00:01:29.548 +07 [2699447] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:36 cloud postgres[2699499]: 2025-10-02 00:01:36.342 +07 [2699499] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:43 cloud postgres[2699551]: 2025-10-02 00:01:43.028 +07 [2699551] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:01:49 cloud postgres[2699603]: 2025-10-02 00:01:49.766 +07 [2699603] FATAL:  lock file "postmaster.pid" already exists
+Job for postgresql.service failed because the control process exited with error code.
+See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Thu 2025-10-02 00:01:56 +07; 20ms ago
+    Process: 2699664 ExecStart=/usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf (code=exited, status=1/FAILURE)
+   Main PID: 2699664 (code=exited, status=1/FAILURE)
+        CPU: 25ms
+
+Oct 02 00:01:56 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 02 00:01:56 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 02 00:01:56 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+LOG:  42501: could not change directory to "/root/PhucAnDuongCMS-3": Permission denied
+LOCATION:  resolve_symlinks, exec.c:320
+2025-10-01 17:01:56.641 GMT [2699671] FATAL:  --check requires a value
+root@cloud:~/PhucAnDuongCMS-3# 

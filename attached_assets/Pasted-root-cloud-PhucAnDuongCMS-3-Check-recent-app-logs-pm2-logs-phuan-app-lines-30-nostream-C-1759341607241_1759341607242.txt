@@ -1,0 +1,112 @@
+root@cloud:~/PhucAnDuongCMS-3# # Check recent app logs
+pm2 logs phuan-app --lines 30 --nostream
+
+# Check what error is happening
+pm2 logs phuan-app --err --lines 10 --nostream
+
+# Wait 5 seconds for app to fully start
+sleep 5
+
+# Test login with verbose output
+curl -X POST http://103.72.96.173:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@phuan.com","password":"admin123"}' \
+  -v 2>&1
+[TAILING] Tailing last 30 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-error.log last 30 lines:
+0|phuan-ap |       _maxListeners: undefined,
+0|phuan-ap |       stream: [Socket],
+0|phuan-ap |       _keepAlive: false,
+0|phuan-ap |       _keepAliveInitialDelayMillis: 0,
+0|phuan-ap |       lastBuffer: false,
+0|phuan-ap |       parsedStatements: {},
+0|phuan-ap |       ssl: false,
+0|phuan-ap |       _ending: false,
+0|phuan-ap |       _emitMessage: false,
+0|phuan-ap |       _connecting: true,
+0|phuan-ap |       [Symbol(shapeMode)]: false,
+0|phuan-ap |       [Symbol(kCapture)]: false
+0|phuan-ap |     },
+0|phuan-ap |     queryQueue: [],
+0|phuan-ap |     binary: false,
+0|phuan-ap |     processID: 2728983,
+0|phuan-ap |     secretKey: 547022789,
+0|phuan-ap |     ssl: false,
+0|phuan-ap |     _connectionTimeoutMillis: 0,
+0|phuan-ap |     _connectionCallback: null,
+0|phuan-ap |     saslSession: null,
+0|phuan-ap |     release: [Function (anonymous)],
+0|phuan-ap |     activeQuery: null,
+0|phuan-ap |     readyForQuery: true,
+0|phuan-ap |     hasExecuted: true,
+0|phuan-ap |     _poolUseCount: 4,
+0|phuan-ap |     [Symbol(shapeMode)]: false,
+0|phuan-ap |     [Symbol(kCapture)]: false
+0|phuan-ap |   }
+0|phuan-ap | }
+
+/root/.pm2/logs/phuan-app-out.log last 30 lines:
+0|phuan-ap | 12:40:29 AM [express] GET /api/cards 200 in 105ms :: []
+0|phuan-ap | 12:40:30 AM [express] serving on port 5000
+0|phuan-ap | 12:40:30 AM [express] GET /api/branches/performance 200 in 89ms :: []
+0|phuan-ap | 12:40:30 AM [express] GET /api/kpis/alerts 200 in 73ms :: []
+0|phuan-ap | 12:40:32 AM [express] GET /api/staff 200 in 44ms :: []
+0|phuan-ap | 12:40:32 AM [express] GET /api/staff-kpis 200 in 49ms :: []
+0|phuan-ap | 12:40:33 AM [express] serving on port 5000
+0|phuan-ap | 12:40:33 AM [express] GET /api/cash-flow/transactions 200 in 71ms :: []
+0|phuan-ap | 12:40:33 AM [express] GET /api/investment-packages/active 200 in 83ms :: []
+0|phuan-ap | 12:40:34 AM [express] GET /api/admin/users 200 in 41ms :: [{"id":"admin-001","email":"admin@phuan.com…
+0|phuan-ap | 12:40:35 AM [express] serving on port 5000
+0|phuan-ap | 12:40:41 AM [express] GET /api/referrals 200 in 95ms :: []
+0|phuan-ap | 12:40:44 AM [express] serving on port 5000
+0|phuan-ap | 12:41:07 AM [express] GET /api/user 401 in 4ms
+0|phuan-ap | 12:41:27 AM [express] POST /api/login 200 in 138ms :: {"id":"admin-001","email":"admin@phuan.com","ro…
+0|phuan-ap | 12:41:27 AM [express] GET /api/dashboard/metrics 200 in 56ms :: {"totalRevenue":"0","activeCards":0,"…
+0|phuan-ap | 12:41:27 AM [express] GET /api/dashboard/business-overview 200 in 58ms :: {"quarterlyData":{"labels":…
+0|phuan-ap | 12:41:30 AM [express] serving on port 5000
+0|phuan-ap | 12:41:35 AM [express] GET /api/cards 500 in 218ms :: {"message":"connect ECONNREFUSED 127.0.0.1:5432"}
+0|phuan-ap | 12:41:35 AM [express] GET /api/cards/types 500 in 121ms :: {"message":"connect ECONNREFUSED 127.0.0.1…
+0|phuan-ap | 12:41:36 AM [express] GET /api/branches/performance 500 in 5ms :: {"message":"connect ECONNREFUSED 12…
+0|phuan-ap | 12:41:36 AM [express] GET /api/kpis/alerts 500 in 2ms :: {"message":"connect ECONNREFUSED 127.0.0.1:5…
+0|phuan-ap | 12:46:18 AM [express] serving on port 5000
+0|phuan-ap | 12:49:40 AM [express] POST /api/login 400 in 2ms
+0|phuan-ap | 12:49:40 AM [express] GET /api/dashboard/metrics 200 in 76ms :: {"totalRevenue":"0","activeCards":0,"…
+0|phuan-ap | 12:49:42 AM [express] serving on port 5000
+0|phuan-ap | 12:56:25 AM [express] serving on port 5000
+0|phuan-ap | 12:56:29 AM [express] POST /api/login 400 in 7ms
+0|phuan-ap | 12:57:45 AM [express] serving on port 5000
+0|phuan-ap | 12:57:48 AM [express] POST /api/login 400 in 11ms
+
+[TAILING] Tailing last 10 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-error.log last 10 lines:
+0|phuan-ap |     saslSession: null,
+0|phuan-ap |     release: [Function (anonymous)],
+0|phuan-ap |     activeQuery: null,
+0|phuan-ap |     readyForQuery: true,
+0|phuan-ap |     hasExecuted: true,
+0|phuan-ap |     _poolUseCount: 4,
+0|phuan-ap |     [Symbol(shapeMode)]: false,
+0|phuan-ap |     [Symbol(kCapture)]: false
+0|phuan-ap |   }
+0|phuan-ap | }
+
+Note: Unnecessary use of -X or --request, POST is already inferred.
+*   Trying 103.72.96.173:5000...
+* Connected to 103.72.96.173 (103.72.96.173) port 5000 (#0)
+> POST /api/login HTTP/1.1
+> Host: 103.72.96.173:5000
+> User-Agent: curl/7.81.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 49
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 400 Bad Request
+< X-Powered-By: Express
+< Date: Wed, 01 Oct 2025 17:59:36 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+< Content-Length: 11
+< 
+* Connection #0 to host 103.72.96.173 left intact
+Bad Requestroot@cloud:~/PhucAnDuongCMS-3# 

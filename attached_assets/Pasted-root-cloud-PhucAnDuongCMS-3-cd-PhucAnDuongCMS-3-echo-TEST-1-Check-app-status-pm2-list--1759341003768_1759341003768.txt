@@ -1,0 +1,79 @@
+root@cloud:~/PhucAnDuongCMS-3# cd ~/PhucAnDuongCMS-3
+
+echo "🔍 TEST 1: Check app status"
+pm2 list | grep phuan-app
+
+echo ""
+echo "🔍 TEST 2: Check PostgreSQL"
+PGPASSWORD='PhucAn2025!' psql -h localhost -U postgres -d phuanduong_db -c "SELECT COUNT(*) FROM users;"
+
+echo ""
+echo "🔍 TEST 3: Test web homepage"
+curl -s -o /dev/null -w "Homepage: HTTP %{http_code}\n" http://103.72.96.173:5000
+
+echo ""
+echo "🔍 TEST 4: Test login API"
+curl -X POST http://103.72.96.173:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@phuan.com","password":"admin123"}' \
+  -c /tmp/cookies.txt -w "\nLogin: HTTP %{http_code}\n"
+
+echo ""
+echo "🔍 TEST 5: Test protected API (dashboard)"
+curl -s http://103.72.96.173:5000/api/dashboard/metrics \
+  -b /tmp/cookies.txt -w "\nDashboard API: HTTP %{http_code}\n" | head -3
+
+echo ""
+echo "🔍 TEST 6: Check for errors in PM2 logs"
+pm2 logs phuan-app --lines 20 --nostream --err
+
+echo ""
+echo "✅ Test complete!"
+🔍 TEST 1: Check app status
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2726959  │ 3m     │ 237  │ online    │ 0%       │ 88.7mb   │ root     │ disabled │
+
+🔍 TEST 2: Check PostgreSQL
+ count 
+-------
+     2
+(1 row)
+
+
+🔍 TEST 3: Test web homepage
+Homepage: HTTP 200
+
+🔍 TEST 4: Test login API
+Bad Request
+Login: HTTP 400
+
+🔍 TEST 5: Test protected API (dashboard)
+{"totalRevenue":"0","activeCards":0,"branches":0,"staff":0}
+Dashboard API: HTTP 200
+
+🔍 TEST 6: Check for errors in PM2 logs
+[TAILING] Tailing last 20 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-error.log last 20 lines:
+0|phuan-ap | Error: connect ECONNREFUSED 127.0.0.1:5432
+0|phuan-ap |     at /root/PhucAnDuongCMS-3/node_modules/pg-pool/index.js:45:11
+0|phuan-ap |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|phuan-ap |     at async PGStore._asyncQuery (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:322:21)
+0|phuan-ap |     at async PGStore._rawEnsureSessionStoreTable (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:177:19)
+0|phuan-ap | Error: connect ECONNREFUSED 127.0.0.1:5432
+0|phuan-ap |     at /root/PhucAnDuongCMS-3/node_modules/pg-pool/index.js:45:11
+0|phuan-ap |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|phuan-ap |     at async PGStore._asyncQuery (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:322:21)
+0|phuan-ap |     at async PGStore._rawEnsureSessionStoreTable (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:177:19)
+0|phuan-ap | Error: connect ECONNREFUSED 127.0.0.1:5432
+0|phuan-ap |     at /root/PhucAnDuongCMS-3/node_modules/pg-pool/index.js:45:11
+0|phuan-ap |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|phuan-ap |     at async PGStore._asyncQuery (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:322:21)
+0|phuan-ap |     at async PGStore._rawEnsureSessionStoreTable (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:177:19)
+0|phuan-ap | Error: connect ECONNREFUSED 127.0.0.1:5432
+0|phuan-ap |     at /root/PhucAnDuongCMS-3/node_modules/pg-pool/index.js:45:11
+0|phuan-ap |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|phuan-ap |     at async PGStore._asyncQuery (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:322:21)
+0|phuan-ap |     at async PGStore._rawEnsureSessionStoreTable (/root/PhucAnDuongCMS-3/node_modules/connect-pg-simple/index.js:177:19)
+
+
+✅ Test complete!
+root@cloud:~/PhucAnDuongCMS-3# 

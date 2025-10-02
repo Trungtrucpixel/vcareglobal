@@ -1,0 +1,80 @@
+root@cloud:~/PhucAnDuongCMS-3# # Add debug logging to see what's happening
+cd ~/PhucAnDuongCMS-3/server
+
+# Backup current auth.ts
+cp auth.ts auth.ts.bak2
+
+# Add logging before passport.authenticate
+cat > /tmp/auth_patch.txt << 'EOF'
+  // Debug middleware to log login requests
+  app.post("/api/login", (req, res, next) => {
+    console.log("Login attempt:", {
+      body: req.body,
+      headers: req.headers,
+      contentType: req.get('Content-Type')
+    });
+    next();
+  }, passport.authenticate("local"), (req, res) => {
+EOF
+
+# Replace the login route
+sed -i 's#app.post("/api/login", passport.authenticate("local"), (req, res) => {#app.post("/api/login", (req, res, next) => {\n    console.log("Login attempt:", { body: req.body, headers: req.headers["content-type"], contentType: req.get("Content-Type") });\n    next();\n  }, passport.authenticate("local"), (req, res) => {#' auth.ts
+
+# Rebuild
+cd ~/PhucAnDuongCMS-3
+npm run build
+pm2 restart phuan-app
+
+echo ""
+echo "Giờ thử login từ điện thoại, rồi check logs:"
+pm2 logs phuan-app --lines 0 --raw
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v6.3.6 building for production...
+transforming (1661) ../node_modules/react-dom/index.jsBrowserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 1978 modules transformed.
+../dist/public/index.html                            1.95 kB │ gzip:   0.74 kB
+../dist/public/assets/index-CZsN8M84.css            65.04 kB │ gzip:  11.91 kB
+../dist/public/assets/purify.es-CQJ0hv7W.js         21.82 kB │ gzip:   8.58 kB
+../dist/public/assets/index.es-BnQqlfGq.js         159.33 kB │ gzip:  53.38 kB
+../dist/public/assets/html2canvas.esm-QH1iLAAe.js  202.38 kB │ gzip:  48.04 kB
+../dist/public/assets/index-C_Lx3gxP.js            821.84 kB │ gzip: 259.81 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 17.78s
+
+  dist/index.js  97.2kb
+
+⚡ Done in 20ms
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2736981  │ 0s     │ 246  │ online    │ 0%       │ 4.0kb    │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+
+Giờ thử login từ điện thoại, rồi check logs:
+10:12:57 AM [express] serving on port 5000
+10:13:18 AM [express] GET /api/user 401 in 4ms
+Login attempt: {
+  body: { username: 'admin@phuan.com', password: 'admin123' },
+  headers: 'application/json',
+  contentType: 'application/json'
+}
+10:13:28 AM [express] POST /api/login 400 in 12ms
+Login attempt: {
+  body: { username: 'admin@phuan.com', password: 'admin123' },
+  headers: 'application/json',
+  contentType: 'application/json'
+}
+10:13:39 AM [express] POST /api/login 400 in 6ms
+

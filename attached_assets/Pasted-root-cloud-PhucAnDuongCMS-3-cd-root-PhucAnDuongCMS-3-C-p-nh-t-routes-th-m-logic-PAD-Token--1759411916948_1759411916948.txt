@@ -1,0 +1,136 @@
+root@cloud:~/PhucAnDuongCMS-3# cd /root/PhucAnDuongCMS-3
+
+# Cập nhật routes để thêm logic PAD Token và auto-upgrade
+cat > /tmp/update-routes.sh << 'SCRIPT'
+#!/bin/bash
+cd /root/PhucAnDuongCMS-3
+
+# Backup
+cp server/routes.ts server/routes.ts.backup.$(date +%s)
+
+# Tìm và thay thế POST /api/cards
+sed -i '/app.post("\/api\/cards"/,/});/{
+  /app.post("\/api\/cards"/,/const card = await storage.createCard(cardData);/{
+    /const card = await storage.createCard(cardData);/i\
+      \n      const price = parseFloat(cardData.price);\
+      const padToken = (price / 1000000) * 100;\
+      \n      const consultationSessionsMap: Record<string, number> = {\
+        "Standard": 12,\
+        "Silver": 15,\
+        "Gold": 18,\
+        "Platinum": 21,\
+        "Diamond": 24\
+      };\
+      const consultationSessions = consultationSessionsMap[cardData.cardType] || 12;\
+      \n      const enrichedCardData = {\
+        ...cardData,\
+        padToken: padToken.toString(),\
+        consultationSessions\
+      };\
+      
+    s/const card = await storage.createCard(cardData);/const card = await storage.createCard(enrichedCardData);/
+  }
+}' server/routes.ts
+
+echo "✅ Routes updated!"
+SCRIPT
+
+chmod +x /tmp/update-routes.sh
+/tmp/update-routes.sh
+
+# Build và restart
+npm run build
+pm2 restart phuan-app
+
+echo ""
+echo "✅ HOÀN TẤT! App đang chạy tại:"
+echo "🌐 http://103.72.96.173:5000"
+echo ""
+echo "Kiểm tra logs:"
+pm2 logs phuan-app --lines 20
+✅ Routes updated!
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v6.3.6 building for production...
+transforming (1661) ../node_modules/react-dom/index.jsBrowserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 1978 modules transformed.
+../dist/public/index.html                            1.95 kB │ gzip:   0.74 kB
+../dist/public/assets/index-CZsN8M84.css            65.04 kB │ gzip:  11.91 kB
+../dist/public/assets/purify.es-CQJ0hv7W.js         21.82 kB │ gzip:   8.58 kB
+../dist/public/assets/index.es-3qJedWCm.js         159.33 kB │ gzip:  53.38 kB
+../dist/public/assets/html2canvas.esm-QH1iLAAe.js  202.38 kB │ gzip:  48.04 kB
+../dist/public/assets/index-kS3cfWgV.js            822.08 kB │ gzip: 259.90 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 17.34s
+
+  dist/index.js  98.8kb
+
+⚡ Done in 20ms
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2740143  │ 0s     │ 251  │ online    │ 0%       │ 16.7mb   │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+
+✅ HOÀN TẤT! App đang chạy tại:
+🌐 http://103.72.96.173:5000
+
+Kiểm tra logs:
+[TAILING] Tailing last 20 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-error.log last 20 lines:
+0|phuan-ap |       [Symbol(shapeMode)]: false,
+0|phuan-ap |       [Symbol(kCapture)]: false
+0|phuan-ap |     },
+0|phuan-ap |     queryQueue: [],
+0|phuan-ap |     binary: false,
+0|phuan-ap |     processID: 2728983,
+0|phuan-ap |     secretKey: 547022789,
+0|phuan-ap |     ssl: false,
+0|phuan-ap |     _connectionTimeoutMillis: 0,
+0|phuan-ap |     _connectionCallback: null,
+0|phuan-ap |     saslSession: null,
+0|phuan-ap |     release: [Function (anonymous)],
+0|phuan-ap |     activeQuery: null,
+0|phuan-ap |     readyForQuery: true,
+0|phuan-ap |     hasExecuted: true,
+0|phuan-ap |     _poolUseCount: 4,
+0|phuan-ap |     [Symbol(shapeMode)]: false,
+0|phuan-ap |     [Symbol(kCapture)]: false
+0|phuan-ap |   }
+0|phuan-ap | }
+
+/root/.pm2/logs/phuan-app-out.log last 20 lines:
+0|phuan-ap | 12:57:34 PM [express] GET /api/staff 304 in 22ms :: [{"id":"staff-001","name":"Phạm Minh D","email":"…
+0|phuan-ap | 12:57:34 PM [express] GET /api/staff-kpis 304 in 15ms :: []
+0|phuan-ap | 12:57:58 PM [express] GET /api/cards 304 in 70ms :: [{"id":"card-001","cardNumber":"PA001001","cardTy…
+0|phuan-ap | 12:57:58 PM [express] GET /api/cards/types 304 in 68ms :: [{"type":"Standard","price":2000000,"maxSes…
+0|phuan-ap | 12:58:30 PM [express] POST /api/cards/card-001/checkin 200 in 41ms :: {"success":true,"card":{"id":"c…
+0|phuan-ap | 12:58:30 PM [express] GET /api/cards 200 in 16ms :: [{"id":"card-002","cardNumber":"PA001002","cardTy…
+0|phuan-ap | 1:01:53 PM [express] GET /api/kpis/alerts 304 in 41ms :: [{"type":"danger","severity":"critical","me…
+0|phuan-ap | 1:01:53 PM [express] GET /api/branches/performance 304 in 54ms :: [{"id":"branch-001","name":"Chi nh…
+0|phuan-ap | 1:02:16 PM [express] GET /api/user 304 in 13ms :: {"id":"admin-001","email":"admin@phuan.com","role"…
+0|phuan-ap | 1:02:16 PM [express] GET /api/dashboard/business-overview 304 in 17ms :: {"quarterlyData":{"labels":…
+0|phuan-ap | 1:02:16 PM [express] GET /api/dashboard/metrics 304 in 22ms :: {"totalRevenue":"0","activeCards":3,"…
+0|phuan-ap | 3:01:10 PM [express] GET /api/user 401 in 4ms
+0|phuan-ap | 3:01:19 PM [express] GET /api/user 401 in 2ms
+0|phuan-ap | 5:41:37 PM [express] GET /api/user 401 in 1ms
+0|phuan-ap | 5:51:35 PM [express] GET /api/user 401 in 5ms
+0|phuan-ap | 6:28:57 PM [express] GET /api/user 200 in 6ms :: {"id":"admin-001","email":"admin@phuan.com","role":…
+0|phuan-ap | 6:28:57 PM [express] GET /api/dashboard/business-overview 304 in 17ms :: {"quarterlyData":{"labels":…
+0|phuan-ap | 6:28:57 PM [express] GET /api/dashboard/metrics 304 in 47ms :: {"totalRevenue":"0","activeCards":3,"…
+0|phuan-ap | 8:29:53 PM [express] serving on port 5000
+0|phuan-ap | 8:30:15 PM [express] serving on port 5000
+
+0|phuan-app  | 8:31:27 PM [express] serving on port 5000
+

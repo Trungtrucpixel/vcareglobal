@@ -1,0 +1,37 @@
+root@cloud:~/PhucAnDuongCMS-3# pm2 logs phuan-app --lines 100 --nostream | grep -A 10 "Card creation error"
+0|phuan-ap | Card creation error: error: column "consultation_sessions" of relation "cards" does not exist
+0|phuan-ap |     at /root/PhucAnDuongCMS-3/node_modules/pg-pool/index.js:45:11
+0|phuan-ap |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|phuan-ap |     at async file:///root/PhucAnDuongCMS-3/node_modules/drizzle-orm/node-postgres/session.js:83:22
+0|phuan-ap |     at async PostgresStorage.createCard (file:///root/PhucAnDuongCMS-3/dist/index.js:739:23)
+0|phuan-ap |     at async file:///root/PhucAnDuongCMS-3/dist/index.js:1331:20 {
+0|phuan-ap |   length: 140,
+0|phuan-ap |   severity: 'ERROR',
+0|phuan-ap |   code: '42703',
+0|phuan-ap |   detail: undefined,
+0|phuan-ap |   hint: undefined,
+--
+0|phuan-ap | Card creation error: error: column "consultation_sessions" of relation "cards" does not exist
+0|phuan-ap |     at /root/PhucAnDuongCMS-3/node_modules/pg-pool/index.js:45:11
+0|phuan-ap |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|phuan-ap |     at async file:///root/PhucAnDuongCMS-3/node_modules/drizzle-orm/node-postgres/session.js:83:22
+0|phuan-ap |     at async PostgresStorage.createCard (file:///root/PhucAnDuongCMS-3/dist/index.js:739:23)
+0|phuan-ap |     at async file:///root/PhucAnDuongCMS-3/dist/index.js:1331:20 {
+0|phuan-ap |   length: 140,
+0|phuan-ap |   severity: 'ERROR',
+0|phuan-ap |   code: '42703',
+0|phuan-ap |   detail: undefined,
+0|phuan-ap |   hint: undefined,
+--
+0|phuan-ap | Card creation error: error: column "consultation_sessions" of relation "cards" does not exist
+0|phuan-ap |     at /root/PhucAnDuongCMS-3/node_modules/pg-pool/index.js:45:11
+0|phuan-ap |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+0|phuan-ap |     at async file:///root/PhucAnDuongCMS-3/node_modules/drizzle-orm/node-postgres/session.js:83:22
+0|phuan-ap |     at async PostgresStorage.createCard (file:///root/PhucAnDuongCMS-3/dist/index.js:739:23)
+0|phuan-ap |     at async file:///root/PhucAnDuongCMS-3/dist/index.js:1331:20 {
+0|phuan-ap |   length: 140,
+0|phuan-ap |   severity: 'ERROR',
+0|phuan-ap |   code: '42703',
+0|phuan-ap |   detail: undefined,
+0|phuan-ap |   hint: undefined,
+root@cloud:~/PhucAnDuongCMS-3# 

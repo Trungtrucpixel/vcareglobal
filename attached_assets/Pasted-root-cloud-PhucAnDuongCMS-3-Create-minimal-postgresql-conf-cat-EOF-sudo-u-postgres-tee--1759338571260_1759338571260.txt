@@ -1,0 +1,64 @@
+root@cloud:~/PhucAnDuongCMS-3# # Create minimal postgresql.conf
+cat << 'EOF' | sudo -u postgres tee /var/lib/postgresql/14/main/postgresql.conf
+listen_addresses = 'localhost'
+port = 5432
+max_connections = 100
+shared_buffers = 128MB
+dynamic_shared_memory_type = posix
+max_wal_size = 1GB
+min_wal_size = 80MB
+log_timezone = 'Asia/Ho_Chi_Minh'
+datestyle = 'iso, mdy'
+timezone = 'Asia/Ho_Chi_Minh'
+lc_messages = 'C.UTF-8'
+lc_monetary = 'C.UTF-8'
+lc_numeric = 'C.UTF-8'
+lc_time = 'C.UTF-8'
+default_text_search_config = 'pg_catalog.english'
+EOF
+
+# Create minimal pg_hba.conf with md5 auth
+cat << 'EOF' | sudo -u postgres tee /var/lib/postgresql/14/main/pg_hba.conf
+local   all             postgres                                peer
+local   all             all                                     md5
+host    all             all             127.0.0.1/32            md5
+host    all             all             ::1/128                 md5
+EOF
+
+# Start PostgreSQL
+sudo systemctl start postgresql
+sudo systemctl status postgresql
+listen_addresses = 'localhost'
+port = 5432
+max_connections = 100
+shared_buffers = 128MB
+dynamic_shared_memory_type = posix
+max_wal_size = 1GB
+min_wal_size = 80MB
+log_timezone = 'Asia/Ho_Chi_Minh'
+datestyle = 'iso, mdy'
+timezone = 'Asia/Ho_Chi_Minh'
+lc_messages = 'C.UTF-8'
+lc_monetary = 'C.UTF-8'
+lc_numeric = 'C.UTF-8'
+lc_time = 'C.UTF-8'
+default_text_search_config = 'pg_catalog.english'
+local   all             postgres                                peer
+local   all             all                                     md5
+host    all             all             127.0.0.1/32            md5
+host    all             all             ::1/128                 md5
+Job for postgresql.service failed because the control process exited with error code.
+See "systemctl status postgresql.service" and "journalctl -xeu postgresql.service" for details.
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+    Drop-In: /etc/systemd/system/postgresql.service.d
+             └─override.conf
+     Active: activating (auto-restart) (Result: exit-code) since Thu 2025-10-02 00:09:16 +07; 21ms ago
+    Process: 2703556 ExecStart=/usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main (code=exited, status=1/FAILURE)
+   Main PID: 2703556 (code=exited, status=1/FAILURE)
+        CPU: 20ms
+
+Oct 02 00:09:16 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 02 00:09:16 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 02 00:09:16 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+root@cloud:~/PhucAnDuongCMS-3# 

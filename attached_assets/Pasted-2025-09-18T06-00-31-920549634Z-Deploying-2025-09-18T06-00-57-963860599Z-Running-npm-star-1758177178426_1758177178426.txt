@@ -1,0 +1,47 @@
+2025-09-18T06:00:31.920549634Z ==> Deploying...
+2025-09-18T06:00:57.963860599Z ==> Running 'npm start'
+2025-09-18T06:00:59.060650291Z 
+2025-09-18T06:00:59.060678792Z > my-node-app@1.0.0 start
+2025-09-18T06:00:59.060684612Z > node dist/server/index.js
+2025-09-18T06:00:59.060688062Z 
+2025-09-18T06:00:59.354387468Z node:internal/modules/esm/resolve:274
+2025-09-18T06:00:59.354413178Z     throw new ERR_MODULE_NOT_FOUND(
+2025-09-18T06:00:59.354416679Z           ^
+2025-09-18T06:00:59.354419039Z 
+2025-09-18T06:00:59.354422819Z Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/opt/render/project/src/dist/server/routes' imported from /opt/render/project/src/dist/server/index.js
+2025-09-18T06:00:59.354427899Z     at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+2025-09-18T06:00:59.354431289Z     at moduleResolve (node:internal/modules/esm/resolve:864:10)
+2025-09-18T06:00:59.354433939Z     at defaultResolve (node:internal/modules/esm/resolve:990:11)
+2025-09-18T06:00:59.354436569Z     at #cachedDefaultResolve (node:internal/modules/esm/loader:768:20)
+2025-09-18T06:00:59.354439109Z     at ModuleLoader.resolve (node:internal/modules/esm/loader:745:38)
+2025-09-18T06:00:59.354442389Z     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:318:38)
+2025-09-18T06:00:59.354445029Z     at #link (node:internal/modules/esm/module_job:208:49) {
+2025-09-18T06:00:59.354448169Z   code: 'ERR_MODULE_NOT_FOUND',
+2025-09-18T06:00:59.354450719Z   url: 'file:///opt/render/project/src/dist/server/routes'
+2025-09-18T06:00:59.35445324Z }
+2025-09-18T06:00:59.35445552Z 
+2025-09-18T06:00:59.35445884Z Node.js v24.8.0
+2025-09-18T06:01:03.151233338Z ==> Exited with status 1
+2025-09-18T06:01:03.314770656Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys
+2025-09-18T06:01:07.426682543Z ==> Running 'npm start'
+2025-09-18T06:01:08.325112942Z 
+2025-09-18T06:01:08.325145113Z > my-node-app@1.0.0 start
+2025-09-18T06:01:08.325150293Z > node dist/server/index.js
+2025-09-18T06:01:08.325153053Z 
+2025-09-18T06:01:08.627487374Z node:internal/modules/esm/resolve:274
+2025-09-18T06:01:08.627521244Z     throw new ERR_MODULE_NOT_FOUND(
+2025-09-18T06:01:08.627525755Z           ^
+2025-09-18T06:01:08.627529185Z 
+2025-09-18T06:01:08.627533015Z Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/opt/render/project/src/dist/server/routes' imported from /opt/render/project/src/dist/server/index.js
+2025-09-18T06:01:08.627539075Z     at finalizeResolution (node:internal/modules/esm/resolve:274:11)
+2025-09-18T06:01:08.627542705Z     at moduleResolve (node:internal/modules/esm/resolve:864:10)
+2025-09-18T06:01:08.627545675Z     at defaultResolve (node:internal/modules/esm/resolve:990:11)
+2025-09-18T06:01:08.627549145Z     at #cachedDefaultResolve (node:internal/modules/esm/loader:768:20)
+2025-09-18T06:01:08.627552345Z     at ModuleLoader.resolve (node:internal/modules/esm/loader:745:38)
+2025-09-18T06:01:08.627555985Z     at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:318:38)
+2025-09-18T06:01:08.627559836Z     at #link (node:internal/modules/esm/module_job:208:49) {
+2025-09-18T06:01:08.627563656Z   code: 'ERR_MODULE_NOT_FOUND',
+2025-09-18T06:01:08.627566736Z   url: 'file:///opt/render/project/src/dist/server/routes'
+2025-09-18T06:01:08.627569836Z }
+2025-09-18T06:01:08.627572816Z 
+2025-09-18T06:01:08.627576036Z Node.js v24.8.0

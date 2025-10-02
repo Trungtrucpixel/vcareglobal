@@ -1,0 +1,138 @@
+root@cloud:~# # Enable debug mode to see request body
+cd ~/PhucAnDuongCMS-3
+
+# Add temporary logging to see what's being sent
+cat > /tmp/test_login.js << 'EOF'
+const http = require('http');
+
+// Simulate browser login request
+const postData = JSON.stringify({
+  email: 'admin@phuan.com',
+  password: 'admin123'
+});
+
+const options = {
+  hostname: '103.72.96.173',
+  port: 5000,
+  path: '/api/login',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Content-Length': Buffer.byteLength(postData)
+  }
+};
+
+const req = http.request(options, (res) => {
+  console.log(`STATUS: ${res.statusCode}`);
+  console.log(`HEADERS: ${JSON.stringify(res.headers)}`);
+  res.on('data', (chunk) => {
+    console.log(`BODY: ${chunk}`);
+  });
+});
+
+req.on('error', (e) => {
+  console.error(`ERROR: ${e.message}`);
+});
+
+req.write(postData);
+req.end();
+EOF
+
+node /tmp/test_login.js
+
+echo ""
+echo "Nếu test OK (200), vấn đề là từ browser. Thử:"
+echo "1. Clear browser cookies cho site này"
+echo "2. Hard refresh (Ctrl+Shift+R)"
+echo "3. Thử incognito/private window"
+STATUS: 200
+HEADERS: {"x-powered-by":"Express","content-type":"application/json; charset=utf-8","content-length":"77","etag":"W/\"4d-cWXSiSWibrgVHA+bCL6UOcRvmy0\"","set-cookie":["connect.sid=s%3ACR5q4XvwCQT30BSFRjQHi4_5-dCs9ddn.GZS7ub5E3ybTdSimDRFa9EyJfdQaHTsmSziVmgIBVKM; Path=/; HttpOnly"],"date":"Thu, 02 Oct 2025 03:05:16 GMT","connection":"keep-alive","keep-alive":"timeout=5"}
+BODY: {"id":"admin-001","email":"admin@phuan.com","role":"admin","status":"active"
+BODY: }
+
+Nếu test OK (200), vấn đề là từ browser. Thử:
+1. Clear browser cookies cho site này
+2. Hard refresh (Ctrl+Shift+R)
+3. Thử incognito/private window
+root@cloud:~/PhucAnDuongCMS-3# # Update auth.ts on VPS with cookie config
+cd ~/PhucAnDuongCMS-3/server
+
+# Edit auth.ts to add cookie settings
+sed -i '/store: storage.sessionStore,/a\    cookie: {\n      httpOnly: true,\n      secure: false,\n      sameSite: '"'"'lax'"'"',\n      maxAge: 1000 * 60 * 60 * 24,\n    },' auth.ts
+
+# Verify the change
+grep -A 8 "sessionSettings" auth.ts
+
+# Rebuild
+cd ~/PhucAnDuongCMS-3
+npm run build
+
+# Restart app
+pm2 restart phuan-app
+sleep 3
+
+# Test login from VPS
+curl -s -X POST http://103.72.96.173:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@phuan.com","password":"admin123"}' \
+  -c /tmp/mobile_test.txt -w "\nHTTP: %{http_code}\n"
+
+echo ""
+echo "✅ Giờ thử login lại trên điện thoại!"
+  const sessionSettings: session.SessionOptions = {
+    secret: process.env.SESSION_SECRET!,
+    resave: false,
+    saveUninitialized: false,
+    store: storage.sessionStore,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+--
+  app.use(session(sessionSettings));
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  passport.use(
+    new LocalStrategy({ usernameField: "email" }, async (username, password, done) => {
+      const user = await storage.getUserByEmail(username); // Using email as username
+      if (!user || !(await comparePasswords(password, user.password))) {
+        return done(null, false);
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v6.3.6 building for production...
+transforming (1661) ../node_modules/react-dom/index.jsBrowserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 1978 modules transformed.
+../dist/public/index.html                            1.95 kB │ gzip:   0.74 kB
+../dist/public/assets/index-CZsN8M84.css            65.04 kB │ gzip:  11.91 kB
+../dist/public/assets/purify.es-CQJ0hv7W.js         21.82 kB │ gzip:   8.58 kB
+../dist/public/assets/index.es-BnQqlfGq.js         159.33 kB │ gzip:  53.38 kB
+../dist/public/assets/html2canvas.esm-QH1iLAAe.js  202.38 kB │ gzip:  48.04 kB
+../dist/public/assets/index-C_Lx3gxP.js            821.84 kB │ gzip: 259.81 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 17.20s
+
+  dist/index.js  97.0kb
+
+⚡ Done in 22ms
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2736910  │ 0s     │ 245  │ online    │ 0%       │ 8.0mb    │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+{"id":"admin-001","email":"admin@phuan.com","role":"admin","status":"active"}
+HTTP: 200
+
+✅ Giờ thử login lại trên điện thoại!
+root@cloud:~/PhucAnDuongCMS-3# 
