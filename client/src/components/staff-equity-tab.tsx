@@ -175,7 +175,7 @@ const KpiPerformance = () => {
             <CardTitle>Kết quả tính KPI</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600" data-testid="text-total-points">
                   {calculateKpiMutation.data.totalPoints}
@@ -195,6 +195,13 @@ const KpiPerformance = () => {
                 <div className="text-sm text-gray-600">Cổ phần</div>
               </div>
               <div className="text-center">
+                <div className="text-2xl font-bold text-orange-600" data-testid="text-pad-token-earned">
+                  {calculateKpiMutation.data.padTokenEarned}
+                </div>
+                <div className="text-sm text-gray-600">PAD Token</div>
+                <div className="text-xs text-gray-500">1 KPI = 10 PAD</div>
+              </div>
+              <div className="text-center flex items-center justify-center">
                 <Badge 
                   variant={calculateKpiMutation.data.isEligible ? "default" : "secondary"}
                   data-testid="badge-eligibility"
@@ -468,6 +475,266 @@ const ReferralManagement = () => {
   );
 };
 
+// Labor Pool (19%) Display Component
+const LaborPoolDisplay = () => {
+  const { data: laborPool } = useQuery<{
+    totalPadTokenFromKpi: number;
+    totalSweatEquityShares: number;
+    laborPoolPercentage: number;
+    staffDistribution: Array<{
+      id: string;
+      name: string;
+      position: string;
+      padToken: number;
+      shares: number;
+    }>;
+    poolValueInVnd: number;
+  }>({ queryKey: ['/api/staff/labor-pool'] });
+
+  return (
+    <div className="space-y-6">
+      {/* Pool Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Award className="h-5 w-5" />
+            Pool công 19% - Sweat Equity & Chi nhánh đạt KPI
+          </CardTitle>
+          <CardDescription>
+            Phân bổ pool công cho nhân viên và chi nhánh đạt KPI
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-orange-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Tổng PAD Token</p>
+                    <p className="text-2xl font-bold" data-testid="text-labor-pool-pad">
+                      {laborPool?.totalPadTokenFromKpi.toLocaleString() || 0} PAD
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2">
+                  <Share2 className="h-5 w-5 text-purple-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Tổng cổ phần Sweat Equity</p>
+                    <p className="text-2xl font-bold" data-testid="text-labor-pool-shares">
+                      {laborPool?.totalSweatEquityShares.toLocaleString() || 0}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-green-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Giá trị Pool</p>
+                    <p className="text-2xl font-bold" data-testid="text-labor-pool-value">
+                      {formatCurrency(laborPool?.poolValueInVnd || 0)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Staff Distribution Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Phân bổ theo nhân viên</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table className="min-w-[600px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="whitespace-nowrap">Nhân viên</TableHead>
+                  <TableHead className="whitespace-nowrap">Vị trí</TableHead>
+                  <TableHead className="whitespace-nowrap">PAD Token</TableHead>
+                  <TableHead className="whitespace-nowrap">Cổ phần</TableHead>
+                  <TableHead className="whitespace-nowrap">Giá trị (VNĐ)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {laborPool?.staffDistribution.map((staff) => (
+                  <TableRow key={staff.id}>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-labor-staff-${staff.id}`}>
+                      {staff.name}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-labor-position-${staff.id}`}>
+                      {staff.position}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-labor-pad-${staff.id}`}>
+                      {staff.padToken.toLocaleString()} PAD
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-labor-shares-${staff.id}`}>
+                      {staff.shares.toLocaleString()}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-labor-value-${staff.id}`}>
+                      {formatCurrency(staff.padToken * 10000)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+// CTV Pool (8%) Display Component
+const CTVPoolDisplay = () => {
+  const { data: ctvPool } = useQuery<{
+    totalCommissionEarned: number;
+    totalCommissionPaid: number;
+    pendingCommission: number;
+    totalPadTokenFromReferrals: number;
+    commissionRate: number;
+    totalReferrals: number;
+    referrerSummary: Record<string, {
+      name: string;
+      totalCommission: number;
+      totalPaid: number;
+      pending: number;
+      padToken: number;
+      count: number;
+    }>;
+  }>({ queryKey: ['/api/referrals/ctv-pool'] });
+
+  return (
+    <div className="space-y-6">
+      {/* Pool Overview */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Pool CTV 8% - Hoa hồng kết nối/giới thiệu
+          </CardTitle>
+          <CardDescription>
+            Pool hoa hồng 8% cho cộng tác viên và người giới thiệu
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-green-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Tổng hoa hồng</p>
+                    <p className="text-2xl font-bold" data-testid="text-ctv-total-commission">
+                      {formatCurrency(ctvPool?.totalCommissionEarned || 0)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2">
+                  <Share2 className="h-5 w-5 text-blue-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Đã chi trả</p>
+                    <p className="text-2xl font-bold" data-testid="text-ctv-paid">
+                      {formatCurrency(ctvPool?.totalCommissionPaid || 0)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="h-5 w-5 text-orange-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Chưa chi trả</p>
+                    <p className="text-2xl font-bold" data-testid="text-ctv-pending">
+                      {formatCurrency(ctvPool?.pendingCommission || 0)}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-purple-500" />
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Tổng giới thiệu</p>
+                    <p className="text-2xl font-bold" data-testid="text-ctv-referrals">
+                      {ctvPool?.totalReferrals || 0}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Referrer Summary Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Tổng hợp theo người giới thiệu</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table className="min-w-[700px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="whitespace-nowrap">Người giới thiệu</TableHead>
+                  <TableHead className="whitespace-nowrap">Số lượt</TableHead>
+                  <TableHead className="whitespace-nowrap">Tổng hoa hồng</TableHead>
+                  <TableHead className="whitespace-nowrap">Đã trả</TableHead>
+                  <TableHead className="whitespace-nowrap">Chưa trả</TableHead>
+                  <TableHead className="whitespace-nowrap">PAD Token</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {ctvPool && Object.entries(ctvPool.referrerSummary).map(([referrerId, summary]) => (
+                  <TableRow key={referrerId}>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-ctv-referrer-${referrerId}`}>
+                      {summary.name}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-ctv-count-${referrerId}`}>
+                      {summary.count}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-ctv-commission-${referrerId}`}>
+                      {formatCurrency(summary.totalCommission)}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-ctv-paid-${referrerId}`}>
+                      {formatCurrency(summary.totalPaid)}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-ctv-pending-${referrerId}`}>
+                      {formatCurrency(summary.pending)}
+                    </TableCell>
+                    <TableCell className="whitespace-nowrap" data-testid={`text-ctv-pad-${referrerId}`}>
+                      {summary.padToken.toLocaleString()} PAD
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
 // Share Management Component
 const ShareManagement = () => {
   const { data: staff = [] } = useQuery<Staff[]>({ queryKey: ['/api/staff'] });
@@ -607,14 +874,22 @@ export default function StaffEquityTab() {
       </div>
 
       <Tabs defaultValue="kpi" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="kpi" data-testid="tab-kpi">
             <TrendingUp className="h-4 w-4 mr-2" />
             KPI & Hiệu suất
           </TabsTrigger>
+          <TabsTrigger value="labor-pool" data-testid="tab-labor-pool">
+            <Award className="h-4 w-4 mr-2" />
+            Pool công 19%
+          </TabsTrigger>
           <TabsTrigger value="referrals" data-testid="tab-referrals">
             <Gift className="h-4 w-4 mr-2" />
             Giới thiệu
+          </TabsTrigger>
+          <TabsTrigger value="ctv-pool" data-testid="tab-ctv-pool">
+            <Users className="h-4 w-4 mr-2" />
+            Pool CTV 8%
           </TabsTrigger>
           <TabsTrigger value="shares" data-testid="tab-shares">
             <Share2 className="h-4 w-4 mr-2" />
@@ -626,8 +901,16 @@ export default function StaffEquityTab() {
           <KpiPerformance />
         </TabsContent>
 
+        <TabsContent value="labor-pool">
+          <LaborPoolDisplay />
+        </TabsContent>
+
         <TabsContent value="referrals">
           <ReferralManagement />
+        </TabsContent>
+
+        <TabsContent value="ctv-pool">
+          <CTVPoolDisplay />
         </TabsContent>
 
         <TabsContent value="shares">
