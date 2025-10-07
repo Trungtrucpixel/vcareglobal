@@ -53,6 +53,35 @@ interface Transaction {
   approvedBy?: string;
 }
 
+interface AssetContribution {
+  id: string;
+  userId: string;
+  assetName: string;
+  assetDescription?: string;
+  valuationAmount: string;
+  padTokenAmount: string;
+  contractDocumentPath?: string;
+  status: string;
+  approvedBy?: string;
+  approvedAt?: string;
+  rejectionReason?: string;
+  inheritanceRight: boolean;
+  createdAt: string;
+}
+
+interface PadTokenHistory {
+  date: string;
+  amount: string;
+  type: string;
+  description: string;
+}
+
+interface RoiProjection {
+  period: string;
+  projectedReturn: number;
+  totalValue: number;
+}
+
 // Utility functions
 const formatCurrency = (amount: string | number) => {
   const numAmount = typeof amount === "string" ? parseFloat(amount) : amount;
@@ -553,6 +582,308 @@ const CashFlowDashboard = () => {
   );
 };
 
+// Asset Contribution Component
+const AssetContribution = () => {
+  const [assetForm, setAssetForm] = useState({
+    assetName: "",
+    assetDescription: "",
+    valuationAmount: "",
+    contractDocumentPath: "",
+    inheritanceRight: false,
+  });
+  const { toast } = useToast();
+
+  const { data: contributions = [] } = useQuery<AssetContribution[]>({ 
+    queryKey: ['/api/contributions/asset'] 
+  });
+
+  const assetMutation = useMutation({
+    mutationFn: async (formData: any) => {
+      const response = await apiRequest('POST', '/api/contributions/asset', formData);
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({ description: "Đã gửi đề xuất góp tài sản thành công!" });
+      setAssetForm({ 
+        assetName: "", 
+        assetDescription: "", 
+        valuationAmount: "", 
+        contractDocumentPath: "", 
+        inheritanceRight: false 
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/contributions/asset'] });
+    },
+    onError: (error: any) => {
+      toast({ variant: "destructive", description: "Lỗi: " + (error.message || "Không thể gửi đề xuất") });
+    }
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!assetForm.assetName || !assetForm.valuationAmount) {
+      toast({ variant: "destructive", description: "Vui lòng điền đầy đủ thông tin" });
+      return;
+    }
+
+    assetMutation.mutate(assetForm);
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Upload className="h-5 w-5 text-purple-500" />
+            Góp tài sản
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <Label htmlFor="assetName">Tên tài sản *</Label>
+              <Input
+                value={assetForm.assetName}
+                onChange={(e) => setAssetForm(prev => ({ ...prev, assetName: e.target.value }))}
+                placeholder="Ví dụ: Nhà đất, Thiết bị, Xe cộ..."
+                data-testid="input-asset-name"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="assetDescription">Mô tả chi tiết</Label>
+              <Textarea
+                value={assetForm.assetDescription}
+                onChange={(e) => setAssetForm(prev => ({ ...prev, assetDescription: e.target.value }))}
+                placeholder="Mô tả tài sản, vị trí, tình trạng..."
+                rows={4}
+                data-testid="textarea-asset-description"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="valuationAmount">Giá trị định giá (VND) *</Label>
+              <Input
+                type="number"
+                value={assetForm.valuationAmount}
+                onChange={(e) => setAssetForm(prev => ({ ...prev, valuationAmount: e.target.value }))}
+                placeholder="Nhập giá trị tài sản"
+                min="0"
+                data-testid="input-valuation-amount"
+              />
+              {assetForm.valuationAmount && (
+                <p className="text-sm text-gray-600 mt-1">
+                  PAD Token tương ứng: <strong>{((parseFloat(assetForm.valuationAmount) / 1000000) * 100).toFixed(2)} PAD</strong>
+                </p>
+              )}
+            </div>
+
+            <div>
+              <Label htmlFor="contractDocumentPath">Link hợp đồng/tài liệu</Label>
+              <Input
+                value={assetForm.contractDocumentPath}
+                onChange={(e) => setAssetForm(prev => ({ ...prev, contractDocumentPath: e.target.value }))}
+                placeholder="https://drive.google.com/..."
+                data-testid="input-contract-path"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                Upload tài liệu lên Google Drive hoặc nơi lưu trữ và dán link vào đây
+              </p>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="inheritanceRight"
+                checked={assetForm.inheritanceRight}
+                onChange={(e) => setAssetForm(prev => ({ ...prev, inheritanceRight: e.target.checked }))}
+                className="h-4 w-4"
+                data-testid="checkbox-inheritance-right"
+              />
+              <Label htmlFor="inheritanceRight" className="cursor-pointer">
+                Tôi muốn áp dụng quyền kế thừa cho tài sản này (chỉ dành cho vai trò Sáng lập)
+              </Label>
+            </div>
+
+            <Button 
+              type="submit" 
+              disabled={assetMutation.isPending}
+              className="w-full"
+              data-testid="button-submit-asset"
+            >
+              {assetMutation.isPending ? "Đang xử lý..." : "Gửi đề xuất góp tài sản"}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      {/* List of contributions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Danh sách góp tài sản của tôi</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Tên tài sản</TableHead>
+                  <TableHead>Giá trị</TableHead>
+                  <TableHead>PAD Token</TableHead>
+                  <TableHead>Trạng thái</TableHead>
+                  <TableHead>Ngày tạo</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {contributions.map((contribution) => (
+                  <TableRow key={contribution.id}>
+                    <TableCell data-testid={`text-asset-name-${contribution.id}`}>
+                      {contribution.assetName}
+                    </TableCell>
+                    <TableCell data-testid={`text-asset-value-${contribution.id}`}>
+                      {formatCurrency(contribution.valuationAmount)}
+                    </TableCell>
+                    <TableCell data-testid={`text-asset-pad-${contribution.id}`}>
+                      {contribution.padTokenAmount} PAD
+                    </TableCell>
+                    <TableCell data-testid={`badge-asset-status-${contribution.id}`}>
+                      <Badge variant={getStatusBadgeVariant(contribution.status)}>
+                        {contribution.status === "pending" ? "Chờ duyệt" :
+                         contribution.status === "approved" ? "Đã duyệt" :
+                         contribution.status === "rejected" ? "Từ chối" :
+                         contribution.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell data-testid={`text-asset-date-${contribution.id}`}>
+                      {formatDate(contribution.createdAt)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          {contributions.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              Chưa có đóng góp tài sản nào
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+// PAD Token Component
+const PadToken = () => {
+  const { data: history = [] } = useQuery<PadTokenHistory[]>({ 
+    queryKey: ['/api/pad-token/history'] 
+  });
+
+  const { data: roiProjection = [] } = useQuery<RoiProjection[]>({ 
+    queryKey: ['/api/pad-token/roi-projection'] 
+  });
+
+  return (
+    <div className="space-y-6">
+      {/* ROI Projection */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-green-500" />
+            Dự đoán lợi nhuận (ROI) theo thời gian
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {roiProjection.map((projection, index) => (
+              <Card key={index} className="border-2">
+                <CardContent className="p-4">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-600 mb-2">
+                      {projection.period}
+                    </p>
+                    <p className="text-xl font-bold text-green-600 mb-1" data-testid={`text-roi-return-${index}`}>
+                      +{formatCurrency(projection.projectedReturn)}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Tổng giá trị: {formatCurrency(projection.totalValue)}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          {roiProjection.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              Chưa có dữ liệu PAD Token để dự đoán
+            </div>
+          )}
+          <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Lưu ý:</strong> Dự đoán ROI dựa trên tỷ lệ lợi nhuận trung bình 15%/năm. 
+              Kết quả thực tế có thể khác biệt tùy theo tình hình kinh doanh.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* PAD Token History */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <DollarSign className="h-5 w-5 text-yellow-500" />
+            Lịch sử PAD Token
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Ngày</TableHead>
+                  <TableHead>Loại giao dịch</TableHead>
+                  <TableHead>Số lượng PAD</TableHead>
+                  <TableHead>Mô tả</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {history.map((item, index) => (
+                  <TableRow key={index}>
+                    <TableCell data-testid={`text-pad-date-${index}`}>
+                      {formatDate(item.date)}
+                    </TableCell>
+                    <TableCell data-testid={`text-pad-type-${index}`}>
+                      <Badge variant="outline">
+                        {item.type === "deposit" ? "Nạp tiền" : 
+                         item.type === "invest" ? "Đầu tư" :
+                         item.type === "asset" ? "Góp tài sản" : 
+                         item.type}
+                      </Badge>
+                    </TableCell>
+                    <TableCell data-testid={`text-pad-amount-${index}`}>
+                      <span className="font-medium text-green-600">
+                        +{item.amount} PAD
+                      </span>
+                    </TableCell>
+                    <TableCell data-testid={`text-pad-description-${index}`}>
+                      {item.description}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          {history.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              Chưa có lịch sử PAD Token
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
 // Main Cash Flow Tab Component
 export default function CashFlowTab() {
   return (
@@ -569,7 +900,7 @@ export default function CashFlowTab() {
       <CashFlowDashboard />
 
       <Tabs defaultValue="deposit" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="deposit" data-testid="tab-deposit">
             <ArrowUpCircle className="h-4 w-4 mr-2" />
             Nạp tiền/Đầu tư
@@ -577,6 +908,14 @@ export default function CashFlowTab() {
           <TabsTrigger value="withdraw" data-testid="tab-withdraw">
             <ArrowDownCircle className="h-4 w-4 mr-2" />
             Rút tiền
+          </TabsTrigger>
+          <TabsTrigger value="asset" data-testid="tab-asset">
+            <Upload className="h-4 w-4 mr-2" />
+            Góp tài sản
+          </TabsTrigger>
+          <TabsTrigger value="padtoken" data-testid="tab-padtoken">
+            <DollarSign className="h-4 w-4 mr-2" />
+            PAD Token
           </TabsTrigger>
           <TabsTrigger value="history" data-testid="tab-history">
             <FileText className="h-4 w-4 mr-2" />
@@ -590,6 +929,14 @@ export default function CashFlowTab() {
 
         <TabsContent value="withdraw">
           <Withdrawal />
+        </TabsContent>
+
+        <TabsContent value="asset">
+          <AssetContribution />
+        </TabsContent>
+
+        <TabsContent value="padtoken">
+          <PadToken />
         </TabsContent>
 
         <TabsContent value="history">

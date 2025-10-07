@@ -10,6 +10,7 @@ import {
   insertKpiSchema, 
   insertStaffKpiSchema, 
   insertReferralSchema,
+  insertAssetContributionSchema,
   profitSharingValidationSchema,
   profitSharingProcessSchema,
   profitDistributionValidationSchema,
@@ -1384,6 +1385,137 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(transaction);
     } catch (error) {
       res.status(500).json({ message: "Failed to reject transaction" });
+    }
+  });
+
+  // Asset contribution routes
+  app.post("/api/contributions/asset", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const user = req.user as any;
+      
+      // Validate input with Zod schema
+      const validatedData = insertAssetContributionSchema.parse({
+        ...req.body,
+        userId: user.id,
+        status: 'pending',
+      });
+      
+      // Ensure valuationAmount is a valid number
+      const valuationNum = parseFloat(validatedData.valuationAmount);
+      if (isNaN(valuationNum) || valuationNum <= 0) {
+        return res.status(400).json({ message: "Valuation amount must be a positive number" });
+      }
+      
+      // Calculate PAD Token: 100 PAD = 1M VND
+      const padTokenAmount = (valuationNum / 1000000) * 100;
+      
+      const contribution = await storage.createAssetContribution({
+        ...validatedData,
+        valuationAmount: valuationNum.toString(),
+        padTokenAmount: padTokenAmount.toString(),
+        status: 'pending',
+      });
+      
+      res.status(201).json(contribution);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors 
+        });
+      }
+      console.error("Asset contribution error:", error);
+      res.status(500).json({ message: "Failed to create asset contribution" });
+    }
+  });
+
+  app.get("/api/contributions/asset", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const user = req.user as any;
+      const contributions = await storage.getAssetContributions(user.id);
+      res.json(contributions);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch asset contributions" });
+    }
+  });
+
+  app.post("/api/contributions/asset/:id/approve", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    try {
+      const { id } = req.params;
+      const contribution = await storage.approveAssetContribution(id, user.id);
+      
+      if (!contribution) {
+        return res.status(404).json({ message: "Contribution not found" });
+      }
+      
+      res.json(contribution);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to approve contribution" });
+    }
+  });
+
+  app.post("/api/contributions/asset/:id/reject", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    try {
+      const { id } = req.params;
+      const { reason } = req.body;
+      
+      if (!reason) {
+        return res.status(400).json({ message: "Rejection reason is required" });
+      }
+      
+      const contribution = await storage.rejectAssetContribution(id, user.id, reason);
+      
+      if (!contribution) {
+        return res.status(404).json({ message: "Contribution not found" });
+      }
+      
+      res.json(contribution);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to reject contribution" });
+    }
+  });
+
+  // PAD Token routes
+  app.get("/api/pad-token/history", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const user = req.user as any;
+      const history = await storage.getPadTokenHistory(user.id);
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch PAD Token history" });
+    }
+  });
+
+  app.get("/api/pad-token/roi-projection", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    try {
+      const user = req.user as any;
+      const periods = [6, 12, 36, 60]; // 6 months, 1 year, 3 years, 5 years
+      const projection = await storage.calculateRoiProjection(user.id, periods);
+      res.json(projection);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to calculate ROI projection" });
     }
   });
 

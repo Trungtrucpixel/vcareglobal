@@ -44,6 +44,15 @@ Testing approach: Skip full automated UI tests, check basic functionality only t
   - New endpoint `/api/staff/labor-pool` for 19% labor pool display (Sweat Equity & branches meeting KPI)
   - New endpoint `/api/referrals/ctv-pool` for 8% CTV pool display (collaborator/referral commissions)
   - Enhanced Staff & Equity tab with 5 sub-tabs: KPI Performance, Labor Pool (19%), Referrals, CTV Pool (8%), and Share Management
+- **Asset Contribution & PAD Token Management** (October 2025):
+  - Added complete asset contribution workflow with valuation, contract document links, and inheritance rights
+  - New backend API routes: POST/GET `/api/contributions/asset`, POST `/api/contributions/asset/:id/approve`, POST `/api/contributions/asset/:id/reject`
+  - New PAD Token history and ROI projection endpoints: GET `/api/pad-token/history`, GET `/api/pad-token/roi-projection`
+  - Enhanced Cash Flow tab with 5 tabs: Nạp tiền/Đầu tư, Rút tiền, Góp tài sản, PAD Token, and Lịch sử
+  - Asset contribution form includes: asset name, description, valuation amount (auto-calculates PAD Token: 100 PAD = 1M VND), contract document link, and inheritance right checkbox
+  - PAD Token tab displays ROI projections for 6 months, 1 year, 3 years, and 5 years (15%/year assumed rate)
+  - Strict Zod schema validation prevents NaN and negative valuation amounts
+  - Admin approval/rejection workflow with status tracking (pending/approved/rejected)
 
 ## Authentication and Authorization
 - **Strategy**: Session-based authentication with Passport.js local strategy

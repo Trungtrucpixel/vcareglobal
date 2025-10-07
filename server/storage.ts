@@ -16,6 +16,7 @@ import {
   type DepositRequest, type InsertDepositRequest,
   type UserSharesHistory, type InsertUserSharesHistory,
   type BusinessTierConfig, type InsertBusinessTierConfig,
+  type AssetContribution, type InsertAssetContribution,
   type UserRoleUpdate, type TransactionApproval, type SystemConfigUpdate, type ReportExport,
   type BusinessTierUpgrade, type QrCheckin, type EnhancedWithdrawal, type UserProfileUpdate,
   validateQuarterBoundaries, determineBusinessTier, calculateShares, calculateWithdrawalTax
@@ -152,6 +153,17 @@ export interface IStorage {
   rejectCashFlowTransaction(transactionId: string, approvedBy: string, reason?: string): Promise<Transaction | undefined>;
   calculateWithdrawalTax(amount: number): number;
   
+  // Asset contribution operations
+  createAssetContribution(contribution: InsertAssetContribution): Promise<AssetContribution>;
+  getAssetContributions(userId?: string): Promise<AssetContribution[]>;
+  getAssetContribution(id: string): Promise<AssetContribution | undefined>;
+  approveAssetContribution(contributionId: string, approvedBy: string): Promise<AssetContribution | undefined>;
+  rejectAssetContribution(contributionId: string, approvedBy: string, reason: string): Promise<AssetContribution | undefined>;
+  
+  // PAD Token operations
+  getPadTokenHistory(userId?: string): Promise<Array<{date: string; amount: string; type: string; description: string}>>;
+  calculateRoiProjection(userId: string, periods: number[]): Promise<Array<{period: string; projectedReturn: number; totalValue: number}>>;
+  
   // Admin operations
   getAllUsers(): Promise<User[]>;
   updateUserRole(userId: string, role: string, updatedBy: string): Promise<User | undefined>;
@@ -227,6 +239,7 @@ export class MemStorage implements IStorage {
   private depositRequests: Map<string, DepositRequest>;
   private userSharesHistory: Map<string, UserSharesHistory>;
   private businessTierConfigs: Map<string, BusinessTierConfig>;
+  private assetContributions: Map<string, AssetContribution>;
   public sessionStore: SessionStore;
 
   constructor() {
@@ -247,6 +260,7 @@ export class MemStorage implements IStorage {
     this.depositRequests = new Map();
     this.userSharesHistory = new Map();
     this.businessTierConfigs = new Map();
+    this.assetContributions = new Map();
     this.sessionStore = new MemoryStore({
       checkPeriod: 86400000,
     });
@@ -2074,6 +2088,143 @@ export class MemStorage implements IStorage {
       return Math.round(amount * 0.1);
     }
     return 0;
+  }
+
+  // Asset contribution operations
+  async createAssetContribution(contribution: InsertAssetContribution): Promise<AssetContribution> {
+    const id = randomUUID();
+    const now = new Date();
+    
+    const newContribution: AssetContribution = {
+      id,
+      ...contribution,
+      status: contribution.status || 'pending',
+      approvedBy: contribution.approvedBy || null,
+      approvedAt: null,
+      rejectionReason: null,
+      inheritanceRight: contribution.inheritanceRight || false,
+      createdAt: now,
+    };
+    
+    this.assetContributions.set(id, newContribution);
+    return newContribution;
+  }
+
+  async getAssetContributions(userId?: string): Promise<AssetContribution[]> {
+    const contributions = Array.from(this.assetContributions.values());
+    if (userId) {
+      return contributions.filter(c => c.userId === userId);
+    }
+    return contributions;
+  }
+
+  async getAssetContribution(id: string): Promise<AssetContribution | undefined> {
+    return this.assetContributions.get(id);
+  }
+
+  async approveAssetContribution(contributionId: string, approvedBy: string): Promise<AssetContribution | undefined> {
+    const contribution = this.assetContributions.get(contributionId);
+    if (!contribution) return undefined;
+
+    const updatedContribution: AssetContribution = {
+      ...contribution,
+      status: 'approved',
+      approvedBy,
+      approvedAt: new Date(),
+    };
+
+    this.assetContributions.set(contributionId, updatedContribution);
+
+    // Cập nhật PAD Token cho user
+    const user = await this.getUser(contribution.userId);
+    if (user) {
+      const currentPadToken = parseFloat(user.padToken || '0');
+      const newPadToken = currentPadToken + parseFloat(contribution.padTokenAmount);
+      await this.updateUser(contribution.userId, {
+        padToken: newPadToken.toString(),
+      });
+
+      // Tạo transaction record
+      await this.createTransaction({
+        userId: contribution.userId,
+        type: 'invest',
+        amount: contribution.valuationAmount,
+        description: `Góp tài sản: ${contribution.assetName}`,
+        contributionType: 'asset',
+        padTokenAmount: contribution.padTokenAmount,
+        status: 'completed',
+        documentPath: contribution.contractDocumentPath || undefined,
+      });
+    }
+
+    return updatedContribution;
+  }
+
+  async rejectAssetContribution(contributionId: string, approvedBy: string, reason: string): Promise<AssetContribution | undefined> {
+    const contribution = this.assetContributions.get(contributionId);
+    if (!contribution) return undefined;
+
+    const updatedContribution: AssetContribution = {
+      ...contribution,
+      status: 'rejected',
+      approvedBy,
+      rejectionReason: reason,
+    };
+
+    this.assetContributions.set(contributionId, updatedContribution);
+    return updatedContribution;
+  }
+
+  // PAD Token operations
+  async getPadTokenHistory(userId?: string): Promise<Array<{date: string; amount: string; type: string; description: string}>> {
+    const transactions = await this.getTransactions();
+    let relevantTransactions = transactions;
+    
+    if (userId) {
+      relevantTransactions = transactions.filter(t => t.userId === userId);
+    }
+
+    // Filter transactions that have PAD Token changes
+    const padTokenTransactions = relevantTransactions.filter(t => {
+      return t.padTokenAmount && parseFloat(t.padTokenAmount) > 0;
+    });
+
+    return padTokenTransactions.map(t => ({
+      date: t.date?.toISOString() || new Date().toISOString(),
+      amount: t.padTokenAmount || '0',
+      type: t.type,
+      description: t.description,
+    }));
+  }
+
+  async calculateRoiProjection(userId: string, periods: number[]): Promise<Array<{period: string; projectedReturn: number; totalValue: number}>> {
+    const user = await this.getUser(userId);
+    if (!user) return [];
+
+    const currentPadToken = parseFloat(user.padToken || '0');
+    const currentValueVnd = currentPadToken * 10000; // 100 PAD = 1M VND, so 1 PAD = 10,000 VND
+
+    // Assumed annual return rate: 15% (configurable)
+    const annualReturnRate = 0.15;
+
+    return periods.map(months => {
+      const years = months / 12;
+      const projectedValue = currentValueVnd * Math.pow(1 + annualReturnRate, years);
+      const projectedReturn = projectedValue - currentValueVnd;
+
+      let periodLabel = '';
+      if (months === 6) periodLabel = '6 tháng';
+      else if (months === 12) periodLabel = '1 năm';
+      else if (months === 36) periodLabel = '3 năm';
+      else if (months === 60) periodLabel = '5 năm';
+      else periodLabel = `${months} tháng`;
+
+      return {
+        period: periodLabel,
+        projectedReturn: Math.round(projectedReturn),
+        totalValue: Math.round(projectedValue),
+      };
+    });
   }
 
   // Helper method for quarter validation
