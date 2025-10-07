@@ -16,6 +16,7 @@ export const users = pgTable("users", {
   totalShares: decimal("total_shares", { precision: 15, scale: 2 }).default("0"), // Current shares owned
   padToken: decimal("pad_token", { precision: 15, scale: 2 }).default("0"), // PAD Token balance (100 PAD = 1M VND)
   maxoutReached: boolean("maxout_reached").default(false), // Whether user reached maxout limit
+  inheritanceRight: boolean("inheritance_right").default(false), // Quyền kế thừa cho vai trò Sáng lập
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -48,6 +49,7 @@ export const assetContributions = pgTable("asset_contributions", {
   approvedBy: varchar("approved_by").references(() => users.id),
   approvedAt: timestamp("approved_at"),
   rejectionReason: text("rejection_reason"),
+  inheritanceRight: boolean("inheritance_right").default(false), // Quyền kế thừa (chỉ cho Sáng lập)
   createdAt: timestamp("created_at").defaultNow(),
 });
 
