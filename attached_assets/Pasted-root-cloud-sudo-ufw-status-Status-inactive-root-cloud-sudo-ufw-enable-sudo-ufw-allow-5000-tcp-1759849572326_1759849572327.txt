@@ -1,0 +1,39 @@
+root@cloud:~# sudo ufw status
+Status: inactive
+root@cloud:~# sudo ufw enable
+sudo ufw allow 5000/tcp
+sudo ufw allow 22/tcp
+sudo ufw allow 24700/tcp
+sudo ufw reload
+Command may disrupt existing ssh connections. Proceed with operation (y|n)? y
+Firewall is active and enabled on system startup
+Rule added
+Rule added (v6)
+Rule added
+Rule added (v6)
+Rule added
+Rule added (v6)
+Firewall reloaded
+root@cloud:~# cd /opt/phucAnduong
+pm2 delete phuan-app
+pm2 start npm --name phuan-app -- start --max-memory-restart 500M
+pm2 save
+[PM2] Applying action deleteProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ N/A     │ fork    │ 2772766  │ 0s     │ 0    │ online    │ 0%       │ 16.6mb   │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Saving current process list...
+[PM2] Successfully saved in /root/.pm2/dump.pm2
+root@cloud:/opt/phucAnduong# netstat -tlnp | grep 5000
+Command 'netstat' not found, but can be installed with:
+apt install net-tools
+root@cloud:/opt/phucAnduong# ss -tlnp | grep 5000
+root@cloud:/opt/phucAnduong# 
