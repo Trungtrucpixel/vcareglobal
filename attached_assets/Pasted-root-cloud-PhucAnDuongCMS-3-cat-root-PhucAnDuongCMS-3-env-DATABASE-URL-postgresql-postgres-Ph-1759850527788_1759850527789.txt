@@ -1,0 +1,36 @@
+root@cloud:~/PhucAnDuongCMS-3# cat /root/PhucAnDuongCMS-3/.env
+DATABASE_URL=postgresql://postgres:PhucAn2025!@localhost:5432/phuanduong_db
+SESSION_SECRET=random-secret-key-change-this
+NODE_ENV=production
+SESSION_SECRET=842d16f5919911b5d66ad480f029e63db95b776bf2a0080d3fb0ec8497c9995f
+root@cloud:~/PhucAnDuongCMS-3# cat /root/PhucAnDuongCMS-3/ecosystem.config.cjs
+module.exports = {
+  apps: [{
+    name: "phuan-app",
+    script: "./dist/index.js",
+    env: {
+      NODE_ENV: "development",
+      PORT: 5000,
+      SESSION_SECRET: "phuan_secret_key_2025_change_this_in_production"
+    }
+  }]
+}
+root@cloud:~/PhucAnDuongCMS-3# cd /root/PhucAnDuongCMS-3
+pm2 delete phuan-app
+pm2 start ecosystem.config.cjs
+pm2 save
+[PM2] Applying action deleteProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2][WARN] Applications phuan-app not running, starting...
+[PM2] App [phuan-app] launched (1 instances)
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2782565  │ 0s     │ 0    │ online    │ 0%       │ 4.0kb    │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Saving current process list...
+[PM2] Successfully saved in /root/.pm2/dump.pm2
+root@cloud:~/PhucAnDuongCMS-3# 
