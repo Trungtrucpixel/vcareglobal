@@ -1,17 +1,26 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { Express } from "express";
 import session from "express-session";
+import jwt from "jsonwebtoken";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import { storage } from "./storage";
-import { User as SelectUser } from "@shared/schema";
+import { User as SelectUser, Role } from "@shared/schema";
 
 declare global {
   namespace Express {
-    interface User extends SelectUser {}
+    interface User extends SelectUser {
+      roles?: Role[];
+      padToken?: number;
+    }
   }
 }
+
+// JWT Secret - should be in environment variables
+const JWT_SECRET = process.env.JWT_SECRET || process.env.SESSION_SECRET || 'your-secret-key';
+const JWT_EXPIRES_IN = '24h';
 
 const scryptAsync = promisify(scrypt);
 
@@ -26,6 +35,39 @@ async function comparePasswords(supplied: string, stored: string) {
   const hashedBuf = Buffer.from(hashed, "hex");
   const suppliedBuf = (await scryptAsync(supplied, salt, 64)) as Buffer;
   return timingSafeEqual(hashedBuf, suppliedBuf);
+}
+
+// JWT Helper functions
+export function generateJWT(user: any): string {
+  return jwt.sign(
+    { 
+      id: user.id, 
+      email: user.email,
+      roles: user.roles?.map((r: Role) => r.name) || [user.role],
+      padToken: parseFloat(user.padToken || "0")
+    },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN }
+  );
+}
+
+export function verifyJWT(token: string): any {
+  return jwt.verify(token, JWT_SECRET);
+}
+
+// Load user with roles and PAD Token
+async function loadUserWithRoles(userId: string): Promise<any> {
+  const user = await storage.getUser(userId);
+  if (!user) return null;
+
+  const userRoles = await storage.getUserRoles(userId);
+  const roles = userRoles.map(ur => ur.roles || ur.role);
+  
+  return {
+    ...user,
+    roles: roles,
+    padToken: parseFloat(user.padToken || "0")
+  };
 }
 
 export function setupAuth(app: Express) {
@@ -58,9 +100,25 @@ export function setupAuth(app: Express) {
     }),
   );
 
+  // JWT Strategy
+  passport.use(new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: JWT_SECRET
+  }, async (payload, done) => {
+    try {
+      const user = await loadUserWithRoles(payload.id);
+      if (user) {
+        return done(null, user);
+      }
+      return done(null, false);
+    } catch (error) {
+      return done(error, false);
+    }
+  }));
+
   passport.serializeUser((user, done) => done(null, user.id));
   passport.deserializeUser(async (id: string, done) => {
-    const user = await storage.getUser(id);
+    const user = await loadUserWithRoles(id);
     done(null, user);
   });
 
@@ -75,14 +133,22 @@ export function setupAuth(app: Express) {
       password: await hashPassword(req.body.password),
     });
 
-    req.login(user, (err) => {
+    // Load user with roles
+    const userWithRoles = await loadUserWithRoles(user.id);
+    
+    req.login(userWithRoles, (err) => {
       if (err) return next(err);
-      // Return user data without password hash and force customer role
+      
+      const token = generateJWT(userWithRoles);
       const userResponse = {
         id: user.id,
         email: user.email,
-        role: 'customer', // Force new registrations to customer role for security
-        status: user.status
+        name: user.name,
+        role: user.role,
+        roles: userWithRoles.roles,
+        padToken: userWithRoles.padToken,
+        status: user.status,
+        token: token
       };
       res.status(201).json(userResponse);
     });
@@ -91,11 +157,16 @@ export function setupAuth(app: Express) {
   app.post("/api/login", passport.authenticate("local"), (req, res) => {
     // Return user data without password hash
     const user = req.user as any;
+    const token = generateJWT(user);
     const userResponse = {
       id: user.id,
       email: user.email,
+      name: user.name,
       role: user.role,
-      status: user.status
+      roles: user.roles,
+      padToken: user.padToken,
+      status: user.status,
+      token: token
     };
     res.status(200).json(userResponse);
   });
@@ -114,9 +185,63 @@ export function setupAuth(app: Express) {
     const userResponse = {
       id: user.id,
       email: user.email,
+      name: user.name,
       role: user.role,
+      roles: user.roles,
+      padToken: user.padToken,
       status: user.status
     };
     res.json(userResponse);
+  });
+
+  // JWT Login endpoint (alternative to session-based login)
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user || !(await comparePasswords(password, user.password))) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+
+      const userWithRoles = await loadUserWithRoles(user.id);
+      const token = generateJWT(userWithRoles);
+      
+      res.json({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        roles: userWithRoles.roles,
+        padToken: userWithRoles.padToken,
+        status: user.status,
+        token: token
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+
+  // JWT Refresh endpoint
+  app.post("/api/auth/refresh", async (req, res) => {
+    try {
+      const { token } = req.body;
+      const decoded = verifyJWT(token);
+      const userWithRoles = await loadUserWithRoles(decoded.id);
+      const newToken = generateJWT(userWithRoles);
+      
+      res.json({
+        id: userWithRoles.id,
+        email: userWithRoles.email,
+        name: userWithRoles.name,
+        role: userWithRoles.role,
+        roles: userWithRoles.roles,
+        padToken: userWithRoles.padToken,
+        status: userWithRoles.status,
+        token: newToken
+      });
+    } catch (error) {
+      res.status(401).json({ message: "Invalid token" });
+    }
   });
 }

@@ -1,6 +1,7 @@
 import { db } from "./db";
 import { eq, and, desc, sql } from "drizzle-orm";
 import * as schema from "@shared/schema";
+import crypto from "crypto";
 import {
   type User, type InsertUser,
   type Card, type InsertCard,
@@ -151,6 +152,22 @@ export class PostgresStorage implements IStorage {
   async getCard(id: string): Promise<Card | undefined> {
     const [card] = await db.select().from(schema.cards).where(eq(schema.cards.id, id));
     return card;
+  }
+
+  async updateCard(id: string, card: Partial<InsertCard>): Promise<Card | undefined> {
+    const [updated] = await db.update(schema.cards)
+      .set({ ...card, updatedAt: new Date() })
+      .where(eq(schema.cards.id, id))
+      .returning();
+    return updated;
+  }
+
+  async updateTransaction(id: string, transaction: Partial<InsertTransaction>): Promise<Transaction | undefined> {
+    const [updated] = await db.update(schema.transactions)
+      .set({ ...transaction, updatedAt: new Date() })
+      .where(eq(schema.transactions.id, id))
+      .returning();
+    return updated;
   }
 
   async createCard(card: InsertCard): Promise<Card> {
@@ -790,5 +807,270 @@ export class PostgresStorage implements IStorage {
     const balance = await this.getUserBalance(userId);
     const availableBalance = balance ? parseFloat(balance.balance || "0") : 0;
     return { valid: availableBalance >= amount && amount >= 5000000, availableBalance };
+  }
+
+  // Role management operations
+  async getAllRoles(): Promise<schema.Role[]> {
+    return await db.select().from(schema.roles).where(eq(schema.roles.isActive, true));
+  }
+
+  async getUserRoles(userId: string): Promise<schema.UserRole[]> {
+    return await db.select()
+      .from(schema.userRoles)
+      .innerJoin(schema.roles, eq(schema.userRoles.roleId, schema.roles.id))
+      .where(eq(schema.userRoles.userId, userId));
+  }
+
+  async assignUserRoles(userId: string, roleIds: string[], adminId: string): Promise<User | undefined> {
+    // Remove existing roles
+    await db.delete(schema.userRoles).where(eq(schema.userRoles.userId, userId));
+    
+    // Add new roles
+    for (const roleId of roleIds) {
+      await db.insert(schema.userRoles).values({
+        userId,
+        roleId,
+        assignedAt: new Date()
+      });
+    }
+
+    // Log the change
+    await this.createAuditLog({
+      userId: adminId,
+      action: "user_role_change",
+      entityType: "user",
+      entityId: userId,
+      oldValue: null,
+      newValue: JSON.stringify({ roleIds }),
+      ipAddress: null,
+      userAgent: null,
+    });
+
+    return this.getUser(userId);
+  }
+
+  async updateUserPadToken(userId: string, padToken: number, reason: string, adminId: string): Promise<User | undefined> {
+    // Get current user to track previous amount
+    const currentUser = await this.getUser(userId);
+    if (!currentUser) return undefined;
+
+    const previousAmount = parseFloat(currentUser.padToken || "0");
+    const changeAmount = padToken - previousAmount;
+
+    // Update user PAD Token
+    const [updated] = await db.update(schema.users)
+      .set({ 
+        padToken: padToken.toString(),
+        updatedAt: new Date()
+      })
+      .where(eq(schema.users.id, userId))
+      .returning();
+
+    // Create PAD Token history record
+    await db.insert(schema.padTokenHistory).values({
+      userId,
+      previousAmount: previousAmount.toString(),
+      newAmount: padToken.toString(),
+      changeAmount: changeAmount.toString(),
+      changeType: "admin_update",
+      reason: reason || "Cập nhật bởi admin",
+      adminId,
+    });
+
+    // Log the change
+    await this.createAuditLog({
+      userId: adminId,
+      action: "pad_token_update",
+      entityType: "user",
+      entityId: userId,
+      oldValue: previousAmount.toString(),
+      newValue: padToken.toString(),
+      ipAddress: null,
+      userAgent: null,
+    });
+
+    return updated;
+  }
+
+  async getUserPadTokenHistory(userId: string): Promise<any[]> {
+    return await db.select()
+      .from(schema.padTokenHistory)
+      .where(eq(schema.padTokenHistory.userId, userId))
+      .orderBy(desc(schema.padTokenHistory.createdAt));
+  }
+
+  // Role management methods
+  async getRoleByName(roleName: string): Promise<any> {
+    const [role] = await db.select()
+      .from(schema.roles)
+      .where(eq(schema.roles.name, roleName))
+      .limit(1);
+    return role;
+  }
+
+  async createRole(roleData: any): Promise<any> {
+    const [role] = await db.insert(schema.roles)
+      .values({
+        id: crypto.randomUUID(),
+        name: roleData.name,
+        displayName: roleData.displayName,
+        description: roleData.description,
+        permissions: roleData.permissions,
+        isActive: roleData.isActive,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .returning();
+    return role;
+  }
+
+  async assignUserRole(userId: string, roleId: string): Promise<any> {
+    const [userRole] = await db.insert(schema.userRoles)
+      .values({
+        id: crypto.randomUUID(),
+        userId,
+        roleId,
+        assignedAt: new Date()
+      })
+      .returning();
+    return userRole;
+  }
+
+  async getUserRoles(userId: string): Promise<any[]> {
+    return await db.select({
+      id: schema.userRoles.id,
+      userId: schema.userRoles.userId,
+      roleId: schema.userRoles.roleId,
+      assignedAt: schema.userRoles.assignedAt,
+      roles: {
+        id: schema.roles.id,
+        name: schema.roles.name,
+        displayName: schema.roles.displayName,
+        description: schema.roles.description,
+        permissions: schema.roles.permissions,
+        isActive: schema.roles.isActive
+      }
+    })
+    .from(schema.userRoles)
+    .leftJoin(schema.roles, eq(schema.userRoles.roleId, schema.roles.id))
+    .where(eq(schema.userRoles.userId, userId));
+  }
+
+  async removeUserRole(userId: string, roleId: string): Promise<void> {
+    await db.delete(schema.userRoles)
+      .where(
+        and(
+          eq(schema.userRoles.userId, userId),
+          eq(schema.userRoles.roleId, roleId)
+        )
+      );
+  }
+
+  // Report generation methods
+  async exportPadTokenBenefitsReport(dateFrom?: string, dateTo?: string): Promise<any[]> {
+    const fromDate = dateFrom ? new Date(dateFrom) : new Date(0);
+    const toDate = dateTo ? new Date(dateTo) : new Date();
+
+    const users = await db.select()
+      .from(schema.users)
+      .where(
+        and(
+          sql`${schema.users.createdAt} >= ${fromDate}`,
+          sql`${schema.users.createdAt} <= ${toDate}`
+        )
+      );
+
+    return users.map(user => ({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      businessTier: user.businessTier,
+      padToken: parseFloat(user.padToken || "0"),
+      totalShares: parseFloat(user.totalShares || "0"),
+      investmentAmount: parseFloat(user.investmentAmount || "0"),
+      status: user.status,
+      createdAt: user.createdAt,
+      // Calculate benefits based on role and PAD Token
+      benefits: this.calculateUserBenefits(user)
+    }));
+  }
+
+  async exportRolesPermissionsReport(): Promise<any[]> {
+    const roles = await this.getAllRoles();
+    const userRoles = await db.select()
+      .from(schema.userRoles)
+      .innerJoin(schema.users, eq(schema.userRoles.userId, schema.users.id))
+      .innerJoin(schema.roles, eq(schema.userRoles.roleId, schema.roles.id));
+
+    return roles.map(role => {
+      const usersWithRole = userRoles.filter(ur => ur.roles.id === role.id);
+      return {
+        roleId: role.id,
+        roleName: role.name,
+        displayName: role.displayName,
+        description: role.description,
+        isActive: role.isActive,
+        userCount: usersWithRole.length,
+        users: usersWithRole.map(ur => ({
+          userId: ur.users.id,
+          userName: ur.users.name,
+          userEmail: ur.users.email,
+          assignedAt: ur.user_roles.assignedAt
+        })),
+        permissions: this.getRolePermissions(role.name)
+      };
+    });
+  }
+
+  private calculateUserBenefits(user: User): any {
+    const padToken = parseFloat(user.padToken || "0");
+    const shares = parseFloat(user.totalShares || "0");
+    
+    return {
+      padTokenValue: padToken * 10000, // 100 PAD = 1M VND, so 1 PAD = 10,000 VND
+      sharesValue: shares * 1000000, // 1 share = 1M VND
+      connectionCommission: user.role === "staff" ? 8 : 0, // 8% for staff
+      vipSupport: user.role === "staff" ? 5 : 0, // 5% for staff
+      profitSharePercentage: 49, // 49% for all roles
+      consultationSessions: this.getConsultationSessions(user.businessTier || ""),
+      maxoutLimit: this.getMaxoutLimit(user.businessTier || ""),
+      inheritanceRight: user.inheritanceRight || false
+    };
+  }
+
+  private getRolePermissions(roleName: string): string[] {
+    const permissions: Record<string, string[]> = {
+      "sang_lap": ["unlimited_shares", "inheritance_right", "profit_share", "admin_access"],
+      "thien_than": ["5x_maxout", "profit_share", "high_commission"],
+      "phat_trien": ["profit_share", "medium_commission", "kpi_bonus"],
+      "dong_hanh": ["profit_share", "basic_commission", "kpi_bonus"],
+      "gop_tai_san": ["asset_contribution", "profit_share"],
+      "sweat_equity": ["kpi_bonus", "labor_pool_share"],
+      "khach_hang": ["card_benefits", "consultation_sessions"]
+    };
+    return permissions[roleName] || [];
+  }
+
+  private getConsultationSessions(businessTier: string): number {
+    const sessionsMap: Record<string, number> = {
+      "founder": 24,
+      "angel": 21,
+      "branch": 18,
+      "card_customer": 12,
+      "staff": 15
+    };
+    return sessionsMap[businessTier] || 12;
+  }
+
+  private getMaxoutLimit(businessTier: string): number {
+    const limitMap: Record<string, number> = {
+      "founder": 0, // unlimited
+      "angel": 5, // 5x
+      "branch": 2.1, // 210%
+      "card_customer": 2.1, // 210%
+      "staff": 1 // 100%
+    };
+    return limitMap[businessTier] || 1;
   }
 }

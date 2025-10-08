@@ -3,6 +3,22 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
 import { 
+  requireAuth, 
+  requireRole, 
+  requireAnyRole, 
+  requireAdmin, 
+  requireStaff, 
+  requireCustomer,
+  requireMinPadToken,
+  addPadTokenCalculations,
+  logUserAction,
+  calculatePadTokenFromAmount,
+  calculateAmountFromPadToken,
+  calculatePadTokenFromRole,
+  calculateReferralPadToken,
+  calculateVipPadToken
+} from "./middleware";
+import { 
   insertCardSchema, 
   insertBranchSchema, 
   insertStaffSchema, 
@@ -32,8 +48,932 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
   setupAuth(app);
 
+  // Home page endpoint - Dynamic data from database
+  app.get("/", async (req, res) => {
+    try {
+      // Fetch all data from database
+      const [cards, branches, transactions, users] = await Promise.all([
+        storage.getCards(),
+        storage.getBranches(),
+        storage.getTransactions(),
+        storage.getUsers()
+      ]);
+
+      // Calculate active cards (cards with status "active")
+      const activeCards = cards.filter(c => c.status === "active").length;
+      
+      // Calculate total branches
+      const totalBranches = branches.length;
+      
+      // Calculate total revenue from income transactions
+      const totalRevenue = transactions
+        .filter(t => t.type === "income")
+        .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
+
+      // Calculate total PAD Token distributed
+      const totalPadTokenDistributed = users.reduce((sum, user) => {
+        return sum + parseFloat(user.padToken || 0);
+      }, 0);
+
+      // Calculate profit sharing percentage (fixed at 49% as per requirements)
+      const profitSharingPercentage = 49;
+
+      // Calculate additional metrics
+      const totalUsers = users.length;
+      const totalTransactions = transactions.length;
+      
+      // Calculate monthly growth (mock data for now)
+      const monthlyGrowth = Math.floor(Math.random() * 20) + 5; // 5-25% growth
+      
+      // Calculate average investment per user
+      const averageInvestment = totalUsers > 0 ? totalRevenue / totalUsers : 0;
+
+      const homeStats = {
+        // Main statistics for display
+        activeCards: activeCards,
+        totalBranches: totalBranches,
+        profitSharingPercentage: profitSharingPercentage,
+        totalRevenue: totalRevenue,
+        totalPadTokenDistributed: totalPadTokenDistributed,
+        
+        // Additional metrics
+        totalUsers: totalUsers,
+        totalTransactions: totalTransactions,
+        monthlyGrowth: monthlyGrowth,
+        averageInvestment: averageInvestment,
+        
+        // Card types with dynamic pricing
+        cardTypes: [
+          { 
+            name: "Standard", 
+            price: 12000000, 
+            sessions: 12, 
+            description: "Thẻ cơ bản với 12 lượt tư vấn",
+            padToken: 1200,
+            count: cards.filter(c => c.cardType === "Standard").length
+          },
+          { 
+            name: "Silver", 
+            price: 15000000, 
+            sessions: 15, 
+            description: "Thẻ bạc với 15 lượt tư vấn",
+            padToken: 1500,
+            count: cards.filter(c => c.cardType === "Silver").length
+          },
+          { 
+            name: "Gold", 
+            price: 18000000, 
+            sessions: 18, 
+            description: "Thẻ vàng với 18 lượt tư vấn",
+            padToken: 1800,
+            count: cards.filter(c => c.cardType === "Gold").length
+          },
+          { 
+            name: "Platinum", 
+            price: 21000000, 
+            sessions: 21, 
+            description: "Thẻ bạch kim với 21 lượt tư vấn",
+            padToken: 2100,
+            count: cards.filter(c => c.cardType === "Platinum").length
+          },
+          { 
+            name: "Diamond", 
+            price: 24000000, 
+            sessions: 24, 
+            description: "Thẻ kim cương với 24 lượt tư vấn",
+            padToken: 2400,
+            count: cards.filter(c => c.cardType === "Diamond").length
+          }
+        ],
+        
+        // Investment roles with dynamic data
+        investmentRoles: [
+          { 
+            name: "Cổ đông", 
+            minAmount: 100000000, 
+            description: "Đầu tư từ 100 triệu VNĐ",
+            count: users.filter(u => u.role === "shareholder").length,
+            padTokenMultiplier: 2.0
+          },
+          { 
+            name: "Angel", 
+            minAmount: 50000000, 
+            description: "Đầu tư từ 50 triệu VNĐ",
+            count: users.filter(u => u.role === "angel").length,
+            padTokenMultiplier: 1.5
+          },
+          { 
+            name: "Seed", 
+            minAmount: 20000000, 
+            description: "Đầu tư từ 20 triệu VNĐ",
+            count: users.filter(u => u.role === "seed").length,
+            padTokenMultiplier: 1.2
+          },
+          { 
+            name: "Retail", 
+            minAmount: 1000000, 
+            description: "Đầu tư từ 1 triệu VNĐ",
+            count: users.filter(u => u.role === "retail").length,
+            padTokenMultiplier: 1.0
+          }
+        ],
+        
+        // System benefits
+        benefits: {
+          profitSharing: "49% chia lãi cho nhà đầu tư",
+          capitalPool: "30% Pool Vốn",
+          workPool: "19% Pool Công ty",
+          transparency: "Minh bạch 100% quyền lợi",
+          referral: "8% Referral & 5% VIP",
+          guarantee: "Không cam kết lợi nhuận, chỉ chia sẻ khi có hiệu quả"
+        },
+        
+        // Recent activity (last 30 days)
+        recentActivity: {
+          newRegistrations: users.filter(u => {
+            const createdAt = new Date(u.createdAt);
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            return createdAt >= thirtyDaysAgo;
+          }).length,
+          newCards: cards.filter(c => {
+            const createdAt = new Date(c.createdAt);
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            return createdAt >= thirtyDaysAgo;
+          }).length,
+          totalInvestment: totalRevenue
+        },
+        
+        // Timestamp for cache control
+        lastUpdated: new Date().toISOString()
+      };
+
+      res.json(homeStats);
+    } catch (error) {
+      console.error("Error loading home stats:", error);
+      res.status(500).json({ 
+        message: "Failed to load home statistics",
+        error: error.message 
+      });
+    }
+  });
+
+  // Card and Role Registration endpoint
+  app.post("/api/register", async (req, res) => {
+    try {
+      const { 
+        email, 
+        phone, 
+        name, 
+        cardType, 
+        roles = [], 
+        investmentAmount = 0,
+        referralCode = null,
+        redirectToCardSelection = false // New parameter for redirect logic
+      } = req.body;
+
+      // Validate required fields
+      if (!email || !phone || !name) {
+        return res.status(400).json({ 
+          message: "Email, phone, and name are required" 
+        });
+      }
+
+      // Check if user already exists
+      let user = await storage.getUserByEmail(email);
+      
+      if (!user) {
+        // Create new user
+        user = await storage.createUser({
+          email,
+          name,
+          phone,
+          password: "temp_password_" + Math.random().toString(36).substring(7), // Temporary password
+          role: "customer",
+          status: "active"
+        });
+      }
+
+      let padTokenEarned = 0;
+      let cardCreated = null;
+      let tempCardRecord = null;
+      let rolesAssigned = [];
+
+      // Handle role registration first
+      if (roles && roles.length > 0) {
+        const validRoles = ["Cổ đông", "Angel", "Seed", "Retail", "Sáng lập", "Thiên thần", "Phát triển", "Đồng hành"];
+        
+        for (const roleName of roles) {
+          if (validRoles.includes(roleName)) {
+            // Find or create role
+            let role = await storage.getRoleByName(roleName);
+            if (!role) {
+              role = await storage.createRole({
+                name: roleName,
+                displayName: roleName,
+                description: `Vai trò ${roleName}`,
+                permissions: JSON.stringify([]),
+                isActive: true
+              });
+            }
+
+            // Assign role to user
+            await storage.assignUserRole(user.id, role.id);
+            rolesAssigned.push(roleName);
+
+            // Calculate additional PAD Token based on role
+            const rolePadToken = calculatePadTokenFromRole(roleName, investmentAmount);
+            if (rolePadToken > 0) {
+              padTokenEarned += rolePadToken;
+              
+              const currentPadToken = parseFloat(user.padToken || "0");
+              const newPadToken = currentPadToken + rolePadToken;
+              
+              await storage.updateUserPadToken(
+                user.id, 
+                newPadToken, 
+                `Đăng ký vai trò ${roleName} - ${investmentAmount.toLocaleString('vi-VN')} VNĐ`,
+                user.id
+              );
+            }
+          }
+        }
+      }
+
+      // Handle investment amount
+      if (investmentAmount > 0) {
+        const investmentPadToken = calculatePadTokenFromAmount(investmentAmount);
+        padTokenEarned += investmentPadToken;
+        
+        const currentPadToken = parseFloat(user.padToken || "0");
+        const newPadToken = currentPadToken + investmentPadToken;
+        
+        await storage.updateUserPadToken(
+          user.id, 
+          newPadToken, 
+          `Đầu tư ${investmentAmount.toLocaleString('vi-VN')} VNĐ`,
+          user.id
+        );
+      }
+
+      // Handle card registration - create temp record if redirecting to card selection
+      if (cardType) {
+        const cardPrices = {
+          "Standard": 2000000,    // Updated prices as per requirements
+          "Silver": 8000000,
+          "Gold": 18000000,
+          "Platinum": 38000000,
+          "Diamond": 100000000
+        };
+
+        const cardSessions = {
+          "Standard": 12,
+          "Silver": 15,
+          "Gold": 18,
+          "Platinum": 20,
+          "Diamond": 24
+        };
+
+        const price = cardPrices[cardType];
+        const sessions = cardSessions[cardType];
+
+        if (!price) {
+          return res.status(400).json({ 
+            message: "Invalid card type" 
+          });
+        }
+
+        // Calculate PAD Token (100 PAD = 1 million VNĐ)
+        const padToken = calculatePadTokenFromAmount(price);
+
+        if (redirectToCardSelection) {
+          // Create temporary card record (not paid yet)
+          tempCardRecord = await storage.createCard({
+            cardType,
+            price: price.toString(),
+            padToken: padToken.toString(),
+            consultationSessions: sessions,
+            ownerId: user.id,
+            status: "pending", // Pending payment
+            description: `Thẻ ${cardType} với ${sessions} lượt tư vấn (Chưa thanh toán)`,
+            paymentStatus: "pending",
+            createdAt: new Date(),
+            updatedAt: new Date()
+          });
+        } else {
+          // Create active card (immediate payment)
+          cardCreated = await storage.createCard({
+            cardType,
+            price: price.toString(),
+            padToken: padToken.toString(),
+            consultationSessions: sessions,
+            ownerId: user.id,
+            status: "active",
+            description: `Thẻ ${cardType} với ${sessions} lượt tư vấn`,
+            paymentStatus: "completed"
+          });
+
+          padTokenEarned += padToken;
+
+          // Update user PAD Token
+          const currentPadToken = parseFloat(user.padToken || "0");
+          const newPadToken = currentPadToken + padToken;
+          
+          await storage.updateUserPadToken(
+            user.id, 
+            newPadToken, 
+            `Đăng ký thẻ ${cardType} - ${price.toLocaleString('vi-VN')} VNĐ`,
+            user.id
+          );
+        }
+      }
+
+      // Create transaction record only if card is paid
+      if (cardCreated || investmentAmount > 0) {
+        await storage.createTransaction({
+          type: "income",
+          amount: ((cardCreated ? parseFloat(cardCreated.price) : 0) + investmentAmount).toString(),
+          description: `Đăng ký ${cardType ? `thẻ ${cardType}` : ''} ${roles.length > 0 ? `vai trò ${roles.join(', ')}` : ''}`,
+          userId: user.id,
+          status: cardCreated ? "completed" : "pending"
+        });
+      }
+
+      // Log the registration
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "registration",
+        entityType: "user",
+        entityId: user.id,
+        oldValue: null,
+        newValue: JSON.stringify({
+          cardType,
+          roles,
+          investmentAmount,
+          padTokenEarned,
+          redirectToCardSelection,
+          tempCardId: tempCardRecord?.id
+        }),
+        ipAddress: req.ip || null,
+        userAgent: req.get("User-Agent") || null,
+      });
+
+      // Prepare response data
+      const responseData = {
+        success: true,
+        message: redirectToCardSelection ? "Đăng ký thành công! Chuyển đến chọn gói thẻ..." : "Đăng ký thành công!",
+        data: {
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            phone: user.phone
+          },
+          card: cardCreated ? {
+            id: cardCreated.id,
+            type: cardCreated.cardType,
+            price: cardCreated.price,
+            sessions: cardCreated.consultationSessions,
+            padToken: cardCreated.padToken,
+            status: cardCreated.status
+          } : tempCardRecord ? {
+            id: tempCardRecord.id,
+            type: tempCardRecord.cardType,
+            price: tempCardRecord.price,
+            sessions: tempCardRecord.consultationSessions,
+            padToken: tempCardRecord.padToken,
+            status: tempCardRecord.status
+          } : null,
+          roles: rolesAssigned,
+          padTokenEarned: padTokenEarned,
+          totalPadToken: parseFloat(user.padToken || "0") + padTokenEarned,
+          redirectToCardSelection: redirectToCardSelection
+        }
+      };
+
+           // Handle redirect logic
+           if (redirectToCardSelection) {
+             // Return JSON with redirect information
+             responseData.redirect = {
+               url: "/card-selection",
+               message: "Chuyển đến giao diện chọn gói thẻ",
+               showCardSelection: true
+             };
+           }
+
+      res.status(201).json(responseData);
+
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ 
+        message: "Registration failed", 
+        error: error.message 
+      });
+    }
+  });
+
+  // Buy card package endpoint (from card selection interface)
+  app.post("/api/buy-card", async (req, res) => {
+    try {
+      const { 
+        userId,
+        cardType, 
+        price,
+        sessions,
+        paymentMethod = "bank_transfer",
+        paymentStatus = "pending", // Default to pending for offline payment
+        notes = ""
+      } = req.body;
+
+      // Validate required fields
+      if (!userId || !cardType || !price || !sessions) {
+        return res.status(400).json({ 
+          message: "User ID, card type, price, and sessions are required" 
+        });
+      }
+
+      // Validate card type and price
+      const validCardTypes = {
+        "Standard": { price: 2000000, sessions: 12 },
+        "Silver": { price: 8000000, sessions: 15 },
+        "Gold": { price: 18000000, sessions: 18 },
+        "Platinum": { price: 38000000, sessions: 20 },
+        "Diamond": { price: 100000000, sessions: 24 }
+      };
+
+      if (!validCardTypes[cardType]) {
+        return res.status(400).json({ 
+          message: "Invalid card type" 
+        });
+      }
+
+      const expectedPrice = validCardTypes[cardType].price;
+      const expectedSessions = validCardTypes[cardType].sessions;
+
+      if (price !== expectedPrice || sessions !== expectedSessions) {
+        return res.status(400).json({ 
+          message: "Invalid price or sessions for selected card type" 
+        });
+      }
+
+      // Get user
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ 
+          message: "User not found" 
+        });
+      }
+
+      // Calculate PAD Token (100 PAD = 1 million VNĐ)
+      const padToken = calculatePadTokenFromAmount(price);
+      const padTokenValue = padToken * 10000; // 1 PAD = 10,000 VNĐ
+
+      // Check if user already has this card type
+      const existingCards = await storage.getCards();
+      const userCards = existingCards.filter(card => 
+        card.ownerId === user.id && 
+        card.cardType === cardType && 
+        card.status === "active"
+      );
+
+      if (userCards.length > 0) {
+        return res.status(400).json({ 
+          message: `Bạn đã sở hữu thẻ ${cardType}. Không thể mua thêm.` 
+        });
+      }
+
+      // Create card with appropriate status
+      const cardCreated = await storage.createCard({
+        cardType,
+        price: price.toString(),
+        padToken: padToken.toString(),
+        consultationSessions: sessions,
+        ownerId: user.id,
+        status: paymentStatus === "completed" ? "active" : "pending",
+        description: `Thẻ ${cardType} với ${sessions} lượt tư vấn`,
+        paymentStatus: paymentStatus,
+        notes: notes || `Mua thẻ ${cardType} - ${price.toLocaleString('vi-VN')} VNĐ`,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+
+      // Update user PAD Token only if payment is completed
+      let newPadToken = parseFloat(user.padToken || "0");
+      if (paymentStatus === "completed") {
+        newPadToken = newPadToken + padToken;
+        
+        await storage.updateUserPadToken(
+          user.id, 
+          newPadToken, 
+          `Mua thẻ ${cardType} - ${price.toLocaleString('vi-VN')} VNĐ`,
+          user.id
+        );
+      }
+
+      // Create transaction record
+      const transaction = await storage.createTransaction({
+        type: "income",
+        amount: price.toString(),
+        description: `Mua thẻ ${cardType} - ${paymentStatus === "completed" ? "Đã thanh toán" : "Chờ thanh toán"}`,
+        userId: user.id,
+        status: paymentStatus === "completed" ? "completed" : "pending",
+        notes: notes || `Giao dịch mua thẻ ${cardType}`,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+
+      // Create payment record if needed
+      if (paymentStatus === "pending") {
+        // You can add payment tracking logic here
+        // For example, create a payment request record
+        console.log(`Payment pending for card ${cardType} - User: ${user.email}`);
+      }
+
+      // Log the purchase
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "card_purchase",
+        entityType: "card",
+        entityId: cardCreated.id,
+        oldValue: null,
+        newValue: JSON.stringify({
+          cardType,
+          price,
+          sessions,
+          padToken,
+          paymentMethod,
+          paymentStatus,
+          transactionId: transaction.id
+        }),
+        ipAddress: req.ip || null,
+        userAgent: req.get("User-Agent") || null,
+      });
+
+      // Prepare response data
+      const responseData = {
+        success: true,
+        message: paymentStatus === "completed" 
+          ? `Mua gói ${cardType} thành công!` 
+          : `Đơn hàng ${cardType} đã được tạo. Vui lòng thanh toán để kích hoạt thẻ.`,
+        data: {
+          card: {
+            id: cardCreated.id,
+            type: cardCreated.cardType,
+            price: cardCreated.price,
+            sessions: cardCreated.consultationSessions,
+            padToken: cardCreated.padToken,
+            status: cardCreated.status,
+            paymentStatus: cardCreated.paymentStatus
+          },
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            phone: user.phone,
+            totalPadToken: newPadToken
+          },
+          transaction: {
+            id: transaction.id,
+            amount: transaction.amount,
+            status: transaction.status,
+            description: transaction.description
+          },
+          padTokenEarned: paymentStatus === "completed" ? padToken : 0,
+          paymentInfo: {
+            method: paymentMethod,
+            status: paymentStatus,
+            amount: price,
+            currency: "VNĐ"
+          }
+        }
+      };
+
+      // Add payment instructions if pending
+      if (paymentStatus === "pending") {
+        responseData.paymentInstructions = {
+          message: "Vui lòng thanh toán để kích hoạt thẻ",
+          bankInfo: {
+            bankName: "Vietcombank",
+            accountNumber: "1234567890",
+            accountName: "Phúc An Dương",
+            amount: price,
+            content: `MUA THE ${cardType.toUpperCase()} - ${user.phone}`
+          },
+          qrCode: `https://api.vietqr.io/v2/generate?accountNo=1234567890&accountName=Phuc%20An%20Duong&amount=${price}&description=MUA%20THE%20${cardType.toUpperCase()}`
+        };
+      }
+
+      res.status(201).json(responseData);
+
+    } catch (error) {
+      console.error("Card purchase error:", error);
+      res.status(500).json({ 
+        message: "Card purchase failed", 
+        error: error.message 
+      });
+    }
+  });
+
+  // Payment confirmation endpoint
+  app.post("/api/confirm-payment", async (req, res) => {
+    try {
+      const { 
+        cardId,
+        paymentMethod = "bank_transfer",
+        paymentReference = "",
+        notes = ""
+      } = req.body;
+
+      // Validate required fields
+      if (!cardId) {
+        return res.status(400).json({ 
+          message: "Card ID is required" 
+        });
+      }
+
+      // Get card
+      const card = await storage.getCard(cardId);
+      if (!card) {
+        return res.status(404).json({ 
+          message: "Card not found" 
+        });
+      }
+
+      // Check if card is already active
+      if (card.status === "active") {
+        return res.status(400).json({ 
+          message: "Card is already active" 
+        });
+      }
+
+      // Get user
+      const user = await storage.getUser(card.ownerId);
+      if (!user) {
+        return res.status(404).json({ 
+          message: "User not found" 
+        });
+      }
+
+      // Update card status to active
+      const updatedCard = await storage.updateCard(cardId, {
+        status: "active",
+        paymentStatus: "completed",
+        notes: notes || `Thanh toán xác nhận - ${paymentMethod}`,
+        updatedAt: new Date()
+      });
+
+      // Calculate and update PAD Token
+      const padToken = parseFloat(card.padToken || "0");
+      const currentPadToken = parseFloat(user.padToken || "0");
+      const newPadToken = currentPadToken + padToken;
+      
+      await storage.updateUserPadToken(
+        user.id, 
+        newPadToken, 
+        `Kích hoạt thẻ ${card.cardType} - ${card.price} VNĐ`,
+        user.id
+      );
+
+      // Update transaction status
+      const transactions = await storage.getTransactions();
+      const cardTransaction = transactions.find(t => 
+        t.userId === user.id && 
+        t.description.includes(`Mua thẻ ${card.cardType}`) &&
+        t.status === "pending"
+      );
+
+      if (cardTransaction) {
+        await storage.updateTransaction(cardTransaction.id, {
+          status: "completed",
+          notes: `Thanh toán xác nhận - ${paymentMethod}`,
+          updatedAt: new Date()
+        });
+      }
+
+      // Log the payment confirmation
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "payment_confirmed",
+        entityType: "card",
+        entityId: cardId,
+        oldValue: JSON.stringify({
+          status: card.status,
+          paymentStatus: card.paymentStatus
+        }),
+        newValue: JSON.stringify({
+          status: "active",
+          paymentStatus: "completed",
+          paymentMethod,
+          paymentReference
+        }),
+        ipAddress: req.ip || null,
+        userAgent: req.get("User-Agent") || null,
+      });
+
+      res.status(200).json({
+        success: true,
+        message: `Thẻ ${card.cardType} đã được kích hoạt thành công!`,
+        data: {
+          card: {
+            id: updatedCard.id,
+            type: updatedCard.cardType,
+            price: updatedCard.price,
+            sessions: updatedCard.consultationSessions,
+            padToken: updatedCard.padToken,
+            status: updatedCard.status,
+            paymentStatus: updatedCard.paymentStatus
+          },
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            phone: user.phone,
+            totalPadToken: newPadToken
+          },
+          padTokenEarned: padToken,
+          paymentInfo: {
+            method: paymentMethod,
+            reference: paymentReference,
+            confirmedAt: new Date().toISOString()
+          }
+        }
+      });
+
+    } catch (error) {
+      console.error("Payment confirmation error:", error);
+      res.status(500).json({ 
+        message: "Payment confirmation failed", 
+        error: error.message 
+      });
+    }
+  });
+
+  // Get user cards endpoint
+  app.get("/api/user-cards/:userId", async (req, res) => {
+    try {
+      const { userId } = req.params;
+
+      if (!userId) {
+        return res.status(400).json({ 
+          message: "User ID is required" 
+        });
+      }
+
+      // Get user
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ 
+          message: "User not found" 
+        });
+      }
+
+      // Get user's cards
+      const allCards = await storage.getCards();
+      const userCards = allCards.filter(card => card.ownerId === userId);
+
+      // Get user's transactions
+      const allTransactions = await storage.getTransactions();
+      const userTransactions = allTransactions.filter(t => t.userId === userId);
+
+      res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            phone: user.phone,
+            totalPadToken: parseFloat(user.padToken || "0")
+          },
+          cards: userCards.map(card => ({
+            id: card.id,
+            type: card.cardType,
+            price: card.price,
+            sessions: card.consultationSessions,
+            padToken: card.padToken,
+            status: card.status,
+            paymentStatus: card.paymentStatus,
+            description: card.description,
+            createdAt: card.createdAt,
+            updatedAt: card.updatedAt
+          })),
+          transactions: userTransactions.map(t => ({
+            id: t.id,
+            type: t.type,
+            amount: t.amount,
+            description: t.description,
+            status: t.status,
+            createdAt: t.createdAt
+          }))
+        }
+      });
+
+    } catch (error) {
+      console.error("Get user cards error:", error);
+      res.status(500).json({ 
+        message: "Failed to get user cards", 
+        error: error.message 
+      });
+    }
+  });
+
+  // Get registration info endpoint
+  app.get("/api/register/info", async (req, res) => {
+    try {
+      const cardTypes = [
+        { name: "Standard", price: 2000000, sessions: 12, description: "Thẻ cơ bản với 12 lượt tư vấn", padToken: 200 },
+        { name: "Silver", price: 8000000, sessions: 15, description: "Thẻ bạc với 15 lượt tư vấn", padToken: 800 },
+        { name: "Gold", price: 18000000, sessions: 18, description: "Thẻ vàng với 18 lượt tư vấn", padToken: 1800 },
+        { name: "Platinum", price: 38000000, sessions: 20, description: "Thẻ bạch kim với 20 lượt tư vấn", padToken: 3800 },
+        { name: "Diamond", price: 100000000, sessions: 24, description: "Thẻ kim cương với 24 lượt tư vấn", padToken: 10000 }
+      ];
+
+      const investmentRoles = [
+        { 
+          name: "Cổ đông", 
+          minAmount: 100000000, 
+          description: "Đầu tư từ 100 triệu VNĐ",
+          padTokenMultiplier: 2.0,
+          benefits: ["Quyền biểu quyết", "Chia lãi cao nhất", "Ưu tiên thông tin"]
+        },
+        { 
+          name: "Angel", 
+          minAmount: 50000000, 
+          description: "Đầu tư từ 50 triệu VNĐ",
+          padTokenMultiplier: 1.5,
+          benefits: ["Chia lãi ưu đãi", "Tham gia quản lý", "Báo cáo định kỳ"]
+        },
+        { 
+          name: "Seed", 
+          minAmount: 20000000, 
+          description: "Đầu tư từ 20 triệu VNĐ",
+          padTokenMultiplier: 1.2,
+          benefits: ["Chia lãi cơ bản", "Cập nhật tiến độ", "Hỗ trợ tư vấn"]
+        },
+        { 
+          name: "Retail", 
+          minAmount: 1000000, 
+          description: "Đầu tư từ 1 triệu VNĐ",
+          padTokenMultiplier: 1.0,
+          benefits: ["Chia lãi cơ bản", "Theo dõi đầu tư", "Hỗ trợ cơ bản"]
+        },
+        { 
+          name: "Sáng lập", 
+          minAmount: 500000000, 
+          description: "Đầu tư từ 500 triệu VNĐ",
+          padTokenMultiplier: 3.0,
+          benefits: ["Quyền cao nhất", "Chia lãi tối đa", "Tham gia điều hành"]
+        },
+        { 
+          name: "Thiên thần", 
+          minAmount: 200000000, 
+          description: "Đầu tư từ 200 triệu VNĐ",
+          padTokenMultiplier: 2.5,
+          benefits: ["Quyền đặc biệt", "Chia lãi cao", "Ưu tiên cao"]
+        },
+        { 
+          name: "Phát triển", 
+          minAmount: 100000000, 
+          description: "Đầu tư từ 100 triệu VNĐ",
+          padTokenMultiplier: 1.8,
+          benefits: ["Tham gia phát triển", "Chia lãi ưu đãi", "Cập nhật chi tiết"]
+        },
+        { 
+          name: "Đồng hành", 
+          minAmount: 50000000, 
+          description: "Đầu tư từ 50 triệu VNĐ",
+          padTokenMultiplier: 1.3,
+          benefits: ["Hỗ trợ đặc biệt", "Chia lãi tốt", "Thông tin ưu tiên"]
+        }
+      ];
+
+      res.json({
+        success: true,
+        data: {
+          cardTypes,
+          investmentRoles,
+          padTokenRate: {
+            description: "100 PAD = 1 triệu VNĐ (1 PAD = 10,000 VNĐ)",
+            rate: 100,
+            valuePerPad: 10000
+          },
+          benefits: {
+            profitSharing: "49% chia lãi cho nhà đầu tư",
+            capitalPool: "30% Pool Vốn",
+            workPool: "19% Pool Công",
+            transparency: "Minh bạch 100% quyền lợi"
+          }
+        }
+      });
+    } catch (error) {
+      console.error("Error loading registration info:", error);
+      res.status(500).json({ message: "Failed to load registration info" });
+    }
+  });
+
   // Card routes
-  app.get("/api/cards", async (req, res) => {
+  app.get("/api/cards", requireAuth, addPadTokenCalculations, async (req, res) => {
     try {
       const cards = await storage.getCards();
       res.json(cards);
@@ -42,13 +982,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/cards", async (req, res) => {
+  app.post("/api/cards", requireAuth, requireCustomer, logUserAction("card_purchase"), async (req, res) => {
     try {
       const cardData = insertCardSchema.parse(req.body);
       
       // Tính PAD Token (100 PAD = 1 triệu VNĐ)
       const price = parseFloat(cardData.price);
-      const padToken = (price / 1000000) * 100; // VNĐ to triệu, then * 100
+      const padToken = calculatePadTokenFromAmount(price);
       
       // Set consultation sessions dựa trên loại thẻ
       const consultationSessionsMap: Record<string, number> = {
@@ -64,28 +1004,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const enrichedCardData = {
         ...cardData,
         padToken: padToken.toString(),
-        consultationSessions
+        consultationSessions,
+        ownerId: req.user?.id // Set owner to current user
       };
       
       const card = await storage.createCard(enrichedCardData);
       
-      // Auto-upgrade role nếu user đã xác thực
-      if (req.isAuthenticated() && req.user && card.ownerId) {
-        const userId = card.ownerId;
+      // Update user PAD Token
+      if (req.user) {
+        const currentPadToken = req.user.padToken || 0;
+        const newPadToken = currentPadToken + padToken;
         
-        // Tính tổng giá trị góp từ thẻ
+        await storage.updateUserPadToken(
+          req.user.id, 
+          newPadToken, 
+          `Mua thẻ ${cardData.cardType} - ${price.toLocaleString('vi-VN')} VNĐ`,
+          req.user.id
+        );
+        
+        // Auto-upgrade role based on total investment
         const userCards = await storage.getCards();
         const totalCardValue = userCards
-          .filter(c => c.ownerId === userId)
+          .filter(c => c.ownerId === req.user?.id)
           .reduce((sum, c) => sum + parseFloat(c.price), 0);
         
-        // Nếu tổng > 101 triệu, auto-upgrade từ Khách hàng → Thiên thần
-        if (totalCardValue > 101000000) {
-          const user = await storage.getUser(userId);
-          if (user && user.role === "customer") {
-            await storage.updateUser(userId, { role: "shareholder" });
-            console.log(`✅ Auto-upgraded user ${user.email} from customer to shareholder (total cards: ${(totalCardValue/1000000).toFixed(1)}M VNĐ)`);
-          }
+        // Auto-upgrade logic
+        if (totalCardValue > 245000000 && req.user.role === "customer") {
+          await storage.updateUser(req.user.id, { role: "shareholder" });
+          console.log(`✅ Auto-upgraded user ${req.user.email} to shareholder (total cards: ${(totalCardValue/1000000).toFixed(1)}M VNĐ)`);
+        } else if (totalCardValue > 101000000 && req.user.role === "customer") {
+          await storage.updateUser(req.user.id, { role: "shareholder" });
+          console.log(`✅ Auto-upgraded user ${req.user.email} to shareholder (total cards: ${(totalCardValue/1000000).toFixed(1)}M VNĐ)`);
         }
       }
       
@@ -226,7 +1175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Dashboard metrics
-  app.get("/api/dashboard/metrics", async (req, res) => {
+  app.get("/api/dashboard/metrics", requireAuth, addPadTokenCalculations, async (req, res) => {
     try {
       const transactions = await storage.getTransactions();
       const cards = await storage.getCards();
@@ -238,11 +1187,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .filter(t => t.type === "income")
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
 
-      // Get current user's PAD Token (if authenticated)
+      // Get current user's PAD Token and roles
       let userPadToken = 0;
-      if (req.isAuthenticated() && req.user) {
-        const currentUser = await storage.getUser((req.user as any).id);
-        userPadToken = currentUser?.padToken ? parseFloat(currentUser.padToken.toString()) : 0;
+      let userRoles = [];
+      let userPadTokenValue = 0;
+      
+      if (req.user) {
+        userPadToken = req.user.padToken || 0;
+        userRoles = req.user.roles || [req.user.role];
+        userPadTokenValue = calculateAmountFromPadToken(userPadToken);
       }
 
       const metrics = {
@@ -250,7 +1203,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
         activeCards: cards.filter(c => c.status === "active").length,
         branches: branches.length,
         staff: staff.length,
-        padToken: userPadToken
+        padToken: userPadToken,
+        padTokenValue: userPadTokenValue,
+        roles: userRoles,
+        userInfo: req.user ? {
+          id: req.user.id,
+          name: req.user.name,
+          email: req.user.email,
+          role: req.user.role
+        } : null
       };
 
       res.json(metrics);
@@ -1538,7 +2499,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update user role (admin only)
+  // Get all roles (admin only)
+  app.get("/api/admin/roles", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    try {
+      const roles = await storage.getAllRoles();
+      res.json(roles);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch roles" });
+    }
+  });
+
+  // Get user roles (admin only)
+  app.get("/api/admin/users/:userId/roles", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    try {
+      const { userId } = req.params;
+      const userRoles = await storage.getUserRoles(userId);
+      res.json(userRoles);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch user roles" });
+    }
+  });
+
+  // Assign multiple roles to user (admin only)
+  app.post("/api/admin/users/:userId/roles", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    try {
+      const { userId } = req.params;
+      const { roleIds } = req.body;
+      
+      if (!Array.isArray(roleIds)) {
+        return res.status(400).json({ message: "roleIds must be an array" });
+      }
+      
+      const updatedUser = await storage.assignUserRoles(userId, roleIds, user.id);
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(updatedUser);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to assign user roles" });
+    }
+  });
+
+  // Update user PAD Token (admin only)
+  app.post("/api/admin/users/:userId/pad-token", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    try {
+      const { userId } = req.params;
+      const { padToken, reason } = req.body;
+      
+      if (typeof padToken !== "number" || padToken < 0) {
+        return res.status(400).json({ message: "PAD Token must be a positive number" });
+      }
+      
+      const updatedUser = await storage.updateUserPadToken(userId, padToken, reason, user.id);
+      
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.json(updatedUser);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update PAD Token" });
+    }
+  });
+
+  // Get user PAD Token history (admin only)
+  app.get("/api/admin/users/:userId/pad-token-history", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    
+    try {
+      const { userId } = req.params;
+      const history = await storage.getUserPadTokenHistory(userId);
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch PAD Token history" });
+    }
+  });
+
+  // Update user role (admin only) - Legacy endpoint for backward compatibility
   app.post("/api/admin/users/:userId/role", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     
@@ -1643,6 +2715,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Export PAD Token and benefits report (admin only)
+  app.post("/api/admin/reports/pad-token-benefits", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || !["admin", "accountant"].includes(user.role)) {
+      return res.status(403).json({ message: "Admin or accountant access required" });
+    }
+    
+    try {
+      const { format = "pdf", dateFrom, dateTo } = req.body;
+      
+      const data = await storage.exportPadTokenBenefitsReport(dateFrom, dateTo);
+      
+      // Log the export
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "report_export",
+        entityType: "report",
+        entityId: null,
+        oldValue: null,
+        newValue: JSON.stringify({ reportType: "pad_token_benefits", format, dateFrom, dateTo }),
+        ipAddress: req.ip || null,
+        userAgent: req.get("User-Agent") || null,
+      });
+      
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to export PAD Token benefits report" });
+    }
+  });
+
+  // Export roles and permissions report (admin only)
+  app.post("/api/admin/reports/roles-permissions", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    
+    const user = req.user as any;
+    if (!user || !["admin", "accountant"].includes(user.role)) {
+      return res.status(403).json({ message: "Admin or accountant access required" });
+    }
+    
+    try {
+      const { format = "pdf" } = req.body;
+      
+      const data = await storage.exportRolesPermissionsReport();
+      
+      // Log the export
+      await storage.createAuditLog({
+        userId: user.id,
+        action: "report_export",
+        entityType: "report",
+        entityId: null,
+        oldValue: null,
+        newValue: JSON.stringify({ reportType: "roles_permissions", format }),
+        ipAddress: req.ip || null,
+        userAgent: req.get("User-Agent") || null,
+      });
+      
+      res.json(data);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to export roles and permissions report" });
+    }
+  });
+
   // Export report data (admin only)
   app.post("/api/admin/reports/export", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
@@ -1655,7 +2791,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { reportType, dateFrom, dateTo } = req.body;
       
-      if (!reportType || !["finance", "tax", "transactions", "users"].includes(reportType)) {
+      if (!reportType || !["finance", "tax", "transactions", "users", "pad_token_benefits", "roles_permissions"].includes(reportType)) {
         return res.status(400).json({ message: "Invalid report type" });
       }
       

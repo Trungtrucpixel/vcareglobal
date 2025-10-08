@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Vai trò & PAD Token - Phúc An Đường</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #43B0A5 0%, #2D7D7A 100%);
+            color: white;
+            padding: 30px 0;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            text-align: center;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: #f8fafc;
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .badge-admin { background-color: #dc2626; color: white; }
+        .badge-accountant { background-color: #7c3aed; color: white; }
+        .badge-branch { background-color: #059669; color: white; }
+        .badge-staff { background-color: #0891b2; color: white; }
+        .badge-customer { background-color: #ea580c; color: white; }
+        .badge-shareholder { background-color: #be185d; color: white; }
+        .badge-active { background-color: #059669; color: white; }
+        .badge-inactive { background-color: #dc2626; color: white; }
+
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            margin: 2px;
+        }
+
+        .btn-primary {
+            background-color: #43B0A5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2D7D7A;
+        }
+
+        .btn-secondary {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #43B0A5;
+            border: 1px solid #43B0A5;
+        }
+
+        .btn-outline:hover {
+            background-color: #43B0A5;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #43B0A5;
+            box-shadow: 0 0 0 3px rgba(67, 176, 165, 0.1);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6b7280;
+        }
+
+        .error {
+            background-color: #fef2f2;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #fecaca;
+        }
+
+        .success {
+            background-color: #f0fdf4;
+            color: #059669;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #bbf7d0;
+        }
+
+        .pad-token-value {
+            font-weight: 600;
+            color: #059669;
+        }
+
+        .role-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+            }
+
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quản lý Vai trò & PAD Token</h1>
+            <p>Hệ thống quản lý đa vai trò và PAD Token cho người dùng</p>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">
+                    👥 Danh sách Người dùng
+                </div>
+            </div>
+            <div class="card-content">
+                <div id="loading" class="loading">
+                    Đang tải dữ liệu...
+                </div>
+                <div id="error" class="error" style="display: none;"></div>
+                <div class="table-container">
+                    <table id="usersTable" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Tên</th>
+                                <th>Email</th>
+                                <th>Vai trò</th>
+                                <th>PAD Token</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Management Modal -->
+        <div id="roleModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">Quản lý Vai trò</span>
+                    <span class="close" onclick="closeRoleModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Người dùng:</label>
+                        <div id="selectedUserName"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vai trò hiện tại:</label>
+                        <div id="currentRoles" class="role-badges"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Chọn vai trò mới:</label>
+                        <div id="rolesCheckboxes" class="checkbox-group"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="saveRoles()">Lưu Vai trò</button>
+                    <button class="btn btn-secondary" onclick="closeRoleModal()">Hủy</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAD Token Management Modal -->
+        <div id="padTokenModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="modal-title">Quản lý PAD Token</span>
+                    <span class="close" onclick="closePadTokenModal()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label">Người dùng:</label>
+                        <div id="selectedUserNamePad"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="padTokenAmount">Số PAD Token:</label>
+                        <input type="number" id="padTokenAmount" class="form-input" placeholder="Nhập số PAD Token">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="padTokenReason">Lý do cập nhật:</label>
+                        <textarea id="padTokenReason" class="form-textarea" placeholder="Nhập lý do cập nhật PAD Token..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="savePadToken()">Lưu PAD Token</button>
+                    <button class="btn btn-secondary" onclick="closePadTokenModal()">Hủy</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let users = [];
+        let roles = [];
+        let selectedUser = null;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUsers();
+            loadRoles();
+        });
+
+        // Load users from API
+        async function loadUsers() {
+            try {
+                const response = await fetch('/api/admin/users');
+                if (!response.ok) throw new Error('Failed to load users');
+                
+                users = await response.json();
+                displayUsers();
+            } catch (error) {
+                showError('Lỗi khi tải danh sách người dùng: ' + error.message);
+            }
+        }
+
+        // Load roles from API
+        async function loadRoles() {
+            try {
+                const response = await fetch('/api/admin/roles');
+                if (!response.ok) throw new Error('Failed to load roles');
+                
+                roles = await response.json();
+            } catch (error) {
+                console.error('Error loading roles:', error);
+            }
+        }
+
+        // Display users in table
+        function displayUsers() {
+            const table = document.getElementById('usersTable');
+            const tbody = document.getElementById('usersTableBody');
+            const loading = document.getElementById('loading');
+
+            loading.style.display = 'none';
+            table.style.display = 'table';
+
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>
+                        <div class="role-badges">
+                            <span class="badge badge-${user.role}">${getRoleDisplayName(user.role)}</span>
+                        </div>
+                    </td>
+                    <td><span class="pad-token-value">${parseFloat(user.padToken || 0).toLocaleString()} PAD</span></td>
+                    <td><span class="badge badge-${user.status}">${user.status === 'active' ? 'Hoạt động' : 'Ngừng hoạt động'}</span></td>
+                    <td>
+                        <button class="btn btn-outline" onclick="openRoleModal('${user.id}')">Quản lý vai trò</button>
+                        <button class="btn btn-outline" onclick="openPadTokenModal('${user.id}')">PAD Token</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Get role display name
+        function getRoleDisplayName(role) {
+            const roleNames = {
+                'admin': 'Quản trị viên',
+                'accountant': 'Kế toán',
+                'branch': 'Chi nhánh',
+                'staff': 'Nhân viên',
+                'customer': 'Khách hàng',
+                'shareholder': 'Cổ đông'
+            };
+            return roleNames[role] || role;
+        }
+
+        // Open role management modal
+        async function openRoleModal(userId) {
+            selectedUser = users.find(u => u.id === userId);
+            if (!selectedUser) return;
+
+            document.getElementById('selectedUserName').textContent = `${selectedUser.name} (${selectedUser.email})`;
+            
+            // Display current roles
+            const currentRolesDiv = document.getElementById('currentRoles');
+            currentRolesDiv.innerHTML = `<span class="badge badge-${selectedUser.role}">${getRoleDisplayName(selectedUser.role)}</span>`;
+
+            // Create role checkboxes
+            const rolesCheckboxes = document.getElementById('rolesCheckboxes');
+            rolesCheckboxes.innerHTML = roles.map(role => `
+                <div class="checkbox-item">
+                    <input type="checkbox" id="role-${role.id}" value="${role.id}">
+                    <label for="role-${role.id}">${role.displayName}</label>
+                </div>
+            `).join('');
+
+            document.getElementById('roleModal').style.display = 'block';
+        }
+
+        // Close role management modal
+        function closeRoleModal() {
+            document.getElementById('roleModal').style.display = 'none';
+            selectedUser = null;
+        }
+
+        // Save roles
+        async function saveRoles() {
+            if (!selectedUser) return;
+
+            const checkboxes = document.querySelectorAll('#rolesCheckboxes input[type="checkbox"]:checked');
+            const roleIds = Array.from(checkboxes).map(cb => cb.value);
+
+            try {
+                const response = await fetch(`/api/admin/users/${selectedUser.id}/roles`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ roleIds })
+                });
+
+                if (!response.ok) throw new Error('Failed to save roles');
+
+                showSuccess('Cập nhật vai trò thành công!');
+                closeRoleModal();
+                loadUsers(); // Reload users
+            } catch (error) {
+                showError('Lỗi khi cập nhật vai trò: ' + error.message);
+            }
+        }
+
+        // Open PAD Token management modal
+        function openPadTokenModal(userId) {
+            selectedUser = users.find(u => u.id === userId);
+            if (!selectedUser) return;
+
+            document.getElementById('selectedUserNamePad').textContent = `${selectedUser.name} (${selectedUser.email})`;
+            document.getElementById('padTokenAmount').value = selectedUser.padToken || 0;
+            document.getElementById('padTokenReason').value = '';
+
+            document.getElementById('padTokenModal').style.display = 'block';
+        }
+
+        // Close PAD Token management modal
+        function closePadTokenModal() {
+            document.getElementById('padTokenModal').style.display = 'none';
+            selectedUser = null;
+        }
+
+        // Save PAD Token
+        async function savePadToken() {
+            if (!selectedUser) return;
+
+            const amount = document.getElementById('padTokenAmount').value;
+            const reason = document.getElementById('padTokenReason').value;
+
+            if (!amount) {
+                showError('Vui lòng nhập số PAD Token');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/admin/users/${selectedUser.id}/pad-token`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        padToken: parseFloat(amount), 
+                        reason: reason || 'Cập nhật bởi admin' 
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to save PAD Token');
+
+                showSuccess('Cập nhật PAD Token thành công!');
+                closePadTokenModal();
+                loadUsers(); // Reload users
+            } catch (error) {
+                showError('Lỗi khi cập nhật PAD Token: ' + error.message);
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // Show success message
+        function showSuccess(message) {
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success';
+            successDiv.textContent = message;
+            document.querySelector('.container').insertBefore(successDiv, document.querySelector('.card'));
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            const roleModal = document.getElementById('roleModal');
+            const padTokenModal = document.getElementById('padTokenModal');
+            
+            if (event.target === roleModal) {
+                closeRoleModal();
+            }
+            if (event.target === padTokenModal) {
+                closePadTokenModal();
+            }
+        }
+    </script>
+</body>
+</html>

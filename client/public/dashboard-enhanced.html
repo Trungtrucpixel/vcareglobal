@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Phúc An Đường</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
+        }
+
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #43B0A5 0%, #2D7D7A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .user-info h3 {
+            margin: 0 0 0.25rem 0;
+            color: #1f2937;
+        }
+
+        .user-roles {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .role-badge {
+            background: linear-gradient(135deg, #43B0A5 0%, #2D7D7A 100%);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #43B0A5;
+        }
+
+        .metric-card.pad-token {
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+        }
+
+        .metric-card.revenue {
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        }
+
+        .metric-card.cards {
+            border-left-color: #3b82f6;
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        }
+
+        .metric-card.branches {
+            border-left-color: #8b5cf6;
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-icon {
+            font-size: 1.5rem;
+        }
+
+        .metric-title {
+            font-size: 0.9rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .metric-subtitle {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .pad-token-details {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .pad-token-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .pad-token-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .pad-token-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #43B0A5;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2D7D7A;
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+
+        .pad-token-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pad-token-stat {
+            text-align: center;
+            padding: 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .pad-token-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .pad-token-stat-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .recent-activity {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-description {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #43B0A5;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: stretch;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Dashboard</h1>
+            <div class="user-welcome" id="userWelcome">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="metrics-grid">
+            <div class="metric-card pad-token">
+                <div class="metric-header">
+                    <span class="metric-icon">🪙</span>
+                    <span class="metric-title">PAD Token</span>
+                </div>
+                <div class="metric-value" id="padTokenAmount">0</div>
+                <div class="metric-subtitle" id="padTokenValue">0 VNĐ</div>
+            </div>
+
+            <div class="metric-card revenue">
+                <div class="metric-header">
+                    <span class="metric-icon">💰</span>
+                    <span class="metric-title">Tổng doanh thu</span>
+                </div>
+                <div class="metric-value" id="totalRevenue">0 VNĐ</div>
+                <div class="metric-subtitle">Từ tất cả giao dịch</div>
+            </div>
+
+            <div class="metric-card cards">
+                <div class="metric-header">
+                    <span class="metric-icon">💳</span>
+                    <span class="metric-title">Thẻ hoạt động</span>
+                </div>
+                <div class="metric-value" id="activeCards">0</div>
+                <div class="metric-subtitle">Thẻ đang sử dụng</div>
+            </div>
+
+            <div class="metric-card branches">
+                <div class="metric-header">
+                    <span class="metric-icon">🏢</span>
+                    <span class="metric-title">Chi nhánh</span>
+                </div>
+                <div class="metric-value" id="totalBranches">0</div>
+                <div class="metric-subtitle">Tổng số chi nhánh</div>
+            </div>
+        </div>
+
+        <div class="pad-token-details">
+            <div class="pad-token-header">
+                <h2 class="pad-token-title">Chi tiết PAD Token</h2>
+                <div class="pad-token-actions">
+                    <button class="btn btn-primary" onclick="showPadTokenHistory()">
+                        Lịch sử
+                    </button>
+                    <button class="btn btn-secondary" onclick="showRoiProjection()">
+                        Dự báo ROI
+                    </button>
+                </div>
+            </div>
+
+            <div class="pad-token-stats">
+                <div class="pad-token-stat">
+                    <div class="pad-token-stat-value" id="currentPadToken">0</div>
+                    <div class="pad-token-stat-label">PAD Token hiện tại</div>
+                </div>
+                <div class="pad-token-stat">
+                    <div class="pad-token-stat-value" id="padTokenValueVND">0 VNĐ</div>
+                    <div class="pad-token-stat-label">Giá trị VNĐ</div>
+                </div>
+                <div class="pad-token-stat">
+                    <div class="pad-token-stat-value" id="padTokenEarned">0</div>
+                    <div class="pad-token-stat-label">PAD Token đã kiếm</div>
+                </div>
+                <div class="pad-token-stat">
+                    <div class="pad-token-stat-value" id="padTokenSpent">0</div>
+                    <div class="pad-token-stat-label">PAD Token đã sử dụng</div>
+                </div>
+            </div>
+
+            <div id="roiProjection" style="display: none;"></div>
+        </div>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3 class="chart-title">Biểu đồ doanh thu</h3>
+                <canvas id="revenueChart" width="400" height="200"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3 class="chart-title">Phân bố PAD Token</h3>
+                <canvas id="padTokenChart" width="300" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="recent-activity">
+            <h3 class="chart-title">Hoạt động gần đây</h3>
+            <div id="recentActivity">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAD Token History Modal -->
+    <div id="padTokenHistoryModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 12px; padding: 2rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="margin: 0; color: #1f2937;">Lịch sử PAD Token</h3>
+                <button onclick="closePadTokenHistory()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #6b7280;">&times;</button>
+            </div>
+            <div id="padTokenHistory"></div>
+        </div>
+    </div>
+
+    <script src="pad-token-integration.js"></script>
+    <script>
+        class DashboardManager {
+            constructor() {
+                this.metrics = {};
+                this.charts = {};
+                this.init();
+            }
+
+            async init() {
+                await this.loadDashboardData();
+                this.setupCharts();
+                this.setupEventListeners();
+            }
+
+            async loadDashboardData() {
+                try {
+                    const response = await fetch('/api/dashboard/metrics');
+                    if (response.ok) {
+                        this.metrics = await response.json();
+                        this.updateDashboard();
+                    } else {
+                        console.error('Failed to load dashboard data');
+                    }
+                } catch (error) {
+                    console.error('Error loading dashboard data:', error);
+                }
+            }
+
+            updateDashboard() {
+                this.updateUserWelcome();
+                this.updateMetrics();
+                this.updatePadTokenDetails();
+            }
+
+            updateUserWelcome() {
+                const userWelcome = document.getElementById('userWelcome');
+                if (this.metrics.userInfo) {
+                    const user = this.metrics.userInfo;
+                    const roles = this.metrics.roles || [user.role];
+                    
+                    userWelcome.innerHTML = `
+                        <div class="user-avatar">${user.name.charAt(0).toUpperCase()}</div>
+                        <div class="user-info">
+                            <h3>Xin chào, ${user.name}!</h3>
+                            <div class="user-roles">
+                                ${roles.map(role => `
+                                    <span class="role-badge">${this.getRoleDisplayName(role)}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            updateMetrics() {
+                document.getElementById('padTokenAmount').textContent = this.metrics.padToken || 0;
+                document.getElementById('padTokenValue').textContent = `${(this.metrics.padTokenValue || 0).toLocaleString('vi-VN')} VNĐ`;
+                document.getElementById('totalRevenue').textContent = this.metrics.totalRevenue || '0 VNĐ';
+                document.getElementById('activeCards').textContent = this.metrics.activeCards || 0;
+                document.getElementById('totalBranches').textContent = this.metrics.branches || 0;
+            }
+
+            updatePadTokenDetails() {
+                const padToken = this.metrics.padToken || 0;
+                const padTokenValue = this.metrics.padTokenValue || 0;
+
+                document.getElementById('currentPadToken').textContent = padToken.toLocaleString();
+                document.getElementById('padTokenValueVND').textContent = `${padTokenValue.toLocaleString('vi-VN')} VNĐ`;
+                
+                // These would come from PAD Token history in a real implementation
+                document.getElementById('padTokenEarned').textContent = padToken.toLocaleString();
+                document.getElementById('padTokenSpent').textContent = '0';
+            }
+
+            setupCharts() {
+                this.setupRevenueChart();
+                this.setupPadTokenChart();
+            }
+
+            setupRevenueChart() {
+                const ctx = document.getElementById('revenueChart').getContext('2d');
+                this.charts.revenue = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
+                        datasets: [{
+                            label: 'Doanh thu (triệu VNĐ)',
+                            data: [12, 19, 3, 5, 2, 3],
+                            borderColor: '#43B0A5',
+                            backgroundColor: 'rgba(67, 176, 165, 0.1)',
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            setupPadTokenChart() {
+                const ctx = document.getElementById('padTokenChart').getContext('2d');
+                this.charts.padToken = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Đã sử dụng', 'Còn lại'],
+                        datasets: [{
+                            data: [30, 70],
+                            backgroundColor: ['#f59e0b', '#43B0A5'],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+
+            setupEventListeners() {
+                // Refresh data every 30 seconds
+                setInterval(() => {
+                    this.loadDashboardData();
+                }, 30000);
+            }
+
+            getRoleDisplayName(role) {
+                const roleNames = {
+                    'admin': 'Quản trị viên',
+                    'accountant': 'Kế toán',
+                    'branch': 'Chi nhánh',
+                    'staff': 'Nhân viên',
+                    'customer': 'Khách hàng',
+                    'shareholder': 'Cổ đông',
+                    'sang_lap': 'Sáng lập',
+                    'thien_than': 'Thiên thần',
+                    'phat_trien': 'Phát triển',
+                    'dong_hanh': 'Đồng hành',
+                    'gop_tai_san': 'Góp tài sản',
+                    'sweat_equity': 'Sweat Equity'
+                };
+                return roleNames[role] || role;
+            }
+        }
+
+        // Global functions for modal interactions
+        function showPadTokenHistory() {
+            document.getElementById('padTokenHistoryModal').style.display = 'block';
+            if (window.padTokenIntegration) {
+                window.padTokenIntegration.displayPadTokenHistory();
+            }
+        }
+
+        function closePadTokenHistory() {
+            document.getElementById('padTokenHistoryModal').style.display = 'none';
+        }
+
+        function showRoiProjection() {
+            const roiContainer = document.getElementById('roiProjection');
+            if (roiContainer.style.display === 'none') {
+                roiContainer.style.display = 'block';
+                if (window.padTokenIntegration && window.dashboardManager) {
+                    window.padTokenIntegration.displayRoiProjection(window.dashboardManager.metrics.padToken || 0);
+                }
+            } else {
+                roiContainer.style.display = 'none';
+            }
+        }
+
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.dashboardManager = new DashboardManager();
+        });
+    </script>
+</body>
+</html>

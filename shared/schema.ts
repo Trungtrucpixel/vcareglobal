@@ -281,6 +281,20 @@ export const userSharesHistory = pgTable("user_shares_history", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// PAD Token history for tracking PAD Token changes
+export const padTokenHistory = pgTable("pad_token_history", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  previousAmount: decimal("previous_amount", { precision: 15, scale: 2 }).notNull(),
+  newAmount: decimal("new_amount", { precision: 15, scale: 2 }).notNull(),
+  changeAmount: decimal("change_amount", { precision: 15, scale: 2 }).notNull(),
+  changeType: text("change_type").notNull(), // admin_update, kpi_reward, referral_commission, investment, withdrawal
+  reason: text("reason"),
+  adminId: varchar("admin_id").references(() => users.id),
+  relatedTransactionId: varchar("related_transaction_id").references(() => transactions.id),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Business tier configurations
 export const businessTierConfigs = pgTable("business_tier_configs", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -382,6 +396,11 @@ export const insertDepositRequestSchema = createInsertSchema(depositRequests).om
 });
 
 export const insertUserSharesHistorySchema = createInsertSchema(userSharesHistory).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertPadTokenHistorySchema = createInsertSchema(padTokenHistory).omit({
   id: true,
   createdAt: true,
 });
@@ -507,6 +526,9 @@ export type DepositRequest = typeof depositRequests.$inferSelect;
 
 export type InsertUserSharesHistory = z.infer<typeof insertUserSharesHistorySchema>;
 export type UserSharesHistory = typeof userSharesHistory.$inferSelect;
+
+export type InsertPadTokenHistory = z.infer<typeof insertPadTokenHistorySchema>;
+export type PadTokenHistory = typeof padTokenHistory.$inferSelect;
 
 export type InsertBusinessTierConfig = z.infer<typeof insertBusinessTierConfigSchema>;
 export type BusinessTierConfig = typeof businessTierConfigs.$inferSelect;
