@@ -1,0 +1,56 @@
+root@cloud:~/PhucAnDuongCMS-3# # Wait 3 seconds for more logs
+sleep 3
+
+# Check FRESH logs
+pm2 logs phuan-app --lines 50 --nostream | tail -50
+0|phuan-ap | 11:55:09 PM [express] serving on port 5000
+0|phuan-ap | 11:55:16 PM [express] serving on port 5000
+0|phuan-ap | 11:55:23 PM [express] serving on port 5000
+0|phuan-ap | 11:55:30 PM [express] serving on port 5000
+0|phuan-ap | 11:55:37 PM [express] serving on port 5000
+0|phuan-ap | 11:55:44 PM [express] serving on port 5000
+0|phuan-ap | 11:55:51 PM [express] serving on port 5000
+0|phuan-ap | 11:55:58 PM [express] serving on port 5000
+0|phuan-ap | 11:56:05 PM [express] serving on port 5000
+0|phuan-ap | 11:56:12 PM [express] serving on port 5000
+0|phuan-ap | 11:56:19 PM [express] serving on port 5000
+0|phuan-ap | 11:56:26 PM [express] serving on port 5000
+0|phuan-ap | 11:56:34 PM [express] serving on port 5000
+0|phuan-ap | 11:56:40 PM [express] serving on port 5000
+0|phuan-ap | 11:56:46 PM [express] serving on port 5000
+0|phuan-ap | 11:56:53 PM [express] serving on port 5000
+0|phuan-ap | 11:57:00 PM [express] serving on port 5000
+0|phuan-ap | 11:57:07 PM [express] serving on port 5000
+0|phuan-ap | 11:57:14 PM [express] serving on port 5000
+0|phuan-ap | 11:57:21 PM [express] serving on port 5000
+0|phuan-ap | 11:57:27 PM [express] serving on port 5000
+0|phuan-ap | 11:57:34 PM [express] serving on port 5000
+0|phuan-ap | 12:16:11 AM [express] serving on port 5000
+0|phuan-ap | 12:16:14 AM [express] serving on port 5000
+0|phuan-ap | 12:16:17 AM [express] serving on port 5000
+0|phuan-ap | 12:16:20 AM [express] serving on port 5000
+0|phuan-ap | 12:16:23 AM [express] serving on port 5000
+0|phuan-ap | 12:16:25 AM [express] serving on port 5000
+0|phuan-ap | 12:16:28 AM [express] serving on port 5000
+0|phuan-ap | 12:16:31 AM [express] serving on port 5000
+0|phuan-ap | 12:16:34 AM [express] serving on port 5000
+0|phuan-ap | 12:16:36 AM [express] serving on port 5000
+0|phuan-ap | 12:16:39 AM [express] serving on port 5000
+0|phuan-ap | 12:16:42 AM [express] serving on port 5000
+0|phuan-ap | 12:16:44 AM [express] serving on port 5000
+0|phuan-ap | 12:16:47 AM [express] serving on port 5000
+0|phuan-ap | 12:16:50 AM [express] serving on port 5000
+0|phuan-ap | 12:16:53 AM [express] serving on port 5000
+0|phuan-ap | 12:16:56 AM [express] serving on port 5000
+0|phuan-ap | 12:16:58 AM [express] serving on port 5000
+0|phuan-ap | 12:17:01 AM [express] serving on port 5000
+0|phuan-ap | 12:17:04 AM [express] serving on port 5000
+0|phuan-ap | 12:17:07 AM [express] serving on port 5000
+0|phuan-ap | 12:17:09 AM [express] serving on port 5000
+0|phuan-ap | 12:17:12 AM [express] serving on port 5000
+0|phuan-ap | 12:17:15 AM [express] serving on port 5000
+0|phuan-ap | 12:17:17 AM [express] serving on port 5000
+0|phuan-ap | 12:17:20 AM [express] serving on port 5000
+0|phuan-ap | 12:17:23 AM [express] serving on port 5000
+
+root@cloud:~/PhucAnDuongCMS-3# 

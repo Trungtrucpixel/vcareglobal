@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Admin System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Admin System</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Buttons -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Admin Functions</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="testAdminLogin()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        Test Admin Login
+                    </button>
+                    <button onclick="testMemberLogin()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Test Member Login
+                    </button>
+                    <button onclick="testRoleRedirect()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        Test Role Redirect
+                    </button>
+                    <button onclick="testClearData()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                        Clear Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Data -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Current Data</h2>
+                <pre id="currentData" class="bg-gray-100 p-4 rounded text-sm overflow-auto"></pre>
+            </div>
+
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+                <div id="testResults" class="space-y-2"></div>
+            </div>
+
+            <!-- Admin Features Demo -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Admin Features Demo</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h3 class="font-semibold text-red-800 mb-2">🔧 Admin Dashboard Features:</h3>
+                        <ul class="text-sm text-red-700 space-y-1">
+                            <li>• Quản lý thành viên (xem, sửa, khóa/mở)</li>
+                            <li>• Quản lý giao dịch (duyệt, từ chối)</li>
+                            <li>• Quản lý thẻ chăm sóc</li>
+                            <li>• Báo cáo hệ thống</li>
+                            <li>• Cài đặt PAD Token</li>
+                            <li>• Thống kê tổng quan</li>
+                        </ul>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <h3 class="font-semibold text-blue-800 mb-2">👤 Member Dashboard Features:</h3>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• Xem thông tin cá nhân</li>
+                            <li>• Xem PAD Token và đầu tư</li>
+                            <li>• Xem giao dịch gần đây</li>
+                            <li>• Xem thẻ chăm sóc</li>
+                            <li>• Quản lý tài khoản</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        function testAdminLogin() {
+            // Simulate admin login
+            const adminCredentials = {
+                id: 'ADMIN001',
+                email: 'admin@phucanduong.com',
+                password: 'admin123',
+                personalInfo: {
+                    fullName: 'Quản trị viên hệ thống',
+                    email: 'admin@phucanduong.com',
+                    phone: '0123456789'
+                },
+                selectedValues: [],
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: 0,
+                totalInvestment: 0,
+                role: 'admin'
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(adminCredentials));
+            addTestResult('✅ Admin Login: Admin credentials set successfully', 'success');
+            addTestResult(`🔧 Role: ${adminCredentials.role}`, 'info');
+            addTestResult(`👤 Name: ${adminCredentials.personalInfo.fullName}`, 'info');
+            addTestResult(`📧 Email: ${adminCredentials.personalInfo.email}`, 'info');
+            updateCurrentData();
+        }
+
+        function testMemberLogin() {
+            // Simulate member login
+            const memberCredentials = {
+                id: 'MEM123456',
+                email: 'demo@phucanduong.com',
+                password: 'demo123',
+                personalInfo: {
+                    fullName: 'Nguyễn Văn Demo',
+                    email: 'demo@phucanduong.com',
+                    phone: '0123456789'
+                },
+                selectedValues: [
+                    {
+                        type: 'Founding Shareholder',
+                        minValue: 100000000,
+                        padToken: 10000,
+                        shares: 1000
+                    }
+                ],
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: 10000,
+                totalInvestment: 100000000,
+                role: 'founder'
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(memberCredentials));
+            addTestResult('✅ Member Login: Member credentials set successfully', 'success');
+            addTestResult(`👤 Role: ${memberCredentials.role}`, 'info');
+            addTestResult(`💰 PAD Token: ${memberCredentials.padToken}`, 'info');
+            addTestResult(`💵 Investment: ${memberCredentials.totalInvestment.toLocaleString()} VNĐ`, 'info');
+            updateCurrentData();
+        }
+
+        function testRoleRedirect() {
+            const memberData = JSON.parse(localStorage.getItem('memberData') || '{}');
+            
+            if (Object.keys(memberData).length === 0) {
+                addTestResult('❌ Role Redirect: No user data found. Please login first.', 'error');
+                return;
+            }
+
+            if (memberData.role === 'admin') {
+                addTestResult('✅ Role Redirect: Admin user - should redirect to admin dashboard', 'success');
+                addTestResult('🔧 Admin Dashboard Features:', 'info');
+                addTestResult('  • Quản lý thành viên', 'info');
+                addTestResult('  • Quản lý giao dịch', 'info');
+                addTestResult('  • Quản lý thẻ chăm sóc', 'info');
+                addTestResult('  • Báo cáo hệ thống', 'info');
+                addTestResult('  • Cài đặt hệ thống', 'info');
+            } else {
+                addTestResult('✅ Role Redirect: Member user - should redirect to member dashboard', 'success');
+                addTestResult('👤 Member Dashboard Features:', 'info');
+                addTestResult('  • Thông tin cá nhân', 'info');
+                addTestResult('  • PAD Token & Đầu tư', 'info');
+                addTestResult('  • Giao dịch gần đây', 'info');
+                addTestResult('  • Thẻ chăm sóc', 'info');
+            }
+        }
+
+        function testClearData() {
+            localStorage.removeItem('memberData');
+            addTestResult('🗑️ Clear Data: All data cleared', 'info');
+            updateCurrentData();
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function updateCurrentData() {
+            const memberData = JSON.parse(localStorage.getItem('memberData') || '{}');
+            document.getElementById('currentData').textContent = JSON.stringify(memberData, null, 2);
+        }
+
+        // Initialize
+        updateCurrentData();
+    </script>
+</body>
+</html>
+

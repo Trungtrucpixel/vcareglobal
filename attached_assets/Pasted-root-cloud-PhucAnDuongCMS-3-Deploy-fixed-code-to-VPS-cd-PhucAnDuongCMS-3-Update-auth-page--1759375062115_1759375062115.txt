@@ -1,0 +1,59 @@
+root@cloud:~/PhucAnDuongCMS-3# # Deploy fixed code to VPS
+cd ~/PhucAnDuongCMS-3
+
+# Update auth-page.tsx - change username to email
+sed -i 's/username: formData.email,/email: formData.email,/' client/src/pages/auth-page.tsx
+
+# Rebuild frontend  
+npm run build
+
+# Restart app
+pm2 restart phuan-app
+sleep 3
+
+# Test login
+curl -s -X POST http://103.72.96.173:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@phuan.com","password":"admin123"}' \
+  -w "\nHTTP: %{http_code}\n"
+
+echo ""
+echo "✅ FIXED! Giờ thử login trên điện thoại!"
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v6.3.6 building for production...
+transforming (1661) ../node_modules/react-dom/index.jsBrowserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 1978 modules transformed.
+../dist/public/index.html                            1.95 kB │ gzip:   0.74 kB
+../dist/public/assets/index-CZsN8M84.css            65.04 kB │ gzip:  11.91 kB
+../dist/public/assets/purify.es-CQJ0hv7W.js         21.82 kB │ gzip:   8.58 kB
+../dist/public/assets/index.es-BNF8bImI.js         159.33 kB │ gzip:  53.38 kB
+../dist/public/assets/html2canvas.esm-QH1iLAAe.js  202.38 kB │ gzip:  48.04 kB
+../dist/public/assets/index-BHm0dn8-.js            821.83 kB │ gzip: 259.80 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 17.41s
+
+  dist/index.js  97.2kb
+
+⚡ Done in 19ms
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2737055  │ 0s     │ 247  │ online    │ 0%       │ 3.4mb    │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+{"id":"admin-001","email":"admin@phuan.com","role":"admin","status":"active"}
+HTTP: 200
+
+✅ FIXED! Giờ thử login trên điện thoại!
+root@cloud:~/PhucAnDuongCMS-3# 

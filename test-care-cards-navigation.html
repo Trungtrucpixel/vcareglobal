@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Care Cards Navigation - Vcare Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">🎫 Test Care Cards Navigation - Vcare Global</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🧪 Test Results</h2>
+                <div id="testResults" class="space-y-2">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🎮 Test Controls</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="testCareCardsNavigation()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        🔗 Test Navigation
+                    </button>
+                    <button onclick="testCareCardsFunction()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        🧪 Test Function
+                    </button>
+                    <button onclick="testCareCardsPage()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        📄 Test Page
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mock Member Dashboard -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">👤 Mock Member Dashboard</h2>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold text-blue-600">Vcare Global</h1>
+                                <p class="text-sm text-gray-600">Hội Tụ Những Tinh Hoa</p>
+                            </div>
+                        </div>
+                        <nav class="hidden md:flex space-x-6">
+                            <a href="#" onclick="testShowMemberDashboard()" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+                            <a href="#" onclick="testShowCareCardsPage()" class="text-blue-600 font-semibold">Thẻ chăm sóc</a>
+                            <a href="#" onclick="testLogout()" class="text-gray-600 hover:text-blue-600">Đăng xuất</a>
+                        </nav>
+                    </div>
+                    <div class="text-center text-gray-500">
+                        <p>Click "Thẻ chăm sóc" để test navigation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debug Information -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🔍 Debug Information</h2>
+                <div id="debugInfo" class="space-y-2 text-sm">
+                    <!-- Debug info will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock functions for testing
+        function testShowMemberDashboard() {
+            addTestResult('🔄 Testing showMemberDashboard...', 'info');
+            addTestResult('✅ showMemberDashboard function called', 'success');
+        }
+
+        function testShowCareCardsPage() {
+            addTestResult('🎫 Testing showCareCardsPage...', 'info');
+            
+            // Check if function exists
+            if (typeof showCareCardsPage === 'function') {
+                addTestResult('✅ showCareCardsPage function exists', 'success');
+                
+                // Try to call the function
+                try {
+                    showCareCardsPage();
+                    addTestResult('✅ showCareCardsPage function called successfully', 'success');
+                } catch (error) {
+                    addTestResult(`❌ Error calling showCareCardsPage: ${error.message}`, 'error');
+                }
+            } else {
+                addTestResult('❌ showCareCardsPage function does not exist', 'error');
+            }
+        }
+
+        function testLogout() {
+            addTestResult('🚪 Testing logout...', 'info');
+            addTestResult('✅ logout function called', 'success');
+        }
+
+        // Test functions
+        async function testCareCardsNavigation() {
+            addTestResult('🔗 Testing Care Cards Navigation...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check if navigation link exists
+                if (html.includes('onclick="showCareCardsPage()"')) {
+                    addTestResult('✅ Care Cards navigation link found', 'success');
+                } else {
+                    addTestResult('❌ Care Cards navigation link not found', 'error');
+                }
+                
+                // Check if function exists
+                if (html.includes('function showCareCardsPage()')) {
+                    addTestResult('✅ showCareCardsPage function found', 'success');
+                } else {
+                    addTestResult('❌ showCareCardsPage function not found', 'error');
+                }
+                
+                // Check if careCardsPage div exists
+                if (html.includes('id="careCardsPage"')) {
+                    addTestResult('✅ careCardsPage div found', 'success');
+                } else {
+                    addTestResult('❌ careCardsPage div not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Navigation test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCareCardsFunction() {
+            addTestResult('🧪 Testing Care Cards Function...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check function implementation
+                const functionMatch = html.match(/function showCareCardsPage\(\)\s*\{[^}]*\}/);
+                if (functionMatch) {
+                    addTestResult('✅ showCareCardsPage function implementation found', 'success');
+                    
+                    const functionCode = functionMatch[0];
+                    
+                    // Check for hideAllPages call
+                    if (functionCode.includes('hideAllPages()')) {
+                        addTestResult('✅ hideAllPages() call found', 'success');
+                    } else {
+                        addTestResult('❌ hideAllPages() call not found', 'error');
+                    }
+                    
+                    // Check for careCardsPage element access
+                    if (functionCode.includes('getElementById(\'careCardsPage\')')) {
+                        addTestResult('✅ careCardsPage element access found', 'success');
+                    } else {
+                        addTestResult('❌ careCardsPage element access not found', 'error');
+                    }
+                    
+                    // Check for localStorage save
+                    if (functionCode.includes('localStorage.setItem(\'currentPage\', \'careCardsPage\')')) {
+                        addTestResult('✅ localStorage save found', 'success');
+                    } else {
+                        addTestResult('❌ localStorage save not found', 'error');
+                    }
+                    
+                } else {
+                    addTestResult('❌ showCareCardsPage function implementation not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Function test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testCareCardsPage() {
+            addTestResult('📄 Testing Care Cards Page...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check if careCardsPage div exists and has content
+                const careCardsPageMatch = html.match(/<div id="careCardsPage"[^>]*>[\s\S]*?<\/div>/);
+                if (careCardsPageMatch) {
+                    addTestResult('✅ careCardsPage div found with content', 'success');
+                    
+                    const pageContent = careCardsPageMatch[0];
+                    
+                    // Check for page title
+                    if (pageContent.includes('Thẻ chăm sóc sức khỏe')) {
+                        addTestResult('✅ Page title found', 'success');
+                    } else {
+                        addTestResult('❌ Page title not found', 'error');
+                    }
+                    
+                    // Check for statistics cards
+                    if (pageContent.includes('totalCardValue') || pageContent.includes('benefitsReceived')) {
+                        addTestResult('✅ Statistics cards found', 'success');
+                    } else {
+                        addTestResult('❌ Statistics cards not found', 'error');
+                    }
+                    
+                    // Check for cards list
+                    if (pageContent.includes('cardsList') || pageContent.includes('card-')) {
+                        addTestResult('✅ Cards list found', 'success');
+                    } else {
+                        addTestResult('❌ Cards list not found', 'error');
+                    }
+                    
+                } else {
+                    addTestResult('❌ careCardsPage div not found or empty', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Page test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function addDebugInfo(message) {
+            const debugDiv = document.getElementById('debugInfo');
+            const debugItem = document.createElement('div');
+            debugItem.textContent = message;
+            debugDiv.appendChild(debugItem);
+        }
+
+        // Initialize debug info
+        addDebugInfo('Page loaded successfully');
+        addDebugInfo('Testing environment ready');
+    </script>
+</body>
+</html>
+
+

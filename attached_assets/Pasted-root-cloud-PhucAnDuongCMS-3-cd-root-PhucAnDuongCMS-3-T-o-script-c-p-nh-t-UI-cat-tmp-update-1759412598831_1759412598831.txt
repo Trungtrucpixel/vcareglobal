@@ -1,0 +1,142 @@
+root@cloud:~/PhucAnDuongCMS-3# cd /root/PhucAnDuongCMS-3
+
+# Tạo script cập nhật UI
+cat > /tmp/update-ui.sh << 'SCRIPT'
+#!/bin/bash
+cd /root/PhucAnDuongCMS-3
+
+# Backup
+cp client/src/components/cards-tab.tsx client/src/components/cards-tab.tsx.bak2
+
+# Tìm và thay thế phần hiển thị benefits
+python3 << 'PYTHON'
+import re
+
+with open('client/src/components/cards-tab.tsx', 'r') as f:
+    content = f.read()
+
+# Tìm đoạn hiển thị benefits cũ và thay thế
+old_benefits_display = r'<div className="col-12 col-md-4 mb-3">.*?<h6 className="text-primary">Hoa hồng kết nối</h6>.*?</div>.*?<div className="col-12 col-md-4 mb-3">.*?<h6 className="text-success">Hỗ trợ VIP</h6>.*?</div>.*?<div className="col-12 col-md-4 mb-3">.*?<h6 className="text-warning">Tỷ lệ Maxout</h6>.*?</div>'
+
+new_benefits_display = '''<div className="col-12 mb-4">
+                    <div className="text-center p-4 rounded" style={{ backgroundColor: '#e8f5f3', border: '2px solid #43B0A5' }}>
+                      <h6 className="text-muted mb-2">
+                        <i className="bi bi-coin me-2"></i>
+                        PAD Token
+                      </h6>
+                      <div className="display-5 fw-bold" style={{ color: '#43B0A5' }}>
+                        {cardBenefits.padToken?.toLocaleString('vi-VN') || '0'} PAD
+                      </div>
+                      <small className="text-muted">
+                        Giá trị: {((cardBenefits.padToken || 0) / 100).toLocaleString('vi-VN')} triệu VNĐ
+                      </small>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-3 mb-3">
+                    <div className="text-center p-3 bg-light rounded">
+                      <h6 className="text-primary">Kết nối</h6>
+                      <div className="display-6 fw-bold">{cardBenefits.connectionCommission}%</div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-3 mb-3">
+                    <div className="text-center p-3 bg-light rounded">
+                      <h6 className="text-success">VIP</h6>
+                      <div className="display-6 fw-bold">{cardBenefits.vipSupport}%</div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-3 mb-3">
+                    <div className="text-center p-3 bg-light rounded">
+                      <h6 className="text-info">Lợi tức</h6>
+                      <div className="display-6 fw-bold">{cardBenefits.profitSharePercentage || 49}%</div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-3 mb-3">
+                    <div className="text-center p-3 bg-light rounded">
+                      <h6 className="text-warning">Maxout</h6>
+                      <div className="display-6 fw-bold">{cardBenefits.maxoutPercentage.toFixed(1)}%</div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-3">
+                  <h6>
+echo "🔄 Tải lại trang web và click vào nút 'Sửa' hoặc xem chi tiết thẻ"ags=re.DOTALL) vấn sức khỏe miễn phí trong 2 năm
+✅ UI updated!
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v6.3.6 building for production...
+✓ 40 modules transformed.
+✗ Build failed in 1.79s
+error during build:
+[vite:esbuild] Transform failed with 5 errors:
+/root/PhucAnDuongCMS-3/client/src/components/cards-tab.tsx:526:20: ERROR: Unexpected closing "div" tag does not match opening "CardContent" tag
+/root/PhucAnDuongCMS-3/client/src/components/cards-tab.tsx:527:18: ERROR: Unexpected closing "div" tag does not match opening "Card" tag
+/root/PhucAnDuongCMS-3/client/src/components/cards-tab.tsx:538:16: ERROR: Unexpected closing "CardContent" tag does not match opening "div" tag
+/root/PhucAnDuongCMS-3/client/src/components/cards-tab.tsx:539:14: ERROR: Unexpected closing "Card" tag does not match opening "div" tag
+/root/PhucAnDuongCMS-3/client/src/components/cards-tab.tsx:540:16: ERROR: Unterminated regular expression
+file: /root/PhucAnDuongCMS-3/client/src/components/cards-tab.tsx:526:20
+
+Unexpected closing "div" tag does not match opening "CardContent" tag
+524|                    </div>
+525|                      </div>
+526|                    </div>
+   |                      ^
+527|                  </div>
+528|                  
+
+Unexpected closing "div" tag does not match opening "Card" tag
+525|                      </div>
+526|                    </div>
+527|                  </div>
+   |                    ^
+528|                  
+529|                  <div className="mt-3">
+
+Unexpected closing "CardContent" tag does not match opening "div" tag
+536|                    </ul>
+537|                  </div>
+538|                </CardContent>
+   |                  ^
+539|              </Card>
+540|            </div>
+
+Unexpected closing "Card" tag does not match opening "div" tag
+537|                  </div>
+538|                </CardContent>
+539|              </Card>
+   |                ^
+540|            </div>
+541|          </div>
+
+Unterminated regular expression
+538|                </CardContent>
+539|              </Card>
+540|            </div>
+   |                  ^
+541|          </div>
+542|        )}
+
+    at failureErrorWithLog (/root/PhucAnDuongCMS-3/node_modules/esbuild/lib/main.js:1467:15)
+    at /root/PhucAnDuongCMS-3/node_modules/esbuild/lib/main.js:736:50
+    at responseCallbacks.<computed> (/root/PhucAnDuongCMS-3/node_modules/esbuild/lib/main.js:603:9)
+    at handleIncomingPacket (/root/PhucAnDuongCMS-3/node_modules/esbuild/lib/main.js:658:12)
+    at Socket.readFromStdout (/root/PhucAnDuongCMS-3/node_modules/esbuild/lib/main.js:581:7)
+    at Socket.emit (node:events:524:28)
+    at addChunk (node:internal/streams/readable:561:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:512:3)
+    at Readable.push (node:internal/streams/readable:392:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:191:23)
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2740367  │ 0s     │ 254  │ online    │ 0%       │ 3.4mb    │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+
+✅ ĐÃ CẬP NHẬT GIAO DIỆN!
+🔄 Tải lại trang web và click vào nút 'Sửa' hoặc xem chi tiết thẻ
+root@cloud:~/PhucAnDuongCMS-3# 

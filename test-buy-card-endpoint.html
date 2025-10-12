@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Buy Card Endpoint - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Buy Card Endpoint - Phúc An Dương</h1>
+        
+        <!-- Test Buttons -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Test Buy Card Endpoints</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <button onclick="testBuyCardPending()" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700">
+                    <i class="fas fa-clock mr-2"></i>Test Buy Card (Pending)
+                </button>
+                <button onclick="testBuyCardCompleted()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-check mr-2"></i>Test Buy Card (Completed)
+                </button>
+                <button onclick="testConfirmPayment()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-credit-card mr-2"></i>Test Confirm Payment
+                </button>
+                <button onclick="testGetUserCards()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-id-card mr-2"></i>Test Get User Cards
+                </button>
+                <button onclick="testDuplicateCard()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>Test Duplicate Card
+                </button>
+                <button onclick="clearResults()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-trash mr-2"></i>Clear Results
+                </button>
+            </div>
+        </div>
+
+        <!-- Test Data Input -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Test Data</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">User ID</label>
+                    <input type="text" id="test-user-id" value="test-user-123" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Card Type</label>
+                    <select id="test-card-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Standard">Standard (2M VNĐ)</option>
+                        <option value="Silver">Silver (8M VNĐ)</option>
+                        <option value="Gold">Gold (18M VNĐ)</option>
+                        <option value="Platinum">Platinum (38M VNĐ)</option>
+                        <option value="Diamond">Diamond (100M VNĐ)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                    <select id="test-payment-method" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="credit_card">Credit Card</option>
+                        <option value="cash">Cash</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
+                    <select id="test-payment-status" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="pending">Pending</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                    <input type="text" id="test-notes" value="Test purchase from interface" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Card ID (for confirm payment)</label>
+                    <input type="text" id="test-card-id" value="" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Test Results</h2>
+            <div id="test-results" class="space-y-4">
+                <p class="text-gray-500">Chưa có kết quả test...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let lastCardId = null;
+
+        // Test functions
+        async function testBuyCardPending() {
+            const testData = getTestData();
+            testData.paymentStatus = 'pending';
+
+            try {
+                const response = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Buy Card (Pending)', response.ok ? 'success' : 'error', result);
+                
+                if (result.success && result.data.card) {
+                    lastCardId = result.data.card.id;
+                    document.getElementById('test-card-id').value = lastCardId;
+                }
+            } catch (error) {
+                logTestResult('Buy Card (Pending)', 'error', { error: error.message });
+            }
+        }
+
+        async function testBuyCardCompleted() {
+            const testData = getTestData();
+            testData.paymentStatus = 'completed';
+
+            try {
+                const response = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Buy Card (Completed)', response.ok ? 'success' : 'error', result);
+                
+                if (result.success && result.data.card) {
+                    lastCardId = result.data.card.id;
+                    document.getElementById('test-card-id').value = lastCardId;
+                }
+            } catch (error) {
+                logTestResult('Buy Card (Completed)', 'error', { error: error.message });
+            }
+        }
+
+        async function testConfirmPayment() {
+            const cardId = document.getElementById('test-card-id').value;
+            if (!cardId) {
+                logTestResult('Confirm Payment', 'error', { message: 'No card ID available. Please buy a card first.' });
+                return;
+            }
+
+            const confirmData = {
+                cardId: cardId,
+                paymentMethod: document.getElementById('test-payment-method').value,
+                paymentReference: 'TEST_REF_' + Date.now(),
+                notes: document.getElementById('test-notes').value
+            };
+
+            try {
+                const response = await fetch('/api/confirm-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(confirmData)
+                });
+
+                const result = await response.json();
+                logTestResult('Confirm Payment', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Confirm Payment', 'error', { error: error.message });
+            }
+        }
+
+        async function testGetUserCards() {
+            const userId = document.getElementById('test-user-id').value;
+            if (!userId) {
+                logTestResult('Get User Cards', 'error', { message: 'User ID is required' });
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/user-cards/${userId}`);
+                const result = await response.json();
+                logTestResult('Get User Cards', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Get User Cards', 'error', { error: error.message });
+            }
+        }
+
+        async function testDuplicateCard() {
+            const testData = getTestData();
+            testData.paymentStatus = 'pending';
+
+            try {
+                // First purchase
+                const response1 = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result1 = await response1.json();
+                logTestResult('Duplicate Card - First Purchase', response1.ok ? 'success' : 'error', result1);
+
+                // Second purchase (should fail)
+                const response2 = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result2 = await response2.json();
+                logTestResult('Duplicate Card - Second Purchase', response2.ok ? 'success' : 'error', result2);
+            } catch (error) {
+                logTestResult('Duplicate Card', 'error', { error: error.message });
+            }
+        }
+
+        function getTestData() {
+            const cardType = document.getElementById('test-card-type').value;
+            const cardPrices = {
+                "Standard": 2000000,
+                "Silver": 8000000,
+                "Gold": 18000000,
+                "Platinum": 38000000,
+                "Diamond": 100000000
+            };
+            const cardSessions = {
+                "Standard": 12,
+                "Silver": 15,
+                "Gold": 18,
+                "Platinum": 20,
+                "Diamond": 24
+            };
+
+            return {
+                userId: document.getElementById('test-user-id').value,
+                cardType: cardType,
+                price: cardPrices[cardType],
+                sessions: cardSessions[cardType],
+                paymentMethod: document.getElementById('test-payment-method').value,
+                notes: document.getElementById('test-notes').value
+            };
+        }
+
+        function logTestResult(testName, status, data) {
+            const testResults = document.getElementById('test-results');
+            const statusClass = status === 'success' ? 'text-green-600' : 'text-red-600';
+            const statusIcon = status === 'success' ? 'fa-check-circle' : 'fa-times-circle';
+            
+            const resultHtml = `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <i class="fas ${statusIcon} ${statusClass} mr-2"></i>
+                        <span class="font-semibold">${testName}</span>
+                        <span class="ml-auto text-sm ${statusClass}">${status.toUpperCase()}</span>
+                    </div>
+                    <pre class="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-64">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            
+            testResults.innerHTML = resultHtml + testResults.innerHTML;
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '<p class="text-gray-500">Chưa có kết quả test...</p>';
+            lastCardId = null;
+            document.getElementById('test-card-id').value = '';
+        }
+
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            logTestResult('Page loaded', 'success', 'Test interface ready');
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Registration Form Validation - VCare Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-center text-blue-600 mb-8">
+                🧪 Test Registration Form Validation
+            </h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Test Cases -->
+                <div class="space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-800">📋 Test Cases</h2>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-blue-800">✅ Valid Cases</h3>
+                            <ul class="text-sm text-blue-700 mt-2 space-y-1">
+                                <li>• Họ tên: "Nguyễn Văn A" (2-50 ký tự)</li>
+                                <li>• SĐT: "0901234567" hoặc "0123456789"</li>
+                                <li>• Email: "test@example.com"</li>
+                                <li>• CMND: "123456789" hoặc "123456789012"</li>
+                                <li>• Ngày sinh: trước 2010</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-red-800">❌ Invalid Cases</h3>
+                            <ul class="text-sm text-red-700 mt-2 space-y-1">
+                                <li>• Họ tên: "A" (quá ngắn) hoặc có số</li>
+                                <li>• SĐT: "123" (quá ngắn) hoặc có chữ</li>
+                                <li>• Email: "invalid-email"</li>
+                                <li>• CMND: "123" (quá ngắn) hoặc có chữ</li>
+                                <li>• Ngày sinh: sau 2010 (quá trẻ)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Test Form -->
+                <div class="space-y-6">
+                    <h2 class="text-xl font-semibold text-gray-800">🎯 Test Form</h2>
+                    
+                    <form id="testRegistrationForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Họ và tên *</label>
+                            <input type="text" id="testFullName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nguyễn Văn A" pattern="[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐđ\s]{2,50}" title="Vui lòng nhập họ tên hợp lệ (2-50 ký tự, chỉ chữ cái)" required>
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: Nguyễn Văn A</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Số điện thoại *</label>
+                            <input type="tel" id="testPhoneNumber" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="09xxxxxxxxx" pattern="[0-9]{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)" required>
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: 0901234567 hoặc 0123456789</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                            <input type="email" id="testEmailOptional" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="you@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Vui lòng nhập email hợp lệ">
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: nguyenvana@gmail.com</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Số CMND/CCCD</label>
+                            <input type="text" id="testIdCard" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="123456789" pattern="[0-9]{9,12}" title="Vui lòng nhập số CMND/CCCD hợp lệ (9-12 chữ số)">
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: 123456789 hoặc 123456789012</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Ngày sinh</label>
+                            <input type="date" id="testBirthDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" max="2010-01-01" title="Vui lòng chọn ngày sinh hợp lệ">
+                            <p class="text-xs text-gray-600 mt-1">Chọn ngày sinh của bạn</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Địa chỉ</label>
+                            <textarea id="testAddress" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập địa chỉ đầy đủ của bạn" maxlength="200"></textarea>
+                            <p class="text-xs text-gray-600 mt-1">Tối đa 200 ký tự</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Loại thành viên *</label>
+                            <select id="testPartnerValue" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+                                <option value="">Chọn loại thành viên</option>
+                                <option value="founder">🏆 Người Sáng Lập</option>
+                                <option value="angel">👼 Angel Investor</option>
+                                <option value="seed">🌱 Seed Investor</option>
+                                <option value="vcare_home">🏠 Vcare Home</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex space-x-3">
+                            <button type="button" onclick="testValidData()" class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                                ✅ Test Valid Data
+                            </button>
+                            <button type="button" onclick="testInvalidData()" class="flex-1 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
+                                ❌ Test Invalid Data
+                            </button>
+                        </div>
+                        
+                        <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            🚀 Submit Test
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Results -->
+            <div id="testResults" class="mt-8 hidden">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">📊 Test Results</h2>
+                <div id="resultsContent" class="bg-gray-50 p-4 rounded-lg"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test validation function (same as in main form)
+        function validateRegistrationForm() {
+            const fullName = document.getElementById('testFullName').value.trim();
+            const phoneNumber = document.getElementById('testPhoneNumber').value.trim();
+            const emailOptional = document.getElementById('testEmailOptional').value.trim();
+            const idCard = document.getElementById('testIdCard').value.trim();
+            const birthDate = document.getElementById('testBirthDate').value;
+            const address = document.getElementById('testAddress').value.trim();
+            const partnerValue = document.getElementById('testPartnerValue').value;
+
+            const errors = [];
+
+            // Validate required fields
+            if (!fullName) {
+                errors.push('❌ Vui lòng nhập họ và tên!');
+            }
+
+            if (!phoneNumber) {
+                errors.push('❌ Vui lòng nhập số điện thoại!');
+            }
+
+            if (!partnerValue) {
+                errors.push('❌ Vui lòng chọn loại thành viên!');
+            }
+
+            // Validate full name format
+            if (fullName) {
+                const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐđ\s]{2,50}$/;
+                if (!namePattern.test(fullName)) {
+                    errors.push('❌ Họ và tên không hợp lệ! Vui lòng nhập 2-50 ký tự, chỉ chứa chữ cái và khoảng trắng.');
+                }
+            }
+
+            // Validate phone number
+            if (phoneNumber) {
+                const phonePattern = /^[0-9]{10,11}$/;
+                if (!phonePattern.test(phoneNumber)) {
+                    errors.push('❌ Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.');
+                }
+            }
+
+            // Validate email if provided
+            if (emailOptional) {
+                const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                if (!emailPattern.test(emailOptional)) {
+                    errors.push('❌ Email không hợp lệ! Vui lòng nhập email đúng định dạng.');
+                }
+            }
+
+            // Validate ID card if provided
+            if (idCard) {
+                const idCardPattern = /^[0-9]{9,12}$/;
+                if (!idCardPattern.test(idCard)) {
+                    errors.push('❌ Số CMND/CCCD không hợp lệ! Vui lòng nhập 9-12 chữ số.');
+                }
+            }
+
+            // Validate birth date if provided
+            if (birthDate) {
+                const selectedDate = new Date(birthDate);
+                const today = new Date();
+                const maxDate = new Date('2010-01-01');
+                
+                if (selectedDate > today) {
+                    errors.push('❌ Ngày sinh không hợp lệ! Ngày sinh không thể là ngày tương lai.');
+                }
+                
+                if (selectedDate > maxDate) {
+                    errors.push('❌ Ngày sinh không hợp lệ! Bạn phải ít nhất 14 tuổi để đăng ký.');
+                }
+            }
+
+            // Validate address length if provided
+            if (address && address.length > 200) {
+                errors.push('❌ Địa chỉ quá dài! Vui lòng nhập tối đa 200 ký tự.');
+            }
+
+            return errors;
+        }
+
+        // Test with valid data
+        function testValidData() {
+            document.getElementById('testFullName').value = 'Nguyễn Văn A';
+            document.getElementById('testPhoneNumber').value = '0901234567';
+            document.getElementById('testEmailOptional').value = 'test@example.com';
+            document.getElementById('testIdCard').value = '123456789';
+            document.getElementById('testBirthDate').value = '1990-01-01';
+            document.getElementById('testAddress').value = '123 Đường ABC, Quận 1, TP.HCM';
+            document.getElementById('testPartnerValue').value = 'vcare_home';
+            
+            showResults('✅ Valid Data Loaded', 'All fields filled with valid data. Try submitting!');
+        }
+
+        // Test with invalid data
+        function testInvalidData() {
+            document.getElementById('testFullName').value = 'A'; // Too short
+            document.getElementById('testPhoneNumber').value = '123'; // Too short
+            document.getElementById('testEmailOptional').value = 'invalid-email'; // Invalid format
+            document.getElementById('testIdCard').value = '123'; // Too short
+            document.getElementById('testBirthDate').value = '2015-01-01'; // Too young
+            document.getElementById('testAddress').value = 'A'.repeat(201); // Too long
+            document.getElementById('testPartnerValue').value = ''; // Not selected
+            
+            showResults('❌ Invalid Data Loaded', 'All fields filled with invalid data. Try submitting to see validation errors!');
+        }
+
+        // Show test results
+        function showResults(title, message) {
+            const resultsDiv = document.getElementById('testResults');
+            const contentDiv = document.getElementById('resultsContent');
+            
+            contentDiv.innerHTML = `
+                <h3 class="font-semibold text-lg mb-2">${title}</h3>
+                <p class="text-gray-700">${message}</p>
+            `;
+            
+            resultsDiv.classList.remove('hidden');
+        }
+
+        // Form submit handler
+        document.getElementById('testRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const errors = validateRegistrationForm();
+            
+            if (errors.length === 0) {
+                showResults('✅ Validation Passed', 'All validation rules passed! Form data is valid.');
+            } else {
+                showResults('❌ Validation Failed', errors.join('<br>'));
+            }
+        });
+
+        // Real-time validation (same as main form)
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = ['testFullName', 'testPhoneNumber', 'testEmailOptional', 'testIdCard', 'testBirthDate', 'testAddress'];
+            
+            inputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function() {
+                        const errors = validateRegistrationForm();
+                        if (errors.length > 0) {
+                            this.style.borderColor = '#ef4444';
+                        } else {
+                            this.style.borderColor = '#d1d5db';
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

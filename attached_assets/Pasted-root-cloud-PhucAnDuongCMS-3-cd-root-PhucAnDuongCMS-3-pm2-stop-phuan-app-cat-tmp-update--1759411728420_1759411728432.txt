@@ -1,0 +1,91 @@
+root@cloud:~/PhucAnDuongCMS-3# cd /root/PhucAnDuongCMS-3 && pm2 stop phuan-app && cat > /tmp/update-app.sh << 'SCRIPT_END'
+#!/bin/bash
+set -e
+cd /root/PhucAnDuongCMS-3
+
+echo "🔄 Đang cập nhật schema..."
+# Backup
+cp shared/schema.ts shared/schema.ts.backup
+
+# Sửa schema - thêm consultationSessions nếu chưa có
+if ! grep -q "consultationSessions:" shared/schema.ts; then
+  sed -i '/remainingSessions: integer("remaining_sessions").default(0),/a\  consultationSessions: integer("consultation_sessions").default(12), // 12-24 lượt tư vấn sức khỏe/2 năm' shared/schema.ts
+fi
+
+# Thêm profitSharePercentage nếu chưa có
+if ! grep -q "profitSharePercentage:" shared/schema.ts; then
+  sed -i '/vipSupport: decimal("vip_support".*default("5.0"),/a\  profitSharePercentage: decimal("profit_share_percentage", { precision: 5, scale: 2 }).default("49.0"), // 49% lợi tức sau thuế' shared/schema.ts
+fi
+
+# Thêm padToken nếu chưa có
+if ! grep -q 'padToken: decimal("pad_token"' shared/schema.ts; then
+  sed -i '/profitSharePercentage:.*default("49.0"),/a\  padToken: decimal("pad_token", { precision: 15, scale: 2 }).default("0"), // PAD Token (100 PAD = 1 triệu VNĐ)' shared/schema.ts
+fi
+
+echo "✅ Schema updated"
+echo "🗄️  Đang cập nhật database..."
+npm run db:push || npm run db:push -- --force
+
+echo "🔄 Đang cập nhật routes..."
+cp server/routes.ts server/routes.ts.backup
+
+# Update POST /api/cards endpoint
+cat > /tmp/post_cards.txt << 'NEWCODE'
+  app.post("/api/cards", async (req, res) => {
+    try {
+      const cardData = insertCardSchema.parse(req.body);
+      
+      const price = parseFloat(cardData.price);
+      const padToken = (price / 1000000) * 100;
+      
+      const consultationSessionsMap: Record<string, number> = {
+        "Standard": 12,
+        "Silver": 15,
+        "Gold": 18,
+        "Platinum": 21,
+        "Diamond": 24
+      };
+      const consultationSessions = consultationSessionsMap[cardData.cardType] || 12;
+      
+      const enrichedCardData = {
+        ...cardData,
+        padToken: padToken.toString(),
+        consultationSessions
+      };
+      
+      const card = await storage.createCard(enrichedCardData);
+      
+      if (req.isAuthenticated() && req.user && card.ownerId) {
+        const userId = card.ownerId;
+        const userCards = await storage.getCards();
+        const totalCardValue = userCards
+          .filter(c => c.ownerId === userId)
+chmod +x /tmp/update-app.sh && /tmp/update-app.sh server/routes.tsrofitSharePercentage: parseFloat(card.profitSharePercentage || "49"),\n        padToken: parseFloat(card.padToken || "0"),\n        consul
+[PM2] Applying action stopProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 0        │ 0      │ 249  │ stopped   │ 0%       │ 0b       │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+🔄 Đang cập nhật schema...
+✅ Schema updated
+🗄️  Đang cập nhật database...
+
+> rest-express@1.0.0 db:push
+> drizzle-kit push
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/root/PhucAnDuongCMS-3/drizzle.config.ts'
+Using 'pg' driver for database querying
+[✓] Pulling schema from database...
+ Warning  Found data-loss statements:
+· You're about to delete roles table with 7 items
+· You're about to delete session table with 16 items
+· You're about to delete pad_token column in users table with 2 items
+
+THIS ACTION WILL CAUSE DATA LOSS AND CANNOT BE REVERTED
+
+Do you still want to push changes?
+❯ No, abort
+  Yes, I want to remove 2 tables, remove 1 column, 

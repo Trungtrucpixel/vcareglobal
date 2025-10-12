@@ -1,0 +1,52 @@
+root@cloud:~/PhucAnDuongCMS-3# # Stop systemd service
+sudo systemctl stop postgresql
+
+# Kill all PostgreSQL
+sudo pkill -9 postgres
+
+# Start using pg_ctlcluster (stable hơn systemd)
+sudo -u postgres pg_ctlcluster 14 main start
+
+# Check if running
+ps aux | grep postgres | grep -v grep
+
+# Test connection
+PGPASSWORD='PhucAn2025!' psql -h localhost -U postgres -d phuanduong_db -c "SELECT 'OK';"
+
+# Restart app
+pm2 restart phuan-app
+sleep 3
+
+# Test login
+curl -X POST http://103.72.96.173:5000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@phuan.com","password":"admin123"}' \
+  -c /tmp/cookies.txt -i | grep "HTTP\|Set-Cookie"
+Warning: the cluster will not be running as a systemd service. Consider using systemctl:
+  sudo systemctl start postgresql@14-main
+Removed stale pid file.
+postgres 2733819  1.0  1.5 218396 30636 ?        Ss   00:57   0:00 /usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf
+postgres 2733822  0.0  0.3 218396  6964 ?        Ss   00:57   0:00 postgres: 14/main: checkpointer 
+postgres 2733823  0.0  0.3 218396  7092 ?        Ss   00:57   0:00 postgres: 14/main: background writer 
+postgres 2733824  0.0  0.3 218396  7092 ?        Ss   00:57   0:00 postgres: 14/main: walwriter 
+postgres 2733825  0.0  0.4 218952  9676 ?        Ss   00:57   0:00 postgres: 14/main: autovacuum launcher 
+postgres 2733826  0.0  0.3  73124  6964 ?        Ss   00:57   0:00 postgres: 14/main: stats collector 
+postgres 2733827  0.0  0.3 218824  7704 ?        Ss   00:57   0:00 postgres: 14/main: logical replication launcher 
+ ?column? 
+----------
+ OK
+(1 row)
+
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2733852  │ 0s     │ 240  │ online    │ 0%       │ 10.8mb   │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    60  100    11  100    49    338   1506 --:--:-- --:--:-- --:--:--  2142
+HTTP/1.1 400 Bad Request
+root@cloud:~/PhucAnDuongCMS-3# 

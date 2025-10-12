@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCare Global - Admin Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Admin Header -->
+    <header class="bg-red-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <!-- VCare Global Logo -->
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                        <!-- Globe with DNA helix -->
+                        <svg viewBox="0 0 48 48" class="w-full h-full">
+                            <!-- Globe outline -->
+                            <circle cx="24" cy="24" r="22" fill="none" stroke="#DC2626" stroke-width="1.8"/>
+                            <!-- Globe grid lines -->
+                            <line x1="2" y1="24" x2="46" y2="24" stroke="#DC2626" stroke-width="0.8" opacity="0.6"/>
+                            <line x1="24" y1="2" x2="24" y2="46" stroke="#DC2626" stroke-width="0.8" opacity="0.6"/>
+                            <ellipse cx="24" cy="24" rx="22" ry="11" fill="none" stroke="#DC2626" stroke-width="0.8" opacity="0.4"/>
+                            <ellipse cx="24" cy="24" rx="11" ry="22" fill="none" stroke="#DC2626" stroke-width="0.8" opacity="0.4"/>
+                            
+                            <!-- DNA double helix -->
+                            <path d="M12 16 Q18 13 24 16 Q30 19 30 24 Q30 29 24 32 Q18 35 12 32" 
+                                  stroke="#DC2626" stroke-width="2" fill="none"/>
+                            <path d="M12 32 Q18 29 24 32 Q30 29 30 24 Q30 19 24 16 Q18 13 12 16" 
+                                  stroke="#DC2626" stroke-width="2" fill="none"/>
+                            
+                            <!-- Connecting lines -->
+                            <line x1="16" y1="20" x2="22" y2="24" stroke="#DC2626" stroke-width="1.2"/>
+                            <line x1="22" y1="20" x2="28" y2="24" stroke="#DC2626" stroke-width="1.2"/>
+                            <line x1="16" y1="28" x2="22" y2="24" stroke="#DC2626" stroke-width="1.2"/>
+                            <line x1="22" y1="28" x2="28" y2="24" stroke="#DC2626" stroke-width="1.2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Vcare Global Admin</h1>
+                        <p class="text-sm text-red-100">Hội Tụ Những Tinh Hoa</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">Xin chào, <strong>Admin</strong></span>
+                    <a href="/" class="bg-white text-red-600 px-4 py-2 rounded-lg hover:bg-gray-100 text-sm">
+                        Về trang chủ
+                    </a>
+                    <button onclick="logout()" class="bg-red-700 text-white px-4 py-2 rounded-lg hover:bg-red-800 text-sm">
+                        Đăng xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Dashboard Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Tổng thành viên</h3>
+                        <p class="text-2xl font-bold text-blue-600">1,247</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Doanh thu tháng</h3>
+                        <p class="text-2xl font-bold text-green-600">2.5B ₫</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Thẻ đang hoạt động</h3>
+                        <p class="text-2xl font-bold text-yellow-600">1,089</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Tăng trưởng</h3>
+                        <p class="text-2xl font-bold text-purple-600">+23%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Functions -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- User Management -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">👥 Quản lý thành viên</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Danh sách thành viên</h3>
+                                <p class="text-sm text-gray-800">Xem, sửa, khóa/mở tài khoản</p>
+                            </div>
+                            <button onclick="showUserList()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                Xem danh sách
+                            </button>
+                        </div>
+                        
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Thống kê thành viên</h3>
+                                <p class="text-sm text-gray-800">Báo cáo theo loại thành viên</p>
+                            </div>
+                            <button onclick="showUserStats()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                                Xem báo cáo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Management -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💳 Quản lý thẻ chăm sóc</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Cấu hình loại thẻ</h3>
+                                <p class="text-sm text-gray-800">Sửa giá, số lượt tư vấn</p>
+                            </div>
+                            <button onclick="showCardConfig()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                Cấu hình
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Quản lý thẻ hoạt động</h3>
+                                <p class="text-sm text-gray-800">Kích hoạt, khóa, dừng thẻ</p>
+                            </div>
+                            <button onclick="showActiveCards()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                Quản lý
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Báo cáo doanh thu</h3>
+                                <p class="text-sm text-gray-800">Thống kê theo loại thẻ</p>
+                            </div>
+                            <button onclick="showCardRevenue()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                                Xem báo cáo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Management -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💰 Quản lý giao dịch</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Duyệt giao dịch đầu tư</h3>
+                                <p class="text-sm text-gray-800">Xem và duyệt các giao dịch đầu tư</p>
+                            </div>
+                            <button onclick="showInvestmentApproval()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                Duyệt
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Xử lý yêu cầu rút tiền</h3>
+                                <p class="text-sm text-gray-800">Duyệt và xử lý yêu cầu rút tiền</p>
+                            </div>
+                            <button onclick="showWithdrawalRequests()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                Xử lý
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Quản lý hoa hồng</h3>
+                                <p class="text-sm text-gray-800">Tính toán và phân phối hoa hồng</p>
+                            </div>
+                            <button onclick="showCommissionManagement()" class="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700">
+                                Quản lý
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Configuration -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">⚙️ Cấu hình hệ thống</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Cấu hình tỷ lệ</h3>
+                                <p class="text-sm text-gray-800">Chia sẻ lợi nhuận, hoa hồng</p>
+                            </div>
+                            <button onclick="showRateConfig()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                Cấu hình
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Cấu hình loại user</h3>
+                                <p class="text-sm text-gray-800">8 loại thành viên</p>
+                            </div>
+                            <button onclick="showUserTypeConfig()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                Cấu hình
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Cấu hình referral</h3>
+                                <p class="text-sm text-gray-800">Tỷ lệ hoa hồng giới thiệu</p>
+                            </div>
+                            <button onclick="showReferralConfig()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                                Cấu hình
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Reports -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📊 Báo cáo hệ thống</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Thống kê tổng quan</h3>
+                                <p class="text-sm text-gray-800">Báo cáo tổng quan hệ thống</p>
+                            </div>
+                            <button onclick="showSystemOverview()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                                Xem báo cáo
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Báo cáo doanh thu</h3>
+                                <p class="text-sm text-gray-800">Phân tích doanh thu chi tiết</p>
+                            </div>
+                            <button onclick="showRevenueReport()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                Xem báo cáo
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                            <div>
+                                <h3 class="font-semibold">Export dữ liệu</h3>
+                                <p class="text-sm text-gray-800">Xuất dữ liệu ra Excel/CSV</p>
+                            </div>
+                            <button onclick="exportData()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                                Export
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="mt-8 bg-white rounded-lg shadow-md">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-bold text-gray-800">📋 Đơn hàng gần đây</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ID</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Khách hàng</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Thẻ</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Giá</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Trạng thái</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ORD-001</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Nguyễn Văn A</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Gold Card</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">18.000.000 ₫</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                    Chờ duyệt
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button onclick="approveOrder('ORD-001')" class="text-green-600 hover:text-green-900 mr-2">Duyệt</button>
+                                <button onclick="rejectOrder('ORD-001')" class="text-red-600 hover:text-red-900">Từ chối</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ORD-002</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Trần Thị B</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Standard Card</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2.000.000 ₫</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                    Đã duyệt
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <button onclick="viewOrder('ORD-002')" class="text-blue-600 hover:text-blue-900">Xem chi tiết</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Modals -->
+    <!-- User List Modal -->
+    <div id="userListModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">👥 Danh sách thành viên</h2>
+                    <button onclick="closeModal('userListModal')" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">ID</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Tên</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Email</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Loại</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Trạng thái</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">VCA Digital Share</th>
+                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr>
+                                    <td class="px-4 py-4 text-sm text-gray-900">USER001</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900">Nguyễn Văn A</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900">user@vcareglobal.com</td>
+                                    <td class="px-4 py-4 text-sm text-gray-900">
+                                        <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded-full text-xs">Card Customer</span>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-900">
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Hoạt động</span>
+                                    </td>
+                                    <td class="px-4 py-4 text-sm text-gray-900">1,800</td>
+                                    <td class="px-4 py-4 text-sm font-medium">
+                                        <button onclick="editUser('USER001')" class="text-blue-600 hover:text-blue-900 mr-2">Sửa</button>
+                                        <button onclick="toggleUserStatus('USER001')" class="text-yellow-600 hover:text-yellow-900">Khóa</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rate Configuration Modal -->
+    <div id="rateConfigModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">⚙️ Cấu hình tỷ lệ</h2>
+                    <button onclick="closeModal('rateConfigModal')" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tỷ lệ chia sẻ lợi nhuận (%)</label>
+                            <input type="number" value="49" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tỷ lệ hoa hồng referral (%)</label>
+                            <input type="number" value="8" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tỷ lệ VIP support (%)</label>
+                            <input type="number" value="5" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Thuế rút tiền trên 10M VND (%)</label>
+                            <input type="number" value="10" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div class="flex justify-end space-x-4">
+                            <button onclick="closeModal('rateConfigModal')" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+                                Hủy
+                            </button>
+                            <button onclick="saveRateConfig()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                                Lưu cấu hình
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Type Configuration Modal -->
+    <div id="userTypeConfigModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">⚙️ Cấu hình 8 loại thành viên</h2>
+                    <button onclick="closeModal('userTypeConfigModal')" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <!-- Founder -->
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-red-800 mb-3">🏆 Người Sáng Lập</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-red-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="245000000" class="w-full px-2 py-1 border border-red-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-red-700">VCA Multiplier:</label>
+                                    <input type="number" value="3.0" step="0.1" class="w-full px-2 py-1 border border-red-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-red-700">Maxout Limit:</label>
+                                    <input type="text" value="Unlimited" class="w-full px-2 py-1 border border-red-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-red-700">Sessions/năm:</label>
+                                    <input type="number" value="24" class="w-full px-2 py-1 border border-red-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Angel -->
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-yellow-800 mb-3">👼 Nhà Đầu Tư Thiên Thần</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-yellow-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="100000000" class="w-full px-2 py-1 border border-yellow-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-yellow-700">VCA Multiplier:</label>
+                                    <input type="number" value="2.5" step="0.1" class="w-full px-2 py-1 border border-yellow-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-yellow-700">Maxout Limit:</label>
+                                    <input type="number" value="5.0" step="0.1" class="w-full px-2 py-1 border border-yellow-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-yellow-700">Sessions/năm:</label>
+                                    <input type="number" value="21" class="w-full px-2 py-1 border border-yellow-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Seed -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-green-800 mb-3">🌱 Nhà Đầu Tư Hạt Giống</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-green-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="50000000" class="w-full px-2 py-1 border border-green-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-green-700">VCA Multiplier:</label>
+                                    <input type="number" value="1.2" step="0.1" class="w-full px-2 py-1 border border-green-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-green-700">Maxout Limit:</label>
+                                    <input type="number" value="4.0" step="0.1" class="w-full px-2 py-1 border border-green-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-green-700">Sessions/năm:</label>
+                                    <input type="number" value="18" class="w-full px-2 py-1 border border-green-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Vcare Home -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-blue-800 mb-3">🏠 Vcare Home</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-blue-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="30000000" class="w-full px-2 py-1 border border-blue-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-blue-700">VCA Multiplier:</label>
+                                    <input type="number" value="1.0" step="0.1" class="w-full px-2 py-1 border border-blue-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-blue-700">Maxout Limit:</label>
+                                    <input type="number" value="3.0" step="0.1" class="w-full px-2 py-1 border border-blue-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-blue-700">Sessions/năm:</label>
+                                    <input type="number" value="15" class="w-full px-2 py-1 border border-blue-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Asset Contributor -->
+                        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-purple-800 mb-3">🏢 Nhà Đóng Góp Tài Sản</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-purple-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="20000000" class="w-full px-2 py-1 border border-purple-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-purple-700">VCA Multiplier:</label>
+                                    <input type="number" value="2.0" step="0.1" class="w-full px-2 py-1 border border-purple-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-purple-700">Maxout Limit:</label>
+                                    <input type="number" value="2.0" step="0.1" class="w-full px-2 py-1 border border-purple-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-purple-700">Sessions/năm:</label>
+                                    <input type="number" value="18" class="w-full px-2 py-1 border border-purple-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Intellectual Contributor -->
+                        <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-indigo-800 mb-3">🧠 Nhà Đóng Góp Trí Tuệ</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-indigo-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="10000000" class="w-full px-2 py-1 border border-indigo-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-indigo-700">VCA Multiplier:</label>
+                                    <input type="number" value="1.5" step="0.1" class="w-full px-2 py-1 border border-indigo-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-indigo-700">Maxout Limit:</label>
+                                    <input type="number" value="2.5" step="0.1" class="w-full px-2 py-1 border border-indigo-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-indigo-700">Sessions/năm:</label>
+                                    <input type="number" value="20" class="w-full px-2 py-1 border border-indigo-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Franchise Branch -->
+                        <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-orange-800 mb-3">🏬 Chi Nhánh Nhượng Quyền</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-orange-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="5000000" class="w-full px-2 py-1 border border-orange-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-orange-700">VCA Multiplier:</label>
+                                    <input type="number" value="1.0" step="0.1" class="w-full px-2 py-1 border border-orange-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-orange-700">Maxout Limit:</label>
+                                    <input type="number" value="1.5" step="0.1" class="w-full px-2 py-1 border border-orange-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-orange-700">Sessions/năm:</label>
+                                    <input type="number" value="18" class="w-full px-2 py-1 border border-orange-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card Customer -->
+                        <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">💳 Khách Hàng Thẻ</h3>
+                            <div class="space-y-2">
+                                <div>
+                                    <label class="text-sm text-gray-700">Min đầu tư (VND):</label>
+                                    <input type="number" value="2000000" class="w-full px-2 py-1 border border-gray-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-gray-700">VCA Multiplier:</label>
+                                    <input type="number" value="1.0" step="0.1" class="w-full px-2 py-1 border border-gray-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-gray-700">Maxout Limit:</label>
+                                    <input type="number" value="2.1" step="0.1" class="w-full px-2 py-1 border border-gray-300 rounded text-sm">
+                                </div>
+                                <div>
+                                    <label class="text-sm text-gray-700">Sessions/năm:</label>
+                                    <input type="number" value="12" class="w-full px-2 py-1 border border-gray-300 rounded text-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-end space-x-4">
+                        <button onclick="closeModal('userTypeConfigModal')" class="px-4 py-2 text-gray-600 border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Hủy
+                        </button>
+                        <button onclick="saveUserTypeConfig()" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Lưu cấu hình
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Management Modal -->
+    <div id="userManagementModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">👥 Quản lý thành viên</h2>
+                    <button onclick="closeUserManagementModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- User Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600">1,247</div>
+                            <div class="text-sm text-gray-600">Tổng thành viên</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600">1,105</div>
+                            <div class="text-sm text-gray-600">Hoạt động</div>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-yellow-600">142</div>
+                            <div class="text-sm text-gray-600">Chờ duyệt</div>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg">
+                            <div class="text-2xl font-bold text-red-600">23</div>
+                            <div class="text-sm text-gray-600">Bị khóa</div>
+                        </div>
+                    </div>
+
+                    <!-- User List Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Tên</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Loại</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Trạng thái</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Thẻ</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Ngày tham gia</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userListBody" class="bg-white divide-y divide-gray-200">
+                                <!-- User data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- User Stats Modal -->
+    <div id="userStatsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📊 Thống kê thành viên</h2>
+                    <button onclick="closeUserStatsModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Growth Stats -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Tăng trưởng</h3>
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <div class="text-3xl font-bold text-blue-600">+23%</div>
+                                <div class="text-sm text-gray-600">Tháng này</div>
+                            </div>
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <div class="text-3xl font-bold text-green-600">89%</div>
+                                <div class="text-sm text-gray-600">Thành viên hoạt động</div>
+                            </div>
+                        </div>
+
+                        <!-- Revenue Stats -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Doanh thu</h3>
+                            <div class="bg-purple-50 p-4 rounded-lg">
+                                <div class="text-3xl font-bold text-purple-600">2.4B ₫</div>
+                                <div class="text-sm text-gray-600">Tổng doanh thu</div>
+                            </div>
+                            <div class="bg-yellow-50 p-4 rounded-lg">
+                                <div class="text-3xl font-bold text-yellow-600">156,789</div>
+                                <div class="text-sm text-gray-600">VCA Digital Share</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- User Type Distribution -->
+                    <div class="mt-8">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Phân bố loại thành viên</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                                <span class="font-medium">Card Customer</span>
+                                <span class="text-blue-600 font-bold">892 (71.5%)</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                                <span class="font-medium">Angel</span>
+                                <span class="text-yellow-600 font-bold">156 (12.5%)</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                                <span class="font-medium">Seed</span>
+                                <span class="text-green-600 font-bold">89 (7.1%)</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-red-50 rounded-lg">
+                                <span class="font-medium">Founder</span>
+                                <span class="text-red-600 font-bold">45 (3.6%)</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-medium">Vcare Home</span>
+                                <span class="text-gray-600 font-bold">65 (5.2%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Management Modal -->
+    <div id="cardManagementModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💳 Quản lý thẻ chăm sóc</h2>
+                    <button onclick="closeCardManagementModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- Card Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-blue-600" id="totalCards">1,089</div>
+                            <div class="text-sm text-gray-600">Tổng thẻ</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600" id="activeCards">892</div>
+                            <div class="text-sm text-gray-600">Hoạt động</div>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-red-600" id="expiredCards">45</div>
+                            <div class="text-sm text-gray-600">Hết hạn</div>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-yellow-600" id="pendingCards">152</div>
+                            <div class="text-sm text-gray-600">Chờ duyệt</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-purple-600" id="cardRevenue">2.4B ₫</div>
+                            <div class="text-sm text-gray-600">Doanh thu</div>
+                        </div>
+                    </div>
+
+                    <!-- Card Management Actions -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Thao tác quản lý</h3>
+                            <button onclick="createNewCard()" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700">
+                                🆕 Tạo thẻ mới
+                            </button>
+                            <button onclick="updateCardPrices()" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700">
+                                💰 Cập nhật giá thẻ
+                            </button>
+                            <button onclick="manageCardSessions()" class="w-full bg-yellow-600 text-white py-3 px-4 rounded-lg hover:bg-yellow-700">
+                                📅 Quản lý số lượt tư vấn
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Báo cáo thẻ</h3>
+                            <button onclick="viewCardExpiry()" class="w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700">
+                                ⏰ Thẻ sắp hết hạn
+                            </button>
+                            <button onclick="viewCardUsage()" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700">
+                                📊 Thống kê sử dụng
+                            </button>
+                            <button onclick="exportCardData()" class="w-full bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700">
+                                📤 Export dữ liệu thẻ
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Management Modal -->
+    <div id="transactionManagementModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💰 Quản lý giao dịch</h2>
+                    <button onclick="closeTransactionManagementModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- Transaction Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-yellow-600" id="pendingWithdrawals">23</div>
+                            <div class="text-sm text-gray-600">Rút tiền chờ duyệt</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600" id="pendingReferrals">45</div>
+                            <div class="text-sm text-gray-600">Hoa hồng chờ duyệt</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-blue-600" id="pendingUpgrades">12</div>
+                            <div class="text-sm text-gray-600">Nâng cấp chờ duyệt</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-purple-600" id="totalRevenue">2.4B ₫</div>
+                            <div class="text-sm text-gray-600">Tổng doanh thu</div>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Management Actions -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Duyệt giao dịch</h3>
+                            <button onclick="approveWithdrawal(1)" class="w-full bg-yellow-600 text-white py-3 px-4 rounded-lg hover:bg-yellow-700">
+                                💸 Duyệt rút tiền
+                            </button>
+                            <button onclick="approveReferral(1)" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700">
+                                🎁 Duyệt hoa hồng
+                            </button>
+                            <button onclick="approveUpgrade(1)" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700">
+                                ⬆️ Duyệt nâng cấp
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Lịch sử giao dịch</h3>
+                            <button onclick="viewTransactionHistory()" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700">
+                                📋 Xem lịch sử
+                            </button>
+                            <button onclick="viewFailedTransactions()" class="w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700">
+                                ❌ Giao dịch thất bại
+                            </button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Báo cáo</h3>
+                            <button onclick="generateTransactionReport()" class="w-full bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700">
+                                📊 Báo cáo giao dịch
+                            </button>
+                            <button onclick="exportTransactionData()" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700">
+                                📤 Export dữ liệu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Reports Modal -->
+    <div id="systemReportsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📈 Báo cáo hệ thống</h2>
+                    <button onclick="closeSystemReportsModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Revenue Reports -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Báo cáo doanh thu</h3>
+                            <button onclick="generateRevenueReport()" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700">
+                                💰 Báo cáo doanh thu
+                            </button>
+                            <button onclick="generateMonthlyReport()" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700">
+                                📅 Báo cáo tháng
+                            </button>
+                            <button onclick="generateQuarterlyReport()" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700">
+                                📊 Báo cáo quý
+                            </button>
+                        </div>
+
+                        <!-- User Reports -->
+                        <div class="space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">Báo cáo thành viên</h3>
+                            <button onclick="exportUserData()" class="w-full bg-yellow-600 text-white py-3 px-4 rounded-lg hover:bg-yellow-700">
+                                👥 Export dữ liệu thành viên
+                            </button>
+                            <button onclick="generateUserActivityReport()" class="w-full bg-red-600 text-white py-3 px-4 rounded-lg hover:bg-red-700">
+                                📈 Báo cáo hoạt động
+                            </button>
+                            <button onclick="generateGrowthReport()" class="w-full bg-indigo-600 text-white py-3 px-4 rounded-lg hover:bg-indigo-700">
+                                📊 Báo cáo tăng trưởng
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="mt-8 bg-gray-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Thống kê nhanh</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-blue-600">2.4B ₫</div>
+                                <div class="text-sm text-gray-600">Doanh thu tháng</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-green-600">+23%</div>
+                                <div class="text-sm text-gray-600">Tăng trưởng</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-purple-600">1,247</div>
+                                <div class="text-sm text-gray-600">Giao dịch</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-2xl font-bold text-yellow-600">89%</div>
+                                <div class="text-sm text-gray-600">Hoạt động</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // User Management Functions
+        function showUserList() {
+            showModal('userListModal');
+        }
+
+
+        function showUserStats() {
+            showModal('userStatsModal');
+        }
+
+        async function editUser(userId) {
+            // Show edit user modal or redirect to edit page
+            alert(`Chỉnh sửa thông tin user ${userId} - Chức năng đang được phát triển...`);
+        }
+
+        async function toggleUserStatus(userId) {
+            if (confirm(`Bạn có chắc chắn muốn thay đổi trạng thái user ${userId}?`)) {
+                try {
+                    const newStatus = 'blocked'; // Toggle logic here
+                    const response = await fetch(`/api/admin/users/${userId}/status`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ status: newStatus })
+                    });
+                    
+                    const result = await response.json();
+                    if (result.success) {
+                        alert(result.message);
+                        loadUserData(); // Reload user data
+                    } else {
+                        alert(`Lỗi: ${result.message}`);
+                    }
+                } catch (error) {
+                    console.error('Error updating user status:', error);
+                    alert('Lỗi khi cập nhật trạng thái user');
+                }
+            }
+        }
+
+        // Card Management Functions
+        function showCardConfig() {
+            showModal('cardManagementModal');
+            loadCardData();
+        }
+
+        function showActiveCards() {
+            showModal('cardManagementModal');
+            loadCardData();
+        }
+
+        function showCardRevenue() {
+            showModal('cardManagementModal');
+            loadCardData();
+        }
+
+        // Transaction Management Functions
+        function showInvestmentApproval() {
+            showModal('transactionManagementModal');
+            loadTransactionData();
+        }
+
+        function showWithdrawalRequests() {
+            showModal('transactionManagementModal');
+            loadTransactionData();
+        }
+
+        function showCommissionManagement() {
+            showModal('transactionManagementModal');
+            loadTransactionData();
+        }
+
+        // System Configuration Functions
+        function showRateConfig() {
+            showModal('rateConfigModal');
+        }
+
+        function showUserTypeConfig() {
+            showModal('userTypeConfigModal');
+        }
+
+        function showReferralConfig() {
+            showModal('rateConfigModal');
+        }
+
+        function saveRateConfig() {
+            alert('Cấu hình tỷ lệ đã được lưu thành công!');
+            closeModal('rateConfigModal');
+        }
+
+        function saveUserTypeConfig() {
+            alert('Cấu hình loại thành viên đã được lưu thành công!');
+            closeModal('userTypeConfigModal');
+        }
+
+        // Reports Functions
+        function showSystemOverview() {
+            showModal('systemReportsModal');
+            loadSystemStats();
+        }
+
+        function showRevenueReport() {
+            showModal('systemReportsModal');
+            loadSystemStats();
+        }
+
+        function exportData() {
+            showModal('systemReportsModal');
+            loadSystemStats();
+        }
+
+        async function approveOrder(orderId) {
+            try {
+                const response = await fetch(`/api/admin/transactions/${orderId}/approve`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    loadTransactionData(); // Reload transaction data
+                } else {
+                    alert(`Lỗi: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error approving transaction:', error);
+                alert('Lỗi khi duyệt giao dịch');
+            }
+        }
+
+        async function rejectOrder(orderId) {
+            const reason = prompt('Nhập lý do từ chối:');
+            if (!reason) return;
+            
+            try {
+                const response = await fetch(`/api/admin/transactions/${orderId}/reject`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ reason })
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    alert(result.message);
+                    loadTransactionData(); // Reload transaction data
+                } else {
+                    alert(`Lỗi: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Error rejecting transaction:', error);
+                alert('Lỗi khi từ chối giao dịch');
+            }
+        }
+
+        function viewOrder(orderId) {
+            alert(`Xem chi tiết đơn hàng ${orderId} - Chức năng đang được phát triển...`);
+        }
+
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                window.location.href = '/';
+            }
+        }
+
+        // Load data from API endpoints
+        async function loadUserData() {
+            try {
+                const response = await fetch('/api/admin/users');
+                const result = await response.json();
+                if (result.success) {
+                    populateUserList(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+        }
+
+        async function loadCardData() {
+            try {
+                const response = await fetch('/api/admin/cards');
+                const result = await response.json();
+                if (result.success) {
+                    populateCardList(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading card data:', error);
+            }
+        }
+
+        async function loadTransactionData() {
+            try {
+                const response = await fetch('/api/admin/transactions');
+                const result = await response.json();
+                if (result.success) {
+                    populateTransactionList(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading transaction data:', error);
+            }
+        }
+
+        async function loadSystemStats() {
+            try {
+                const response = await fetch('/api/admin/stats');
+                const result = await response.json();
+                if (result.success) {
+                    populateSystemStats(result.data);
+                }
+            } catch (error) {
+                console.error('Error loading system stats:', error);
+            }
+        }
+
+        function populateUserList(users) {
+            const tbody = document.getElementById('userListBody');
+            if (!tbody) return;
+            
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${user.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(user.businessTier)}">
+                            ${user.businessTier.toUpperCase()}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(user.status)}">
+                            ${user.status.toUpperCase()}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${user.cards.join(', ')}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${user.joinDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                        <button onclick="editUser('${user.id}')" class="text-indigo-600 hover:text-indigo-900 mr-2">Sửa</button>
+                        <button onclick="toggleUserStatus('${user.id}')" class="text-red-600 hover:text-red-900">${user.status === 'active' ? 'Khóa' : 'Kích hoạt'}</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function populateCardList(cards) {
+            // Implementation for card list population
+            console.log('Cards loaded:', cards);
+        }
+
+        function populateTransactionList(transactions) {
+            // Implementation for transaction list population
+            console.log('Transactions loaded:', transactions);
+        }
+
+        function populateSystemStats(stats) {
+            // Update dashboard statistics
+            document.getElementById('totalUsers').textContent = stats.totalUsers.toLocaleString();
+            document.getElementById('activeUsers').textContent = stats.activeUsers.toLocaleString();
+            document.getElementById('pendingUsers').textContent = stats.pendingUsers.toLocaleString();
+            document.getElementById('blockedUsers').textContent = stats.blockedUsers.toLocaleString();
+        }
+
+        function getStatusColor(status) {
+            switch (status) {
+                case 'active': return 'bg-green-100 text-green-800';
+                case 'pending': return 'bg-yellow-100 text-yellow-800';
+                case 'blocked': return 'bg-red-100 text-red-800';
+                default: return 'bg-gray-100 text-gray-800';
+            }
+        }
+
+        // Admin Management Functions
+        function showUserList() {
+            showModal('userManagementModal');
+            loadUserData();
+        }
+
+
+        // Auto-load data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSystemStats();
+        });
+
+        function showUserStats() {
+            showUserStatsModal();
+            loadSystemStats();
+        }
+
+        function showCardManagement() {
+            showCardManagementModal();
+        }
+
+        function showTransactionManagement() {
+            showTransactionManagementModal();
+        }
+
+        function showSystemReports() {
+            showSystemReportsModal();
+        }
+
+        // User Management Modal
+        function showUserManagementModal() {
+            const modal = document.getElementById('userManagementModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadUserList();
+        }
+
+        function closeUserManagementModal() {
+            document.getElementById('userManagementModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadUserList() {
+            const userList = [
+                { id: 1, name: 'Nguyễn Văn A', email: 'user1@vcareglobal.com', type: 'Card Customer', status: 'Active', joinDate: '2024-01-15', cards: 2 },
+                { id: 2, name: 'Trần Thị B', email: 'user2@vcareglobal.com', type: 'Angel', status: 'Active', joinDate: '2024-02-20', cards: 1 },
+                { id: 3, name: 'Lê Văn C', email: 'user3@vcareglobal.com', type: 'Seed', status: 'Active', joinDate: '2024-03-10', cards: 1 },
+                { id: 4, name: 'Phạm Thị D', email: 'user4@vcareglobal.com', type: 'Founder', status: 'Active', joinDate: '2024-01-05', cards: 3 },
+                { id: 5, name: 'Hoàng Văn E', email: 'user5@vcareglobal.com', type: 'Vcare Home', status: 'Suspended', joinDate: '2024-04-12', cards: 1 }
+            ];
+
+            const tbody = document.getElementById('userListBody');
+            tbody.innerHTML = '';
+            
+            userList.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${user.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${user.email}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getUserTypeColor(user.type)}">
+                            ${user.type}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${user.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${user.cards} thẻ</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${user.joinDate}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="editUser(${user.id})" class="text-indigo-600 hover:text-indigo-900 mr-3">Sửa</button>
+                        <button onclick="toggleUserStatus(${user.id})" class="text-red-600 hover:text-red-900">${user.status === 'Active' ? 'Khóa' : 'Mở'}</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function getUserTypeColor(type) {
+            const colors = {
+                'Card Customer': 'bg-blue-100 text-blue-800',
+                'Angel': 'bg-yellow-100 text-yellow-800',
+                'Seed': 'bg-green-100 text-green-800',
+                'Founder': 'bg-red-100 text-red-800',
+                'Vcare Home': 'bg-gray-100 text-gray-800'
+            };
+            return colors[type] || 'bg-gray-100 text-gray-800';
+        }
+
+        function editUser(userId) {
+            alert(`✏️ Chỉnh sửa thông tin user #${userId}\n\n• Thay đổi loại thành viên\n• Cập nhật thông tin cá nhân\n• Điều chỉnh VCA Digital Share\n• Quản lý thẻ chăm sóc\n\nChức năng chi tiết sẽ được phát triển trong phiên bản tiếp theo.`);
+        }
+
+        function toggleUserStatus(userId) {
+            if (confirm('Bạn có chắc muốn thay đổi trạng thái user này?')) {
+                alert(`✅ Đã thay đổi trạng thái user #${userId}\n\nTrạng thái đã được cập nhật thành công.`);
+                loadUserList(); // Reload to show updated status
+            }
+        }
+
+
+        // User Stats Modal
+        function showUserStatsModal() {
+            const modal = document.getElementById('userStatsModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUserStatsModal() {
+            document.getElementById('userStatsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Card Management Modal
+        function showCardManagementModal() {
+            const modal = document.getElementById('cardManagementModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadCardStats();
+        }
+
+        function closeCardManagementModal() {
+            document.getElementById('cardManagementModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadCardStats() {
+            // Mock data for card statistics
+            const cardStats = {
+                total: 1089,
+                active: 892,
+                expired: 45,
+                pending: 152,
+                revenue: '2.4B ₫'
+            };
+
+            document.getElementById('totalCards').textContent = cardStats.total;
+            document.getElementById('activeCards').textContent = cardStats.active;
+            document.getElementById('expiredCards').textContent = cardStats.expired;
+            document.getElementById('pendingCards').textContent = cardStats.pending;
+            document.getElementById('cardRevenue').textContent = cardStats.revenue;
+        }
+
+        function createNewCard() {
+            alert('🆕 Tạo thẻ chăm sóc mới:\n\n• Chọn loại thẻ (Standard, Silver, Gold, Platinum, Diamond)\n• Thiết lập giá và số lượt tư vấn\n• Cấu hình quyền lợi\n• Tạo mã thẻ duy nhất\n\nThẻ mới đã được tạo thành công!');
+        }
+
+        // Transaction Management Modal
+        function showTransactionManagementModal() {
+            const modal = document.getElementById('transactionManagementModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadTransactionStats();
+        }
+
+        function closeTransactionManagementModal() {
+            document.getElementById('transactionManagementModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadTransactionStats() {
+            // Mock data for transaction statistics
+            const transactionStats = {
+                pendingWithdrawals: 23,
+                pendingReferrals: 45,
+                pendingUpgrades: 12,
+                totalRevenue: '2.4B ₫'
+            };
+
+            document.getElementById('pendingWithdrawals').textContent = transactionStats.pendingWithdrawals;
+            document.getElementById('pendingReferrals').textContent = transactionStats.pendingReferrals;
+            document.getElementById('pendingUpgrades').textContent = transactionStats.pendingUpgrades;
+            document.getElementById('totalRevenue').textContent = transactionStats.totalRevenue;
+        }
+
+        function approveWithdrawal(transactionId) {
+            if (confirm('Bạn có chắc muốn duyệt yêu cầu rút tiền này?')) {
+                alert(`✅ Đã duyệt yêu cầu rút tiền #${transactionId}\n\nGiao dịch đã được xử lý thành công.`);
+            }
+        }
+
+        function approveReferral(referralId) {
+            if (confirm('Bạn có chắc muốn duyệt hoa hồng referral này?')) {
+                alert(`✅ Đã duyệt hoa hồng referral #${referralId}\n\nHoa hồng đã được chuyển vào tài khoản người giới thiệu.`);
+            }
+        }
+
+        function approveUpgrade(upgradeId) {
+            if (confirm('Bạn có chắc muốn duyệt yêu cầu nâng cấp này?')) {
+                alert(`✅ Đã duyệt nâng cấp #${upgradeId}\n\nLoại thành viên đã được cập nhật thành công.`);
+            }
+        }
+
+        // System Reports Modal
+        function showSystemReportsModal() {
+            const modal = document.getElementById('systemReportsModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSystemReportsModal() {
+            document.getElementById('systemReportsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function generateRevenueReport() {
+            alert('📊 Báo cáo doanh thu đã được tạo:\n\n• Doanh thu tháng này: 2.4B ₫\n• Tăng trưởng: +23%\n• Số giao dịch: 1,247\n• Top user types: Card Customer (892), Angel (156)\n\nBáo cáo đã được lưu và có thể export.');
+        }
+
+        function exportUserData() {
+            alert('📤 Export dữ liệu thành viên:\n\n• Đã xuất 1,247 records\n• Format: Excel (.xlsx)\n• Bao gồm: Thông tin cá nhân, loại thành viên, thẻ chăm sóc\n\nFile đã được tải xuống thành công!');
+        }
+
+        // Additional Admin Functions
+        function updateCardPrices() {
+            alert('💰 Cập nhật giá thẻ:\n\n• Standard: 2M ₫ → 2.2M ₫\n• Silver: 5M ₫ → 5.5M ₫\n• Gold: 18M ₫ → 20M ₫\n• Platinum: 50M ₫ → 55M ₫\n• Diamond: 100M ₫ → 110M ₫\n\nGiá thẻ đã được cập nhật thành công!');
+        }
+
+        function manageCardSessions() {
+            alert('📅 Quản lý số lượt tư vấn:\n\n• Standard: 12 lượt/2 năm\n• Silver: 15 lượt/2 năm\n• Gold: 18 lượt/2 năm\n• Platinum: 21 lượt/2 năm\n• Diamond: 24 lượt/2 năm\n\nCấu hình đã được lưu thành công!');
+        }
+
+        function viewCardExpiry() {
+            alert('⏰ Thẻ sắp hết hạn:\n\n• 45 thẻ hết hạn trong 30 ngày tới\n• 23 thẻ hết hạn trong 7 ngày tới\n• 12 thẻ đã hết hạn cần gia hạn\n\nDanh sách đã được gửi qua email cho admin.');
+        }
+
+        function viewCardUsage() {
+            alert('📊 Thống kê sử dụng thẻ:\n\n• Tổng lượt tư vấn đã sử dụng: 15,678\n• Tỷ lệ sử dụng trung bình: 68%\n• Thẻ được sử dụng nhiều nhất: Gold (89%)\n• Thẻ ít sử dụng nhất: Diamond (45%)');
+        }
+
+        function exportCardData() {
+            alert('📤 Export dữ liệu thẻ:\n\n• Đã xuất 1,089 records\n• Format: CSV (.csv)\n• Bao gồm: Mã thẻ, loại, trạng thái, ngày hết hạn\n\nFile đã được tải xuống thành công!');
+        }
+
+        function viewTransactionHistory() {
+            alert('📋 Lịch sử giao dịch:\n\n• Tổng giao dịch: 1,247\n• Thành công: 1,198 (96%)\n• Thất bại: 49 (4%)\n• Doanh thu: 2.4B ₫\n\nChi tiết đã được hiển thị trong bảng.');
+        }
+
+        function viewFailedTransactions() {
+            alert('❌ Giao dịch thất bại:\n\n• 49 giao dịch thất bại\n• Lý do chính: Thông tin thanh toán không chính xác\n• Cần liên hệ khách hàng để cập nhật thông tin\n\nDanh sách đã được gửi cho bộ phận hỗ trợ.');
+        }
+
+        function generateTransactionReport() {
+            alert('📊 Báo cáo giao dịch đã được tạo:\n\n• Doanh thu tháng: 2.4B ₫\n• Số giao dịch: 1,247\n• Tỷ lệ thành công: 96%\n• Top payment methods: Bank transfer (78%), Cash (22%)\n\nBáo cáo đã được lưu và có thể export.');
+        }
+
+        function exportTransactionData() {
+            alert('📤 Export dữ liệu giao dịch:\n\n• Đã xuất 1,247 records\n• Format: Excel (.xlsx)\n• Bao gồm: Mã giao dịch, loại, số tiền, trạng thái\n\nFile đã được tải xuống thành công!');
+        }
+
+        function generateMonthlyReport() {
+            alert('📅 Báo cáo tháng đã được tạo:\n\n• Doanh thu tháng này: 2.4B ₫\n• So với tháng trước: +23%\n• Thành viên mới: 89\n• Thẻ bán được: 156\n\nBáo cáo đã được lưu và gửi email.');
+        }
+
+        function generateQuarterlyReport() {
+            alert('📊 Báo cáo quý đã được tạo:\n\n• Doanh thu quý: 7.2B ₫\n• So với quý trước: +18%\n• Thành viên mới: 267\n• Thẻ bán được: 445\n\nBáo cáo đã được lưu và gửi email.');
+        }
+
+        function generateUserActivityReport() {
+            alert('📈 Báo cáo hoạt động thành viên:\n\n• Tỷ lệ hoạt động: 89%\n• Login trung bình/ngày: 1,105\n• Thao tác phổ biến: Xem thẻ (45%), Đặt lịch (23%), Referral (18%)\n• Thời gian online trung bình: 12 phút\n\nBáo cáo đã được lưu thành công.');
+        }
+
+        function generateGrowthReport() {
+            alert('📊 Báo cáo tăng trưởng:\n\n• Tăng trưởng thành viên: +23%\n• Tăng trưởng doanh thu: +18%\n• Tăng trưởng thẻ: +15%\n• Dự báo tháng tới: +25%\n\nBáo cáo đã được lưu và gửi email.');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('VCare Global Admin Dashboard loaded successfully!');
+        });
+    </script>
+</body>
+</html>

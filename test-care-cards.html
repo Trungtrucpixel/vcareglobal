@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Care Cards Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Care Cards Page - Vcare Global</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Instructions -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🧪 Test Instructions</h2>
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">Test Case 1: Access Care Cards Page</h3>
+                        <ol class="text-sm text-blue-700 space-y-1">
+                            <li>1. Go to <a href="http://localhost:3000" target="_blank" class="underline">http://localhost:3000</a></li>
+                            <li>2. Click "Đăng nhập" button</li>
+                            <li>3. Login with: <code>MEM123456</code> / <code>demo123</code></li>
+                            <li>4. In Member Dashboard, click "Xem chi tiết" in "Thẻ chăm sóc & Quyền lợi" section</li>
+                            <li>5. Should see Care Cards page with detailed card management</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">Test Case 2: Card Management Functions</h3>
+                        <ol class="text-sm text-green-700 space-y-1">
+                            <li>1. Test filter buttons: "Tất cả", "Đang hiệu lực", "Hết hạn/Đã maxout"</li>
+                            <li>2. Test action buttons on each card:</li>
+                            <li>   - "Đặt lịch trị liệu" (Book therapy)</li>
+                            <li>   - "Ghi nhận 1 lượt đã dùng" (Record session)</li>
+                            <li>   - "Ghi nhận chia quý" (Record quarterly share)</li>
+                            <li>   - "Chia sẻ/Referral" (Share referral)</li>
+                            <li>   - "Nâng cấp thẻ" (Upgrade card)</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-800 mb-2">Test Case 3: Buy More Cards</h3>
+                        <ol class="text-sm text-purple-700 space-y-1">
+                            <li>1. Scroll down to "Mua thêm thẻ" section</li>
+                            <li>2. Click on different card tiers (Standard, Silver, Gold, Platinum, Diamond)</li>
+                            <li>3. Verify selection updates in "Đã chọn" area</li>
+                            <li>4. Click "Thanh toán & kích hoạt" button</li>
+                            <li>5. Should show confirmation dialog</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page Features -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">✨ Page Features</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">📊 Statistics Dashboard</h3>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Tổng tiền thẻ: 118.000.000 ₫</li>
+                            <li>• Quyền lợi đã nhận: 16.500.000 ₫</li>
+                            <li>• Tổng lượt trị liệu: 36</li>
+                            <li>• Đã sử dụng: 10</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">🎫 Card Management</h3>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Gold Card (TH-001): 18M ₫</li>
+                            <li>• Diamond Card (TH-002): 100M ₫</li>
+                            <li>• Progress tracking for benefits & sessions</li>
+                            <li>• Action buttons for each card</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">🛒 Buy More Cards</h3>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 5 card tiers: Standard → Diamond</li>
+                            <li>• Interactive selection</li>
+                            <li>• Price display: 2M → 100M ₫</li>
+                            <li>• Payment integration ready</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">🔧 Interactive Features</h3>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Filter cards by status</li>
+                            <li>• Progress bars for benefits & sessions</li>
+                            <li>• Card selection with visual feedback</li>
+                            <li>• Responsive design</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Details -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🔧 Technical Implementation</h2>
+                <div class="space-y-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">JavaScript Functions:</h3>
+                        <div class="bg-gray-50 p-3 rounded text-sm font-mono">
+                            <div>showCareCardsPage() - Navigate to care cards page</div>
+                            <div>loadCareCardsData() - Load statistics and data</div>
+                            <div>filterCards(filter) - Filter cards by status</div>
+                            <div>bookTherapy(cardId) - Book therapy session</div>
+                            <div>recordSession(cardId) - Record used session</div>
+                            <div>recordQuarterlyShare(cardId) - Record quarterly share</div>
+                            <div>shareReferral(cardId) - Share referral link</div>
+                            <div>upgradeCard(cardId) - Upgrade card</div>
+                            <div>selectCard(cardType) - Select card for purchase</div>
+                            <div>proceedToPayment() - Proceed to payment</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Page Structure:</h3>
+                        <div class="bg-gray-50 p-3 rounded text-sm">
+                            <div>• Header with navigation</div>
+                            <div>• Statistics cards (3 columns)</div>
+                            <div>• Filter buttons and usage stats</div>
+                            <div>• Individual card displays with progress bars</div>
+                            <div>• Action buttons for each card</div>
+                            <div>• "Buy More Cards" section with 5 tiers</div>
+                            <div>• Selection and payment area</div>
+                            <div>• Footer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Test -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🚀 Quick Test</h2>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="testCareCardsAccess()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Test Access
+                    </button>
+                    <button onclick="testCardSelection()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        Test Card Selection
+                    </button>
+                    <button onclick="testCardActions()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        Test Card Actions
+                    </button>
+                    <button onclick="checkPageState()" class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700">
+                        Check Page State
+                    </button>
+                </div>
+                <div id="testResults" class="mt-4 space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testCareCardsAccess() {
+            // Simulate member login
+            const memberData = {
+                id: 'MEM123456',
+                email: 'demo@vcareglobal.com',
+                password: 'demo123',
+                personalInfo: {
+                    fullName: 'Nguyễn Văn Demo',
+                    email: 'demo@vcareglobal.com',
+                    phone: '0123456789'
+                },
+                role: 'member',
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: 10000,
+                totalInvestment: 100000000
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(memberData));
+            localStorage.setItem('currentPage', 'careCardsPage');
+            
+            addTestResult('✅ Member login data saved to localStorage', 'success');
+            addTestResult('Navigate to http://localhost:3000 and refresh to test care cards page', 'info');
+        }
+
+        function testCardSelection() {
+            addTestResult('✅ Card selection test:', 'info');
+            addTestResult('1. Click on different card tiers in "Mua thêm thẻ" section', 'info');
+            addTestResult('2. Verify selection updates in "Đã chọn" area', 'info');
+            addTestResult('3. Check visual feedback (blue border on selected card)', 'info');
+        }
+
+        function testCardActions() {
+            addTestResult('✅ Card actions test:', 'info');
+            addTestResult('1. Click "Đặt lịch trị liệu" - should show alert', 'info');
+            addTestResult('2. Click "Ghi nhận 1 lượt đã dùng" - should show confirmation', 'info');
+            addTestResult('3. Click "Chia sẻ/Referral" - should copy link to clipboard', 'info');
+            addTestResult('4. Click other action buttons to test functionality', 'info');
+        }
+
+        function checkPageState() {
+            const memberData = localStorage.getItem('memberData');
+            const currentPage = localStorage.getItem('currentPage');
+            
+            addTestResult(`Member Data: ${memberData ? 'Present' : 'Not present'}`, memberData ? 'success' : 'info');
+            addTestResult(`Current Page: ${currentPage || 'Not set'}`, currentPage ? 'success' : 'info');
+            
+            if (currentPage === 'careCardsPage') {
+                addTestResult('✅ Care Cards page should be visible on refresh', 'success');
+            } else {
+                addTestResult('ℹ️ Set currentPage to "careCardsPage" to test', 'info');
+            }
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Check current state on load
+        checkPageState();
+    </script>
+</body>
+</html>
+
+

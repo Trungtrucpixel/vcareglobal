@@ -1,0 +1,122 @@
+root@cloud:~/PhucAnDuongCMS-3# sudo systemctl status postgresql
+○ postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) (Result: exit-code) since Wed 2025-10-01 15:09:37 +07; 3h 7min ago
+   Main PID: 2541929 (code=exited, status=1/FAILURE)
+        CPU: 13ms
+
+Oct 01 15:09:36 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 15:09:36 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 15:09:36 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 15:09:37 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93230.
+Oct 01 15:09:37 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+root@cloud:~/PhucAnDuongCMS-3# # Xem chi tiết lỗi PostgreSQL
+sudo journalctl -u postgresql -n 50 --no-pager
+Oct 01 15:09:20 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93224.
+Oct 01 15:09:20 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+Oct 01 15:09:22 cloud systemd[1]: Starting PostgreSQL RDBMS...
+Oct 01 15:09:22 cloud postgres[2541794]: 2025-10-01 15:09:22.945 +07 [2541794] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 15:09:22 cloud postgres[2541794]: 2025-10-01 15:09:22.945 +07 [2541794] HINT:  Is another postmaster (PID 2541776) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 15:09:22 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 15:09:22 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 15:09:22 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 15:09:23 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93225.
+Oct 01 15:09:23 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+Oct 01 15:09:25 cloud systemd[1]: Starting PostgreSQL RDBMS...
+Oct 01 15:09:25 cloud postgres[2541821]: 2025-10-01 15:09:25.725 +07 [2541821] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 15:09:25 cloud postgres[2541821]: 2025-10-01 15:09:25.725 +07 [2541821] HINT:  Is another postmaster (PID 2541803) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 15:09:25 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 15:09:25 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 15:09:25 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 15:09:26 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93226.
+Oct 01 15:09:26 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+Oct 01 15:09:28 cloud systemd[1]: Starting PostgreSQL RDBMS...
+Oct 01 15:09:28 cloud postgres[2541848]: 2025-10-01 15:09:28.464 +07 [2541848] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 15:09:28 cloud postgres[2541848]: 2025-10-01 15:09:28.464 +07 [2541848] HINT:  Is another postmaster (PID 2541830) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 15:09:28 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 15:09:28 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 15:09:28 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 15:09:28 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93227.
+Oct 01 15:09:28 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+Oct 01 15:09:31 cloud systemd[1]: Starting PostgreSQL RDBMS...
+Oct 01 15:09:31 cloud postgres[2541875]: 2025-10-01 15:09:31.202 +07 [2541875] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 15:09:31 cloud postgres[2541875]: 2025-10-01 15:09:31.202 +07 [2541875] HINT:  Is another postmaster (PID 2541857) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 15:09:31 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 15:09:31 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 15:09:31 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 15:09:31 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93228.
+Oct 01 15:09:31 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+Oct 01 15:09:33 cloud systemd[1]: Starting PostgreSQL RDBMS...
+Oct 01 15:09:33 cloud postgres[2541902]: 2025-10-01 15:09:33.973 +07 [2541902] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 15:09:33 cloud postgres[2541902]: 2025-10-01 15:09:33.973 +07 [2541902] HINT:  Is another postmaster (PID 2541884) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 15:09:33 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 15:09:33 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 15:09:33 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 15:09:34 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93229.
+Oct 01 15:09:34 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+Oct 01 15:09:36 cloud systemd[1]: Starting PostgreSQL RDBMS...
+Oct 01 15:09:36 cloud postgres[2541929]: 2025-10-01 15:09:36.709 +07 [2541929] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 15:09:36 cloud postgres[2541929]: 2025-10-01 15:09:36.709 +07 [2541929] HINT:  Is another postmaster (PID 2541911) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 15:09:36 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 15:09:36 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 15:09:36 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 15:09:37 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93230.
+Oct 01 15:09:37 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+root@cloud:~/PhucAnDuongCMS-3# sudo ls -lah /var/log/postgresql/
+total 201M
+drwxrwxr-t  2 root     postgres   68 Sep 28 15:58 .
+drwxrwxr-x 12 root     syslog   4.0K Oct  1 00:00 ..
+-rw-r-----  1 postgres adm       89M Oct  1 15:57 postgresql-14-main.log
+-rw-r-----  1 postgres adm      112M Sep 28 15:58 postgresql-14-main.log.1
+root@cloud:~/PhucAnDuongCMS-3# sudo tail -50 /var/log/postgresql/postgresql-14-main.log
+2025-10-01 15:09:26.103 +07 [2541803] LOG:  background worker "logical replication launcher" (PID 2541810) exited with exit code 1
+2025-10-01 15:09:26.105 +07 [2541805] LOG:  shutting down
+2025-10-01 15:09:26.115 +07 [2541803] LOG:  database system is shut down
+2025-10-01 15:09:26.299 +07 [2541830] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 15:09:26.299 +07 [2541830] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 15:09:26.300 +07 [2541830] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 15:09:26.304 +07 [2541831] LOG:  database system was shut down at 2025-10-01 15:09:26 +07
+2025-10-01 15:09:26.309 +07 [2541830] LOG:  database system is ready to accept connections
+2025-10-01 15:09:28.828 +07 [2541830] LOG:  received fast shutdown request
+2025-10-01 15:09:28.830 +07 [2541830] LOG:  aborting any active transactions
+2025-10-01 15:09:28.840 +07 [2541830] LOG:  background worker "logical replication launcher" (PID 2541837) exited with exit code 1
+2025-10-01 15:09:28.841 +07 [2541832] LOG:  shutting down
+2025-10-01 15:09:28.853 +07 [2541830] LOG:  database system is shut down
+2025-10-01 15:09:29.020 +07 [2541857] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 15:09:29.020 +07 [2541857] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 15:09:29.021 +07 [2541857] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 15:09:29.024 +07 [2541858] LOG:  database system was shut down at 2025-10-01 15:09:28 +07
+2025-10-01 15:09:29.030 +07 [2541857] LOG:  database system is ready to accept connections
+2025-10-01 15:09:31.581 +07 [2541857] LOG:  received fast shutdown request
+2025-10-01 15:09:31.583 +07 [2541857] LOG:  aborting any active transactions
+2025-10-01 15:09:31.591 +07 [2541857] LOG:  background worker "logical replication launcher" (PID 2541864) exited with exit code 1
+2025-10-01 15:09:31.592 +07 [2541859] LOG:  shutting down
+2025-10-01 15:09:31.605 +07 [2541857] LOG:  database system is shut down
+2025-10-01 15:09:31.800 +07 [2541884] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 15:09:31.800 +07 [2541884] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 15:09:31.801 +07 [2541884] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 15:09:31.804 +07 [2541885] LOG:  database system was shut down at 2025-10-01 15:09:31 +07
+2025-10-01 15:09:31.809 +07 [2541884] LOG:  database system is ready to accept connections
+2025-10-01 15:09:34.346 +07 [2541884] LOG:  received fast shutdown request
+2025-10-01 15:09:34.347 +07 [2541884] LOG:  aborting any active transactions
+2025-10-01 15:09:34.355 +07 [2541884] LOG:  background worker "logical replication launcher" (PID 2541891) exited with exit code 1
+2025-10-01 15:09:34.357 +07 [2541886] LOG:  shutting down
+2025-10-01 15:09:34.371 +07 [2541884] LOG:  database system is shut down
+2025-10-01 15:09:34.566 +07 [2541911] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 15:09:34.566 +07 [2541911] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 15:09:34.567 +07 [2541911] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 15:09:34.571 +07 [2541912] LOG:  database system was shut down at 2025-10-01 15:09:34 +07
+2025-10-01 15:09:34.579 +07 [2541911] LOG:  database system is ready to accept connections
+2025-10-01 15:09:37.068 +07 [2541911] LOG:  received fast shutdown request
+2025-10-01 15:09:37.069 +07 [2541911] LOG:  aborting any active transactions
+2025-10-01 15:09:37.082 +07 [2541911] LOG:  background worker "logical replication launcher" (PID 2541918) exited with exit code 1
+2025-10-01 15:09:37.082 +07 [2541913] LOG:  shutting down
+2025-10-01 15:09:37.093 +07 [2541911] LOG:  database system is shut down
+2025-10-01 15:09:44.406 +07 [2541945] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 15:09:44.407 +07 [2541945] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 15:09:44.408 +07 [2541945] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 15:09:44.410 +07 [2541946] LOG:  database system was shut down at 2025-10-01 15:09:37 +07
+2025-10-01 15:09:44.417 +07 [2541945] LOG:  database system is ready to accept connections
+2025-10-01 15:57:35.332 +07 [2542578] phuan_user@phuan_app ERROR:  column "username" does not exist at character 12
+2025-10-01 15:57:35.332 +07 [2542578] phuan_user@phuan_app STATEMENT:  SELECT id, username, email, role FROM users LIMIT 5;
+root@cloud:~/PhucAnDuongCMS-3# 

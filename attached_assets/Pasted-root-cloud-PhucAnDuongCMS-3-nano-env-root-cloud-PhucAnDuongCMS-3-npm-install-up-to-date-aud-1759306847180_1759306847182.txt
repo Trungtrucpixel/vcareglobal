@@ -1,0 +1,55 @@
+root@cloud:~/PhucAnDuongCMS-3# nano .env
+root@cloud:~/PhucAnDuongCMS-3# npm install
+
+up to date, audited 540 packages in 3s
+
+71 packages are looking for funding
+  run `npm fund` for details
+
+4 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.6.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.6.1
+npm notice To update run: npm install -g npm@11.6.1
+npm notice
+root@cloud:~/PhucAnDuongCMS-3# npm run build
+
+> rest-express@1.0.0 build
+> vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist
+
+vite v6.3.6 building for production...
+transforming (44) ../node_modules/react/jsx-runtime.jsBrowserslist: browsers data (caniuse-lite) is 12 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+✓ 1978 modules transformed.
+../dist/public/index.html                            1.95 kB │ gzip:   0.74 kB
+../dist/public/assets/index-CZsN8M84.css            65.04 kB │ gzip:  11.91 kB
+../dist/public/assets/purify.es-CQJ0hv7W.js         21.82 kB │ gzip:   8.58 kB
+../dist/public/assets/index.es-BnQqlfGq.js         159.33 kB │ gzip:  53.38 kB
+../dist/public/assets/html2canvas.esm-QH1iLAAe.js  202.38 kB │ gzip:  48.04 kB
+../dist/public/assets/index-C_Lx3gxP.js            821.84 kB │ gzip: 259.81 kB
+
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 17.49s
+✘ [ERROR] The constant "retentionPoints" must be initialized
+
+    server/storage.ts:1532:10:
+      1532 │     const retentionPoints
+           ╵           ~~~~~~~~~~~~~~~
+
+✘ [ERROR] Unexpected end of file
+
+    server/storage.ts:1533:0:
+      1533 │ 
+           ╵ ^
+
+2 errors
+root@cloud:~/PhucAnDuongCMS-3# 

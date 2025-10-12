@@ -1,0 +1,20 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Globe background -->
+  <circle cx="16" cy="16" r="15" fill="#1E40AF" stroke="#1E3A8A" stroke-width="2"/>
+  
+  <!-- Globe grid lines -->
+  <path d="M16 2 L16 30" stroke="#60A5FA" stroke-width="1" opacity="0.7"/>
+  <path d="M2 16 L30 16" stroke="#60A5FA" stroke-width="1" opacity="0.7"/>
+  <ellipse cx="16" cy="16" rx="15" ry="7.5" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.5"/>
+  <ellipse cx="16" cy="16" rx="7.5" ry="15" fill="none" stroke="#60A5FA" stroke-width="1" opacity="0.5"/>
+  
+  <!-- DNA double helix -->
+  <path d="M8 12 Q12 8 16 12 Q20 16 24 12" stroke="#FBBF24" stroke-width="2" fill="none"/>
+  <path d="M8 20 Q12 24 16 20 Q20 16 24 20" stroke="#FBBF24" stroke-width="2" fill="none"/>
+  
+  <!-- DNA connecting lines -->
+  <line x1="10" y1="14" x2="14" y2="18" stroke="#FBBF24" stroke-width="1.5"/>
+  <line x1="18" y1="14" x2="22" y2="18" stroke="#FBBF24" stroke-width="1.5"/>
+  <line x1="10" y1="18" x2="14" y2="14" stroke="#FBBF24" stroke-width="1.5"/>
+  <line x1="18" y1="18" x2="22" y2="14" stroke="#FBBF24" stroke-width="1.5"/>
+</svg>

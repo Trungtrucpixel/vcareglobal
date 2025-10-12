@@ -1,0 +1,46 @@
+root@cloud:~/PhucAnDuongCMS-3# pm2 logs phuan-app --lines 20
+[TAILING] Tailing last 20 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-error.log last 20 lines:
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 4:37:28 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=m2sZeyTEl1Df3DOMMQtEw (resolved id: /src/main.tsx?v=m2sZeyTEl1Df3DOMMQtEw). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 4:37:35 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=PVg0MSLRE9aR8dED3595u (resolved id: /src/main.tsx?v=PVg0MSLRE9aR8dED3595u). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 4:37:42 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=sUhgZ_t_6g1hf2w2f1fGB (resolved id: /src/main.tsx?v=sUhgZ_t_6g1hf2w2f1fGB). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 4:41:27 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=mYYL-uApm9ghEL6fIm8Wn (resolved id: /src/main.tsx?v=mYYL-uApm9ghEL6fIm8Wn). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 4:41:48 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=RGpWiV2HwgS68f_Pm-HeI (resolved id: /src/main.tsx?v=RGpWiV2HwgS68f_Pm-HeI). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+
+/root/.pm2/logs/phuan-app-out.log last 20 lines:
+0|phuan-ap | 3:50:13 PM [express] POST /api/login 401 in 6ms
+0|phuan-ap | 3:50:16 PM [express] POST /api/login 401 in 2ms
+0|phuan-ap | 3:50:44 PM [express] POST /api/login 401 in 6ms
+0|phuan-ap | 3:55:47 PM [express] serving on port 5000
+0|phuan-ap | 4:04:32 PM [express] GET /api/user 401 in 6ms
+0|phuan-ap | 4:04:53 PM [express] POST /api/login 401 in 1ms
+0|phuan-ap | 4:04:54 PM [express] POST /api/login 401 in 1ms
+0|phuan-ap | 4:32:36 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 4:36:04 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 4:37:29 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 4:37:36 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 4:37:43 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 4:41:28 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 4:41:49 PM [express] serving on port 5000
+

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Complete System - Vcare Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">🧪 Test Complete System - Vcare Global</h1>
+        
+        <div class="max-w-6xl mx-auto space-y-6">
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">📊 Test Results</h2>
+                <div id="testResults" class="space-y-2">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🎮 Test Controls</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <button onclick="testHomepage()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        🏠 Test Homepage
+                    </button>
+                    <button onclick="testRegistration()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        📝 Test Registration
+                    </button>
+                    <button onclick="testMemberLogin()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        👤 Test Member Login
+                    </button>
+                    <button onclick="testAdminLogin()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        🔧 Test Admin Login
+                    </button>
+                    <button onclick="testCareCards()" class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700">
+                        🎫 Test Care Cards
+                    </button>
+                    <button onclick="testSessionPersistence()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                        🔄 Test Session Persistence
+                    </button>
+                    <button onclick="testAllFeatures()" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900">
+                        🚀 Test All Features
+                    </button>
+                    <button onclick="clearResults()" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500">
+                        🗑️ Clear Results
+                    </button>
+                </div>
+            </div>
+
+            <!-- System Status -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">⚙️ System Status</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Server Status</h3>
+                        <div id="serverStatus" class="text-sm text-gray-600">
+                            <div>Checking server...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Local Storage</h3>
+                        <div id="storageStatus" class="text-sm text-gray-600">
+                            <div>Checking storage...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Instructions -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">📋 Test Instructions</h2>
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">1. Homepage Test</h3>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• Check if Vcare Global branding is displayed</li>
+                            <li>• Verify statistics are loaded (cards, branches, transparency)</li>
+                            <li>• Test "Bắt đầu đăng ký" button</li>
+                            <li>• Test "Xem quyền lợi thẻ" button</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">2. Registration Test</h3>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Test popup registration form</li>
+                            <li>• Test 4-step registration flow</li>
+                            <li>• Test value selection page</li>
+                            <li>• Test information page</li>
+                            <li>• Test payment page</li>
+                            <li>• Test contract page</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-800 mb-2">3. Login Test</h3>
+                        <ul class="text-sm text-purple-700 space-y-1">
+                            <li>• Test member login (MEM123456 / demo123)</li>
+                            <li>• Test admin login (ADMIN001 / admin123)</li>
+                            <li>• Test session persistence (F5 refresh)</li>
+                            <li>• Test logout functionality</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-orange-800 mb-2">4. Care Cards Test</h3>
+                        <ul class="text-sm text-orange-700 space-y-1">
+                            <li>• Test access from member dashboard</li>
+                            <li>• Test card management functions</li>
+                            <li>• Test buy more cards section</li>
+                            <li>• Test card selection and payment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        async function testHomepage() {
+            addTestResult('🏠 Testing Homepage...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                if (response.ok) {
+                    const html = await response.text();
+                    const vcareCount = (html.match(/Vcare Global/g) || []).length;
+                    const hasStats = html.includes('activeCards') || html.includes('totalBranches');
+                    
+                    addTestResult(`✅ Homepage loads successfully (${vcareCount} Vcare Global references)`, 'success');
+                    addTestResult(`✅ Statistics loaded: ${hasStats ? 'Yes' : 'No'}`, hasStats ? 'success' : 'error');
+                } else {
+                    addTestResult(`❌ Homepage failed to load (${response.status})`, 'error');
+                }
+            } catch (error) {
+                addTestResult(`❌ Homepage test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRegistration() {
+            addTestResult('📝 Testing Registration...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'test@vcareglobal.com',
+                        phone: '0123456789',
+                        cardType: {
+                            type: 'Standard',
+                            price: 2000000,
+                            sessions: 12
+                        }
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    addTestResult('✅ Registration API works', 'success');
+                    addTestResult(`✅ Response: ${data.message}`, 'success');
+                } else {
+                    addTestResult(`❌ Registration API failed (${response.status})`, 'error');
+                }
+            } catch (error) {
+                addTestResult(`❌ Registration test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function testMemberLogin() {
+            addTestResult('👤 Testing Member Login...', 'info');
+            
+            // Simulate member login
+            const memberData = {
+                id: 'MEM123456',
+                email: 'demo@vcareglobal.com',
+                password: 'demo123',
+                personalInfo: {
+                    fullName: 'Nguyễn Văn Demo',
+                    email: 'demo@vcareglobal.com',
+                    phone: '0123456789'
+                },
+                role: 'member',
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: 10000,
+                totalInvestment: 100000000
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(memberData));
+            localStorage.setItem('currentPage', 'memberDashboard');
+            
+            addTestResult('✅ Member login data saved to localStorage', 'success');
+            addTestResult('ℹ️ Navigate to http://localhost:3000 and refresh to test member dashboard', 'info');
+        }
+
+        function testAdminLogin() {
+            addTestResult('🔧 Testing Admin Login...', 'info');
+            
+            // Simulate admin login
+            const adminData = {
+                id: 'ADMIN001',
+                email: 'admin@vcareglobal.com',
+                password: 'admin123',
+                personalInfo: {
+                    fullName: 'Quản trị viên hệ thống',
+                    email: 'admin@vcareglobal.com',
+                    phone: '0123456789'
+                },
+                role: 'admin',
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: 0,
+                totalInvestment: 0
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(adminData));
+            localStorage.setItem('currentPage', 'adminDashboard');
+            
+            addTestResult('✅ Admin login data saved to localStorage', 'success');
+            addTestResult('ℹ️ Navigate to http://localhost:3000 and refresh to test admin dashboard', 'info');
+        }
+
+        function testCareCards() {
+            addTestResult('🎫 Testing Care Cards...', 'info');
+            
+            // Simulate member login for care cards
+            const memberData = {
+                id: 'MEM123456',
+                email: 'demo@vcareglobal.com',
+                password: 'demo123',
+                personalInfo: {
+                    fullName: 'Nguyễn Văn Demo',
+                    email: 'demo@vcareglobal.com',
+                    phone: '0123456789'
+                },
+                role: 'member',
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: 10000,
+                totalInvestment: 100000000
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(memberData));
+            localStorage.setItem('currentPage', 'careCardsPage');
+            
+            addTestResult('✅ Care cards access data saved to localStorage', 'success');
+            addTestResult('ℹ️ Navigate to http://localhost:3000 and refresh to test care cards page', 'info');
+        }
+
+        function testSessionPersistence() {
+            addTestResult('🔄 Testing Session Persistence...', 'info');
+            
+            const currentPage = localStorage.getItem('currentPage');
+            const memberData = localStorage.getItem('memberData');
+            
+            if (currentPage && memberData) {
+                addTestResult(`✅ Session data found: ${currentPage}`, 'success');
+                addTestResult('ℹ️ F5 refresh should maintain current page', 'info');
+            } else {
+                addTestResult('ℹ️ No session data found - login first to test persistence', 'info');
+            }
+        }
+
+        async function testAllFeatures() {
+            addTestResult('🚀 Running Complete System Test...', 'info');
+            
+            await testHomepage();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testRegistration();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            testMemberLogin();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            testAdminLogin();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            testCareCards();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            testSessionPersistence();
+            
+            addTestResult('🎉 Complete system test finished!', 'success');
+        }
+
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Check system status on load
+        async function checkSystemStatus() {
+            // Check server status
+            try {
+                const response = await fetch('http://localhost:3000/api/home');
+                if (response.ok) {
+                    document.getElementById('serverStatus').innerHTML = '<div class="text-green-600">✅ Server running on port 3000</div>';
+                } else {
+                    document.getElementById('serverStatus').innerHTML = '<div class="text-red-600">❌ Server error</div>';
+                }
+            } catch (error) {
+                document.getElementById('serverStatus').innerHTML = '<div class="text-red-600">❌ Server not accessible</div>';
+            }
+
+            // Check localStorage status
+            const memberData = localStorage.getItem('memberData');
+            const currentPage = localStorage.getItem('currentPage');
+            
+            let storageStatus = '';
+            if (memberData) {
+                const data = JSON.parse(memberData);
+                storageStatus += `<div class="text-green-600">✅ User logged in: ${data.personalInfo?.fullName || data.id}</div>`;
+                storageStatus += `<div class="text-green-600">✅ Role: ${data.role}</div>`;
+            } else {
+                storageStatus += '<div class="text-gray-600">ℹ️ No user logged in</div>';
+            }
+            
+            if (currentPage) {
+                storageStatus += `<div class="text-blue-600">ℹ️ Current page: ${currentPage}</div>`;
+            }
+            
+            document.getElementById('storageStatus').innerHTML = storageStatus;
+        }
+
+        // Initialize on load
+        checkSystemStatus();
+    </script>
+</body>
+</html>
+
+

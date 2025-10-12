@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Referral Code - Vcare Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">🔗 Test Referral Code - Vcare Global</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🧪 Test Results</h2>
+                <div id="testResults" class="space-y-2">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🎮 Test Controls</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="testReferralPage()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        🔗 Test Referral Page
+                    </button>
+                    <button onclick="testReferralFunctions()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        🧪 Test Functions
+                    </button>
+                    <button onclick="testReferralForm()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        📝 Test Form
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mock Referral Code Page -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🔗 Mock Referral Code Page</h2>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold text-blue-600">Vcare Global</h1>
+                                <p class="text-sm text-gray-600">Hội Tụ Những Tinh Hoa</p>
+                            </div>
+                        </div>
+                        <nav class="hidden md:flex space-x-6">
+                            <a href="#" onclick="testShowMemberDashboard()" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+                            <a href="#" onclick="testShowCareCardsPage()" class="text-gray-600 hover:text-blue-600">Thẻ chăm sóc</a>
+                            <a href="#" onclick="testShowReferralCodePage()" class="text-blue-600 font-semibold">Mã giới thiệu</a>
+                            <a href="#" onclick="testLogout()" class="text-gray-600 hover:text-blue-600">Đăng xuất</a>
+                        </nav>
+                    </div>
+                    <div class="text-center text-gray-500">
+                        <p>Click "Mã giới thiệu" để test navigation</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mock Registration Form -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">📝 Mock Registration Form</h2>
+                <form id="testRegistrationForm" class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" id="testEmail" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Số điện thoại</label>
+                        <input type="tel" id="testPhone" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Mã giới thiệu (tùy chọn)</label>
+                        <input type="text" id="testReferralCode" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập mã giới thiệu nếu có">
+                        <p class="text-xs text-gray-500 mt-1">Nhập mã giới thiệu để nhận ưu đãi đặc biệt</p>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Loại thẻ</label>
+                        <select id="testCardType" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                            <option value="">Chọn loại thẻ</option>
+                            <option value="Standard">Standard - 2M VNĐ (12 lượt)</option>
+                            <option value="Silver">Silver - 8M VNĐ (15 lượt)</option>
+                            <option value="Gold">Gold - 18M VNĐ (18 lượt)</option>
+                            <option value="Platinum">Platinum - 38M VNĐ (20 lượt)</option>
+                            <option value="Diamond">Diamond - 100M VNĐ (24 lượt)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                        Đăng ký
+                    </button>
+                </form>
+            </div>
+
+            <!-- Feature Summary -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">✨ Referral Code Features</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">🎯 Core Features</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• Referral code generation and display</li>
+                            <li>• Referral statistics tracking</li>
+                            <li>• Referral history management</li>
+                            <li>• Social media sharing integration</li>
+                            <li>• Commission calculation (8%)</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3">🔧 Technical Features</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• Copy to clipboard functionality</li>
+                            <li>• Share to Facebook, Zalo, WhatsApp</li>
+                            <li>• Email sharing with template</li>
+                            <li>• Referral link generation</li>
+                            <li>• Commission tracking and display</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock functions for testing
+        function testShowMemberDashboard() {
+            addTestResult('🔄 Testing showMemberDashboard...', 'info');
+            addTestResult('✅ showMemberDashboard function called', 'success');
+        }
+
+        function testShowCareCardsPage() {
+            addTestResult('🎫 Testing showCareCardsPage...', 'info');
+            addTestResult('✅ showCareCardsPage function called', 'success');
+        }
+
+        function testShowReferralCodePage() {
+            addTestResult('🔗 Testing showReferralCodePage...', 'info');
+            addTestResult('✅ showReferralCodePage function called', 'success');
+        }
+
+        function testLogout() {
+            addTestResult('🚪 Testing logout...', 'info');
+            addTestResult('✅ logout function called', 'success');
+        }
+
+        // Test functions
+        async function testReferralPage() {
+            addTestResult('🔗 Testing Referral Page...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check if referral page exists
+                if (html.includes('id="referralCodePage"')) {
+                    addTestResult('✅ Referral code page found', 'success');
+                } else {
+                    addTestResult('❌ Referral code page not found', 'error');
+                }
+                
+                // Check if navigation link exists
+                if (html.includes('onclick="showReferralCodePage()"')) {
+                    addTestResult('✅ Referral navigation link found', 'success');
+                } else {
+                    addTestResult('❌ Referral navigation link not found', 'error');
+                }
+                
+                // Check if referral functions exist
+                if (html.includes('function showReferralCodePage()')) {
+                    addTestResult('✅ showReferralCodePage function found', 'success');
+                } else {
+                    addTestResult('❌ showReferralCodePage function not found', 'error');
+                }
+                
+                // Check if referral stats exist
+                if (html.includes('referralCode') && html.includes('referralCount')) {
+                    addTestResult('✅ Referral stats elements found', 'success');
+                } else {
+                    addTestResult('❌ Referral stats elements not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Referral page test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testReferralFunctions() {
+            addTestResult('🧪 Testing Referral Functions...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check for referral functions
+                const functions = [
+                    'loadReferralData',
+                    'loadReferralStats',
+                    'loadReferralHistory',
+                    'copyReferralCode',
+                    'shareToFacebook',
+                    'shareToZalo',
+                    'shareToWhatsApp',
+                    'shareToTelegram',
+                    'shareToEmail',
+                    'refreshReferralHistory'
+                ];
+                
+                let foundFunctions = 0;
+                functions.forEach(func => {
+                    if (html.includes(`function ${func}()`)) {
+                        foundFunctions++;
+                        addTestResult(`✅ ${func} function found`, 'success');
+                    } else {
+                        addTestResult(`❌ ${func} function not found`, 'error');
+                    }
+                });
+                
+                if (foundFunctions === functions.length) {
+                    addTestResult('✅ All referral functions found', 'success');
+                } else {
+                    addTestResult(`⚠️ Found ${foundFunctions}/${functions.length} referral functions`, 'warning');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Referral functions test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testReferralForm() {
+            addTestResult('📝 Testing Referral Form...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check if referral code input exists
+                if (html.includes('id="referralCode"') && html.includes('Mã giới thiệu')) {
+                    addTestResult('✅ Referral code input found', 'success');
+                } else {
+                    addTestResult('❌ Referral code input not found', 'error');
+                }
+                
+                // Check if referral code is included in form data
+                if (html.includes('referralCode: referralCode || null')) {
+                    addTestResult('✅ Referral code included in form data', 'success');
+                } else {
+                    addTestResult('❌ Referral code not included in form data', 'error');
+                }
+                
+                // Check if referral code validation exists
+                if (html.includes('referralCode') && html.includes('tùy chọn')) {
+                    addTestResult('✅ Referral code validation found', 'success');
+                } else {
+                    addTestResult('❌ Referral code validation not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Referral form test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Handle test form submission
+        document.getElementById('testRegistrationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('testEmail').value;
+            const phone = document.getElementById('testPhone').value;
+            const referralCode = document.getElementById('testReferralCode').value;
+            const cardType = document.getElementById('testCardType').value;
+            
+            addTestResult('📝 Form submitted with data:', 'info');
+            addTestResult(`Email: ${email}`, 'info');
+            addTestResult(`Phone: ${phone}`, 'info');
+            addTestResult(`Referral Code: ${referralCode || 'None'}`, 'info');
+            addTestResult(`Card Type: ${cardType}`, 'info');
+            
+            if (referralCode) {
+                addTestResult('✅ Referral code will be processed', 'success');
+            } else {
+                addTestResult('ℹ️ No referral code provided', 'info');
+            }
+        });
+
+        // Initialize
+        addTestResult('Page loaded successfully', 'info');
+        addTestResult('Testing environment ready', 'info');
+    </script>
+</body>
+</html>
+
+

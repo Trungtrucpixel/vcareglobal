@@ -1,0 +1,62 @@
+root@cloud:~/PhucAnDuongCMS-3# # Start PM2 với single quotes
+NODE_ENV=production DATABASE_URL='postgresql://postgres:PhucAn2025!@localhost:5432/phuanduong_db' SESSION_SECRET='random-secret-key' pm2 start dist/index.js --name phuan-app
+
+# Xem logs
+pm2 logs phuan-app --lines 20
+[PM2] Starting /root/PhucAnDuongCMS-3/dist/index.js in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2564209  │ 0s     │ 0    │ online    │ 0%       │ 10.8mb   │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[TAILING] Tailing last 20 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-out.log last 20 lines:
+0|phuan-ap | 4:51:53 PM [express] serving on port 5000
+0|phuan-ap | 4:53:00 PM [express] POST /api/login 200 in 94ms :: {"id":"admin-default-001","email":"admin@phuan.c…
+0|phuan-ap | 4:53:00 PM [express] GET /api/dashboard/metrics 200 in 11ms :: {"totalRevenue":"150.000","activeCard…
+0|phuan-ap | 4:53:00 PM [express] GET /api/dashboard/business-overview 200 in 2ms :: {"quarterlyData":{"labels":[…
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 5:06:24 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 5:29:41 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 5:35:49 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 5:44:09 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 5:44:14 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 6:37:36 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 6:54:50 PM [express] serving on port 5000
+0|phuan-ap | ✅ Created default admin user: admin@phuan.com (DEV mode)
+0|phuan-ap | 7:04:00 PM [express] serving on port 5000
+
+/root/.pm2/logs/phuan-app-error.log last 20 lines:
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 5:44:13 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=nlQNkDPmcNyO8xhaJwgs1 (resolved id: /src/main.tsx?v=nlQNkDPmcNyO8xhaJwgs1). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 6:37:35 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=izTfZwhFMBaacbj0wp-dW (resolved id: /src/main.tsx?v=izTfZwhFMBaacbj0wp-dW). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | 6:54:49 PM [vite] Pre-transform error: Failed to load url /src/main.tsx?v=9mxy8EJpRi64Q6pPd3tw9 (resolved id: /src/main.tsx?v=9mxy8EJpRi64Q6pPd3tw9). Does the file exist?
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | TypeError: this.generateReferralCode is not a function
+0|phuan-ap |     at MemStorage.initializeSampleData (file:///root/PhucAnDuongCMS-3/dist/index.js:329:38)
+0|phuan-ap | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|phuan-ap |     at file:///root/PhucAnDuongCMS-3/dist/index.js:633:9
+0|phuan-ap |     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+0|phuan-ap |     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+0|phuan-ap | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|phuan-ap |     at file:///root/PhucAnDuongCMS-3/dist/index.js:633:9
+0|phuan-ap |     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+0|phuan-ap |     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+
+0|phuan-app  | Warning: connect.session() MemoryStore is not
+0|phuan-app  | designed for a production environment, as it will leak
+0|phuan-app  | memory, and will not scale past a single process.
+0|phuan-app  | 7:11:46 PM [express] serving on port 5000
+

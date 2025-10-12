@@ -1,0 +1,67 @@
+Bad Requestroot@cloud:~/PhucAnD# Check login route validation validation
+grep -A 30 "POST.*login\|/api/login" ~/PhucAnDuongCMS-3/dist/index.js | head -40
+
+# Also check what fields are being validated
+grep -B 5 -A 15 "email.*password.*zod\|insertUserSchema" ~/PhucAnDuongCMS-3/dist/index.js | head -30
+  app2.post("/api/login", passport.authenticate("local"), (req, res) => {
+    const user = req.user;
+    const userResponse = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      status: user.status
+    };
+    res.status(200).json(userResponse);
+  });
+  app2.post("/api/logout", (req, res, next) => {
+    req.logout((err) => {
+      if (err) return next(err);
+      res.sendStatus(200);
+    });
+  });
+  app2.get("/api/user", (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+    const user = req.user;
+    const userResponse = {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      status: user.status
+    };
+    res.json(userResponse);
+  });
+}
+
+// server/routes.ts
+import { z as z2 } from "zod";
+  insertStaffKpiSchema: () => insertStaffKpiSchema,
+  insertStaffSchema: () => insertStaffSchema,
+  insertSystemConfigSchema: () => insertSystemConfigSchema,
+  insertTransactionSchema: () => insertTransactionSchema,
+  insertUserBalanceSchema: () => insertUserBalanceSchema,
+  insertUserSchema: () => insertUserSchema,
+  insertUserSharesHistorySchema: () => insertUserSharesHistorySchema,
+  investmentPackages: () => investmentPackages,
+  kpis: () => kpis,
+  profitDistribution: () => profitDistribution,
+  profitDistributionValidationSchema: () => profitDistributionValidationSchema,
+  profitShareWithMaxoutSchema: () => profitShareWithMaxoutSchema,
+  profitSharing: () => profitSharing,
+  profitSharingProcessSchema: () => profitSharingProcessSchema,
+  profitSharingValidationSchema: () => profitSharingValidationSchema,
+  qrCheckinSchema: () => qrCheckinSchema,
+  quarterlyPeriodSchema: () => quarterlyPeriodSchema,
+  referrals: () => referrals,
+  reportExportSchema: () => reportExportSchema,
+  staff: () => staff,
+  staffKpis: () => staffKpis,
+--
+  // For branches
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow()
+});
+var insertUserSchema = createInsertSchema(users).omit({
+  id: true
+});
+root@cloud:~/PhucAnDuongCMS-3# 

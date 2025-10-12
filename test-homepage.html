@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - App khám hàng Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-teal-600 to-teal-700 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <i class="fas fa-hospital text-2xl mr-3"></i>
+                    <h1 class="text-xl font-bold">Phúc An Dương</h1>
+                </div>
+                <div class="flex space-x-4">
+                    <button class="bg-white text-teal-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        Đăng nhập
+                    </button>
+                    <button class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-400 transition-colors">
+                        Đăng ký
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                    App khám hàng <span class="text-teal-600">Phúc An Dương</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+                    Đăng ký đóng hàng online, quản lý thẻ chăm sóc, theo dõi quyền lợi minh bạch 
+                    <span class="font-semibold text-teal-600">49% - 5% - 8%</span> theo tỷ lệ phần trăm. 
+                    Không cần đặt lợi nhuận. Chia sẻ khi có hiệu quả thuần tế sau thuế.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="alert('Bắt đầu đăng ký!')" class="bg-teal-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-teal-700 transition-colors shadow-lg">
+                        <i class="fas fa-play mr-2"></i>Bắt đầu đăng ký
+                    </button>
+                    <button onclick="alert('Xem quyền lợi thẻ!')" class="bg-white text-teal-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg border-2 border-teal-600">
+                        <i class="fas fa-credit-card mr-2"></i>Xem quyền lợi thẻ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-credit-card text-2xl text-teal-600"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-2">400+</h3>
+                    <p class="text-gray-600">Thẻ đang hoạt động</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-building text-2xl text-blue-600"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-2">10+</h3>
+                    <p class="text-gray-600">Chi nhánh liên kết</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-chart-pie text-2xl text-green-600"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-gray-900 mb-2">49%</h3>
+                    <p class="text-gray-600">Minh bạch quyền lợi</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card Types Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Các hạng thẻ</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <div class="text-center mb-4">
+                        <div class="bg-gradient-to-r from-teal-500 to-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-credit-card text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900">Standard</h3>
+                        <p class="text-gray-600 text-sm">Thẻ cơ bản với 12 lượt tư vấn</p>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Giá:</span>
+                            <span class="font-semibold text-lg text-teal-600">12,000,000 VNĐ</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Lượt tư vấn:</span>
+                            <span class="font-semibold">12 lượt/2 năm</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">PAD Token:</span>
+                            <span class="font-semibold text-blue-600">1,200 PAD</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="alert('Mở thẻ Standard!')" class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors">
+                        Mở thẻ
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition-shadow">
+                    <div class="text-center mb-4">
+                        <div class="bg-gradient-to-r from-teal-500 to-blue-500 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-credit-card text-2xl text-white"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900">Diamond</h3>
+                        <p class="text-gray-600 text-sm">Thẻ kim cương với 24 lượt tư vấn</p>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Giá:</span>
+                            <span class="font-semibold text-lg text-teal-600">24,000,000 VNĐ</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Lượt tư vấn:</span>
+                            <span class="font-semibold">24 lượt/2 năm</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">PAD Token:</span>
+                            <span class="font-semibold text-blue-600">2,400 PAD</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="alert('Mở thẻ Diamond!')" class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors">
+                        Mở thẻ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Câu hỏi thường gặp</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-lg shadow-md">
+                    <button onclick="toggleFAQ(1)" class="w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">App có cam kết lợi nhuận không?</h3>
+                            <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-1"></i>
+                        </div>
+                    </button>
+                    <div class="px-6 pb-6 hidden" id="faq-content-1">
+                        <p class="text-gray-600">Không, chúng tôi không cam kết lợi nhuận. Chia sẻ khi có hiệu quả thuần tế sau thuế. Chúng tôi minh bạch về quyền lợi và chỉ chia sẻ khi có lợi nhuận thực tế.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md">
+                    <button onclick="toggleFAQ(2)" class="w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">Maxout 210% nghĩa là gì?</h3>
+                            <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-2"></i>
+                        </div>
+                    </button>
+                    <div class="px-6 pb-6 hidden" id="faq-content-2">
+                        <p class="text-gray-600">Maxout 210% có nghĩa là tổng số tiền bạn có thể nhận được tối đa là 210% so với số tiền đầu tư ban đầu. Đây là giới hạn tối đa để đảm bảo tính bền vững của hệ thống.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md">
+                    <button onclick="toggleFAQ(3)" class="w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">Tôi có thể đăng ký Cổ đông không?</h3>
+                            <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-3"></i>
+                        </div>
+                    </button>
+                    <div class="px-6 pb-6 hidden" id="faq-content-3">
+                        <p class="text-gray-600">Có, bạn có thể đăng ký trở thành Cổ đông với mức đầu tư tối thiểu 100 triệu VNĐ. Với vai trò Cổ đông, bạn sẽ có quyền lợi đặc biệt và tỷ lệ chia lãi cao hơn.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center mb-4">
+                    <i class="fas fa-hospital text-2xl mr-3"></i>
+                    <h3 class="text-xl font-bold">Phúc An Dương</h3>
+                </div>
+                <p class="text-gray-400 mb-4">App khám hàng với quyền lợi minh bạch và chia sẻ lợi nhuận công bằng.</p>
+                <p class="text-gray-500">&copy; 2024 Phúc An Dương. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(index) {
+            const content = document.getElementById(`faq-content-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+    </script>
+</body>
+</html>
+

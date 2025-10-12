@@ -1,0 +1,186 @@
+root@cloud:~/PhucAnDuongCMS-3# # Check detailed PostgreSQL logs
+sudo journalctl -xeu postgresql.service --no-pager | tail -50
+
+# Check PostgreSQL error log file
+sudo tail -100 /var/log/postgresql/postgresql-14-main.log
+
+# Check for lock files
+sudo ls -la /var/run/postgresql/
+
+# Check data directory permissions
+sudo ls -la /var/lib/postgresql/14/main/ | head -20
+░░ A stop job for unit postgresql.service has finished.
+░░ 
+░░ The job identifier is 7085845 and the job result is done.
+Oct 02 00:45:24 cloud systemd[1]: Starting PostgreSQL RDBMS...
+░░ Subject: A start job for unit postgresql.service has begun execution
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit postgresql.service has begun execution.
+░░ 
+░░ The job identifier is 7085845.
+Oct 02 00:45:24 cloud postgres[2726376]: 2025-10-02 00:45:24.228 +07 [2726376] FATAL:  lock file "postmaster.pid" already exists
+Oct 02 00:45:24 cloud postgres[2726376]: 2025-10-02 00:45:24.228 +07 [2726376] HINT:  Is another postmaster (PID 2726358) running in data directory "/var/lib/postgresql/14/main"?
+Oct 02 00:45:24 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ An ExecStart= process belonging to unit postgresql.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Oct 02 00:45:24 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit postgresql.service has entered the 'failed' state with result 'exit-code'.
+Oct 02 00:45:24 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+░░ Subject: A start job for unit postgresql.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit postgresql.service has finished with a failure.
+░░ 
+░░ The job identifier is 7085845 and the job result is failed.
+Oct 02 00:45:24 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 750.
+░░ Subject: Automatic restarting of a unit has been scheduled
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ Automatic restarting of the unit postgresql.service has been scheduled, as the result for
+░░ the configured Restart= setting for the unit.
+Oct 02 00:45:24 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+░░ Subject: A stop job for unit postgresql.service has finished
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A stop job for unit postgresql.service has finished.
+░░ 
+░░ The job identifier is 7085918 and the job result is done.
+2025-10-02 00:44:57.318 +07 [2726112] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:44:57.318 +07 [2726112] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:44:57.319 +07 [2726112] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:44:57.322 +07 [2726113] LOG:  database system was shut down at 2025-10-02 00:44:57 +07
+2025-10-02 00:44:57.329 +07 [2726112] LOG:  database system is ready to accept connections
+2025-10-02 00:44:59.848 +07 [2726112] LOG:  received fast shutdown request
+2025-10-02 00:44:59.849 +07 [2726112] LOG:  aborting any active transactions
+2025-10-02 00:44:59.860 +07 [2726112] LOG:  background worker "logical replication launcher" (PID 2726119) exited with exit code 1
+2025-10-02 00:44:59.860 +07 [2726114] LOG:  shutting down
+2025-10-02 00:44:59.872 +07 [2726112] LOG:  database system is shut down
+2025-10-02 00:45:00.052 +07 [2726139] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:00.052 +07 [2726139] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:00.053 +07 [2726139] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:00.056 +07 [2726140] LOG:  database system was shut down at 2025-10-02 00:44:59 +07
+2025-10-02 00:45:00.061 +07 [2726139] LOG:  database system is ready to accept connections
+2025-10-02 00:45:02.599 +07 [2726139] LOG:  received fast shutdown request
+2025-10-02 00:45:02.600 +07 [2726139] LOG:  aborting any active transactions
+2025-10-02 00:45:02.614 +07 [2726139] LOG:  background worker "logical replication launcher" (PID 2726146) exited with exit code 1
+2025-10-02 00:45:02.615 +07 [2726141] LOG:  shutting down
+2025-10-02 00:45:02.633 +07 [2726139] LOG:  database system is shut down
+2025-10-02 00:45:02.847 +07 [2726169] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:02.847 +07 [2726169] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:02.848 +07 [2726169] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:02.851 +07 [2726170] LOG:  database system was shut down at 2025-10-02 00:45:02 +07
+2025-10-02 00:45:02.862 +07 [2726169] LOG:  database system is ready to accept connections
+2025-10-02 00:45:05.429 +07 [2726169] LOG:  received fast shutdown request
+2025-10-02 00:45:05.434 +07 [2726169] LOG:  aborting any active transactions
+2025-10-02 00:45:05.522 +07 [2726169] LOG:  background worker "logical replication launcher" (PID 2726176) exited with exit code 1
+2025-10-02 00:45:05.522 +07 [2726171] LOG:  shutting down
+2025-10-02 00:45:05.539 +07 [2726169] LOG:  database system is shut down
+2025-10-02 00:45:05.748 +07 [2726196] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:05.749 +07 [2726196] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:05.749 +07 [2726196] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:05.753 +07 [2726197] LOG:  database system was shut down at 2025-10-02 00:45:05 +07
+2025-10-02 00:45:05.759 +07 [2726196] LOG:  database system is ready to accept connections
+2025-10-02 00:45:08.312 +07 [2726196] LOG:  received fast shutdown request
+2025-10-02 00:45:08.313 +07 [2726196] LOG:  aborting any active transactions
+2025-10-02 00:45:08.322 +07 [2726196] LOG:  background worker "logical replication launcher" (PID 2726203) exited with exit code 1
+2025-10-02 00:45:08.322 +07 [2726198] LOG:  shutting down
+2025-10-02 00:45:08.332 +07 [2726196] LOG:  database system is shut down
+2025-10-02 00:45:08.499 +07 [2726223] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:08.499 +07 [2726223] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:08.500 +07 [2726223] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:08.503 +07 [2726224] LOG:  database system was shut down at 2025-10-02 00:45:08 +07
+2025-10-02 00:45:08.508 +07 [2726223] LOG:  database system is ready to accept connections
+2025-10-02 00:45:11.091 +07 [2726223] LOG:  received fast shutdown request
+2025-10-02 00:45:11.092 +07 [2726223] LOG:  aborting any active transactions
+2025-10-02 00:45:11.102 +07 [2726223] LOG:  background worker "logical replication launcher" (PID 2726230) exited with exit code 1
+2025-10-02 00:45:11.102 +07 [2726225] LOG:  shutting down
+2025-10-02 00:45:11.116 +07 [2726223] LOG:  database system is shut down
+2025-10-02 00:45:11.307 +07 [2726250] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:11.307 +07 [2726250] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:11.308 +07 [2726250] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:11.311 +07 [2726251] LOG:  database system was shut down at 2025-10-02 00:45:11 +07
+2025-10-02 00:45:11.317 +07 [2726250] LOG:  database system is ready to accept connections
+2025-10-02 00:45:13.814 +07 [2726250] LOG:  received fast shutdown request
+2025-10-02 00:45:13.815 +07 [2726250] LOG:  aborting any active transactions
+2025-10-02 00:45:13.823 +07 [2726250] LOG:  background worker "logical replication launcher" (PID 2726257) exited with exit code 1
+2025-10-02 00:45:13.826 +07 [2726252] LOG:  shutting down
+2025-10-02 00:45:13.838 +07 [2726250] LOG:  database system is shut down
+2025-10-02 00:45:14.000 +07 [2726277] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:14.000 +07 [2726277] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:14.001 +07 [2726277] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:14.003 +07 [2726278] LOG:  database system was shut down at 2025-10-02 00:45:13 +07
+2025-10-02 00:45:14.009 +07 [2726277] LOG:  database system is ready to accept connections
+2025-10-02 00:45:16.311 +07 [2726277] LOG:  received fast shutdown request
+2025-10-02 00:45:16.312 +07 [2726277] LOG:  aborting any active transactions
+2025-10-02 00:45:16.322 +07 [2726277] LOG:  background worker "logical replication launcher" (PID 2726284) exited with exit code 1
+2025-10-02 00:45:16.322 +07 [2726279] LOG:  shutting down
+2025-10-02 00:45:16.333 +07 [2726277] LOG:  database system is shut down
+2025-10-02 00:45:16.517 +07 [2726304] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:16.518 +07 [2726304] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:16.518 +07 [2726304] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:16.521 +07 [2726305] LOG:  database system was shut down at 2025-10-02 00:45:16 +07
+2025-10-02 00:45:16.526 +07 [2726304] LOG:  database system is ready to accept connections
+2025-10-02 00:45:19.072 +07 [2726304] LOG:  received fast shutdown request
+2025-10-02 00:45:19.072 +07 [2726304] LOG:  aborting any active transactions
+2025-10-02 00:45:19.082 +07 [2726304] LOG:  background worker "logical replication launcher" (PID 2726311) exited with exit code 1
+2025-10-02 00:45:19.083 +07 [2726306] LOG:  shutting down
+2025-10-02 00:45:19.092 +07 [2726304] LOG:  database system is shut down
+2025-10-02 00:45:19.271 +07 [2726331] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:19.271 +07 [2726331] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:19.272 +07 [2726331] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:19.276 +07 [2726332] LOG:  database system was shut down at 2025-10-02 00:45:19 +07
+2025-10-02 00:45:19.282 +07 [2726331] LOG:  database system is ready to accept connections
+2025-10-02 00:45:21.818 +07 [2726331] LOG:  received fast shutdown request
+2025-10-02 00:45:21.819 +07 [2726331] LOG:  aborting any active transactions
+2025-10-02 00:45:21.833 +07 [2726331] LOG:  background worker "logical replication launcher" (PID 2726338) exited with exit code 1
+2025-10-02 00:45:21.833 +07 [2726333] LOG:  shutting down
+2025-10-02 00:45:21.847 +07 [2726331] LOG:  database system is shut down
+2025-10-02 00:45:22.029 +07 [2726358] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-02 00:45:22.029 +07 [2726358] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-02 00:45:22.030 +07 [2726358] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-02 00:45:22.033 +07 [2726359] LOG:  database system was shut down at 2025-10-02 00:45:21 +07
+2025-10-02 00:45:22.039 +07 [2726358] LOG:  database system is ready to accept connections
+2025-10-02 00:45:24.622 +07 [2726358] LOG:  received fast shutdown request
+2025-10-02 00:45:24.623 +07 [2726358] LOG:  aborting any active transactions
+2025-10-02 00:45:24.648 +07 [2726358] LOG:  background worker "logical replication launcher" (PID 2726365) exited with exit code 1
+2025-10-02 00:45:24.648 +07 [2726360] LOG:  shutting down
+2025-10-02 00:45:24.667 +07 [2726358] LOG:  database system is shut down
+total 0
+drwxrwsr-x  3 postgres postgres   60 Oct  2 00:45 .
+drwxr-xr-x 32 root     root     1020 Oct  2 00:05 ..
+drwxr-s---  2 postgres postgres   40 Oct  2 00:45 14-main.pg_stat_tmp
+total 32
+drwx------ 20 postgres postgres 4096 Oct  2 00:45 .
+drwxr-xr-x  4 postgres postgres   34 Oct  2 00:05 ..
+-rw-------  1 postgres postgres    3 Oct  2 00:05 PG_VERSION
+drwx------  6 postgres postgres   54 Oct  2 00:15 base
+drwxr-xr-x  2 postgres postgres    6 Oct  2 00:08 conf.d
+drwx------  2 postgres postgres 4096 Oct  2 00:45 global
+drwx------  2 postgres postgres    6 Oct  2 00:05 pg_commit_ts
+drwx------  2 postgres postgres    6 Oct  2 00:05 pg_dynshmem
+-rw-rw-r--  1 postgres postgres  273 Oct  2 00:09 pg_hba.conf
+-rw-------  1 postgres postgres 1636 Oct  2 00:05 pg_ident.conf
+drwx------  4 postgres postgres   68 Oct  2 00:45 pg_logical
+drwx------  4 postgres postgres   36 Oct  2 00:05 pg_multixact
+drwx------  2 postgres postgres    6 Oct  2 00:05 pg_notify
+drwx------  2 postgres postgres    6 Oct  2 00:05 pg_replslot
+drwx------  2 postgres postgres    6 Oct  2 00:05 pg_serial
+drwx------  2 postgres postgres    6 Oct  2 00:05 pg_snapshots
+drwx------  2 postgres postgres  101 Oct  2 00:45 pg_stat
+drwx------  2 postgres postgres    6 Oct  2 00:11 pg_stat_tmp
+drwx------  2 postgres postgres   18 Oct  2 00:05 pg_subtrans
+root@cloud:~/PhucAnDuongCMS-3# 

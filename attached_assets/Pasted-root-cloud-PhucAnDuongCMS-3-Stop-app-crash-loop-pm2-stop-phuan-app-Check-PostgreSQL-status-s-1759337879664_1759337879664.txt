@@ -1,0 +1,82 @@
+root@cloud:~/PhucAnDuongCMS-3# # Stop app crash loop
+pm2 stop phuan-app
+
+# Check PostgreSQL status
+sudo systemctl status postgresql
+
+# Check PostgreSQL logs
+sudo tail -50 /var/log/postgresql/postgresql-14-main.log
+
+# Check max connections
+sudo -u postgres psql -c "SHOW max_connections;"
+[PM2] Applying action stopProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 0        │ 0      │ 67   │ stopped   │ 0%       │ 0b       │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+○ postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: inactive (dead) (Result: exit-code) since Wed 2025-10-01 23:57:33 +07; 4s ago
+    Process: 2697526 ExecStart=/usr/lib/postgresql/14/bin/postgres -D /var/lib/postgresql/14/main -c config_file=/etc/postgresql/14/main/postgresql.conf (code=exited, status=1/FAILURE)
+   Main PID: 2697526 (code=exited, status=1/FAILURE)
+        CPU: 14ms
+
+Oct 01 23:57:33 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+Oct 01 23:57:33 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+Oct 01 23:57:33 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+Oct 01 23:57:33 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 96149.
+Oct 01 23:57:33 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+2025-10-01 23:57:06.348 +07 [2697221] LOG:  database system is shut down
+2025-10-01 23:57:06.603 +07 [2697286] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 23:57:06.603 +07 [2697286] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 23:57:06.604 +07 [2697286] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 23:57:06.608 +07 [2697287] LOG:  database system was shut down at 2025-10-01 23:57:06 +07
+2025-10-01 23:57:06.617 +07 [2697286] LOG:  database system is ready to accept connections
+2025-10-01 23:57:13.108 +07 [2697286] LOG:  received fast shutdown request
+2025-10-01 23:57:13.109 +07 [2697286] LOG:  aborting any active transactions
+2025-10-01 23:57:13.109 +07 [2697299] postgres@phuanduong_db FATAL:  terminating connection due to administrator command
+2025-10-01 23:57:13.145 +07 [2697286] LOG:  background worker "logical replication launcher" (PID 2697293) exited with exit code 1
+2025-10-01 23:57:13.145 +07 [2697288] LOG:  shutting down
+2025-10-01 23:57:13.162 +07 [2697286] LOG:  database system is shut down
+2025-10-01 23:57:13.381 +07 [2697350] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 23:57:13.382 +07 [2697350] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 23:57:13.387 +07 [2697350] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 23:57:13.391 +07 [2697355] LOG:  database system was shut down at 2025-10-01 23:57:13 +07
+2025-10-01 23:57:13.400 +07 [2697350] LOG:  database system is ready to accept connections
+2025-10-01 23:57:20.057 +07 [2697350] LOG:  received fast shutdown request
+2025-10-01 23:57:20.059 +07 [2697350] LOG:  aborting any active transactions
+2025-10-01 23:57:20.067 +07 [2697363] postgres@phuanduong_db FATAL:  terminating connection due to administrator command
+2025-10-01 23:57:20.071 +07 [2697350] LOG:  background worker "logical replication launcher" (PID 2697361) exited with exit code 1
+2025-10-01 23:57:20.083 +07 [2697356] LOG:  shutting down
+2025-10-01 23:57:20.101 +07 [2697350] LOG:  database system is shut down
+2025-10-01 23:57:20.371 +07 [2697414] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 23:57:20.371 +07 [2697414] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 23:57:20.372 +07 [2697414] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 23:57:20.376 +07 [2697415] LOG:  database system was shut down at 2025-10-01 23:57:20 +07
+2025-10-01 23:57:20.388 +07 [2697414] LOG:  database system is ready to accept connections
+2025-10-01 23:57:26.847 +07 [2697414] LOG:  received fast shutdown request
+2025-10-01 23:57:26.849 +07 [2697414] LOG:  aborting any active transactions
+2025-10-01 23:57:26.849 +07 [2697427] postgres@phuanduong_db FATAL:  terminating connection due to administrator command
+2025-10-01 23:57:26.867 +07 [2697414] LOG:  background worker "logical replication launcher" (PID 2697425) exited with exit code 1
+2025-10-01 23:57:26.880 +07 [2697420] LOG:  shutting down
+2025-10-01 23:57:26.901 +07 [2697414] LOG:  database system is shut down
+2025-10-01 23:57:27.142 +07 [2697478] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 23:57:27.142 +07 [2697478] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 23:57:27.143 +07 [2697478] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 23:57:27.150 +07 [2697479] LOG:  database system was shut down at 2025-10-01 23:57:26 +07
+2025-10-01 23:57:27.161 +07 [2697478] LOG:  database system is ready to accept connections
+2025-10-01 23:57:33.578 +07 [2697478] LOG:  received fast shutdown request
+2025-10-01 23:57:33.579 +07 [2697478] LOG:  aborting any active transactions
+2025-10-01 23:57:33.579 +07 [2697491] postgres@phuanduong_db FATAL:  terminating connection due to administrator command
+2025-10-01 23:57:33.603 +07 [2697478] LOG:  background worker "logical replication launcher" (PID 2697489) exited with exit code 1
+2025-10-01 23:57:33.611 +07 [2697484] LOG:  shutting down
+2025-10-01 23:57:33.630 +07 [2697478] LOG:  database system is shut down
+2025-10-01 23:57:33.856 +07 [2697542] LOG:  starting PostgreSQL 14.19 (Ubuntu 14.19-0ubuntu0.22.04.1) on x86_64-pc-linux-gnu, compiled by gcc (Ubuntu 11.4.0-1ubuntu1~22.04.2) 11.4.0, 64-bit
+2025-10-01 23:57:33.856 +07 [2697542] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-10-01 23:57:33.861 +07 [2697542] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2025-10-01 23:57:33.864 +07 [2697543] LOG:  database system was shut down at 2025-10-01 23:57:33 +07
+2025-10-01 23:57:33.876 +07 [2697542] LOG:  database system is ready to accept connections
+could not change directory to "/root/PhucAnDuongCMS-3": Permission denied
+Password for user postgres: 

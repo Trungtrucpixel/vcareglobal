@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Member Types - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto py-8 px-4">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">
+            <i class="fas fa-users text-blue-600 mr-3"></i>
+            Test Member Types - Phúc An Dương
+        </h1>
+        
+        <!-- Member Type Overview -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Member Type Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <div class="text-center">
+                        <i class="fas fa-crown text-purple-600 text-3xl mb-2"></i>
+                        <h3 class="font-semibold text-purple-800">Cổ đông</h3>
+                        <p class="text-sm text-purple-600">Shareholder</p>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div class="text-center">
+                        <i class="fas fa-angel text-blue-600 text-3xl mb-2"></i>
+                        <h3 class="font-semibold text-blue-800">Angel</h3>
+                        <p class="text-sm text-blue-600">Angel Investor</p>
+                    </div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <div class="text-center">
+                        <i class="fas fa-seedling text-green-600 text-3xl mb-2"></i>
+                        <h3 class="font-semibold text-green-800">Seed</h3>
+                        <p class="text-sm text-green-600">Seed Investor</p>
+                    </div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <div class="text-center">
+                        <i class="fas fa-store text-yellow-600 text-3xl mb-2"></i>
+                        <h3 class="font-semibold text-yellow-800">Retail</h3>
+                        <p class="text-sm text-yellow-600">Retail Investor</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Categories -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Cổ đông Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-purple-800 flex items-center">
+                    <i class="fas fa-crown text-purple-600 mr-2"></i>
+                    Cổ đông (Shareholder) Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testCodoDongRegistration()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-user-plus mr-2"></i>Test Registration
+                    </button>
+                    <button onclick="testCodoDongCardSelection()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-id-card mr-2"></i>Test Card Selection
+                    </button>
+                    <button onclick="testCodoDongInvestment()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-dollar-sign mr-2"></i>Test Investment
+                    </button>
+                    <button onclick="testCodoDongBenefits()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-gift mr-2"></i>Test Benefits
+                    </button>
+                </div>
+            </div>
+
+            <!-- Angel Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-blue-800 flex items-center">
+                    <i class="fas fa-angel text-blue-600 mr-2"></i>
+                    Angel Investor Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testAngelRegistration()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-user-plus mr-2"></i>Test Registration
+                    </button>
+                    <button onclick="testAngelCardSelection()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-id-card mr-2"></i>Test Card Selection
+                    </button>
+                    <button onclick="testAngelInvestment()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-dollar-sign mr-2"></i>Test Investment
+                    </button>
+                    <button onclick="testAngelBenefits()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-gift mr-2"></i>Test Benefits
+                    </button>
+                </div>
+            </div>
+
+            <!-- Seed Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-green-800 flex items-center">
+                    <i class="fas fa-seedling text-green-600 mr-2"></i>
+                    Seed Investor Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testSeedRegistration()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-user-plus mr-2"></i>Test Registration
+                    </button>
+                    <button onclick="testSeedCardSelection()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-id-card mr-2"></i>Test Card Selection
+                    </button>
+                    <button onclick="testSeedInvestment()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-dollar-sign mr-2"></i>Test Investment
+                    </button>
+                    <button onclick="testSeedBenefits()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-gift mr-2"></i>Test Benefits
+                    </button>
+                </div>
+            </div>
+
+            <!-- Retail Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-yellow-800 flex items-center">
+                    <i class="fas fa-store text-yellow-600 mr-2"></i>
+                    Retail Investor Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testRetailRegistration()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-user-plus mr-2"></i>Test Registration
+                    </button>
+                    <button onclick="testRetailCardSelection()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-id-card mr-2"></i>Test Card Selection
+                    </button>
+                    <button onclick="testRetailInvestment()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-dollar-sign mr-2"></i>Test Investment
+                    </button>
+                    <button onclick="testRetailBenefits()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-gift mr-2"></i>Test Benefits
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Package Tests -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                <i class="fas fa-credit-card text-teal-600 mr-2"></i>
+                Card Package Tests
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <button onclick="testStandardCard()" class="bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-id-card mr-2"></i>Standard
+                </button>
+                <button onclick="testSilverCard()" class="bg-gray-500 text-white py-2 px-4 rounded-lg hover:bg-gray-600 transition-colors">
+                    <i class="fas fa-id-card mr-2"></i>Silver
+                </button>
+                <button onclick="testGoldCard()" class="bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                    <i class="fas fa-id-card mr-2"></i>Gold
+                </button>
+                <button onclick="testPlatinumCard()" class="bg-gray-400 text-white py-2 px-4 rounded-lg hover:bg-gray-500 transition-colors">
+                    <i class="fas fa-id-card mr-2"></i>Platinum
+                </button>
+                <button onclick="testDiamondCard()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                    <i class="fas fa-gem mr-2"></i>Diamond
+                </button>
+            </div>
+        </div>
+
+        <!-- Test Results -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                <i class="fas fa-clipboard-list text-gray-600 mr-2"></i>
+                Test Results
+            </h2>
+            <div id="test-results" class="space-y-4 max-h-96 overflow-y-auto">
+                <p class="text-gray-500">Chưa có kết quả test...</p>
+            </div>
+        </div>
+
+        <!-- Test Controls -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Test Controls</h2>
+            <div class="flex flex-wrap gap-4">
+                <button onclick="runAllMemberTests()" class="bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all font-semibold">
+                    <i class="fas fa-play mr-2"></i>Run All Member Tests
+                </button>
+                <button onclick="runAllCardTests()" class="bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all font-semibold">
+                    <i class="fas fa-credit-card mr-2"></i>Run All Card Tests
+                </button>
+                <button onclick="clearResults()" class="bg-gray-600 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors font-semibold">
+                    <i class="fas fa-trash mr-2"></i>Clear Results
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        let testStats = { passed: 0, failed: 0, total: 0 };
+
+        // Cổ đông Tests
+        async function testCodoDongRegistration() {
+            const testData = {
+                email: `codoDong${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test Cổ đông User',
+                roles: ['Cổ đông'],
+                investmentAmount: 10000000, // 10M VNĐ
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Cổ đông Registration', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Cổ đông Registration', 'error', { error: error.message });
+            }
+        }
+
+        async function testCodoDongCardSelection() {
+            logTestResult('Cổ đông Card Selection', 'info', 'Testing card selection for Cổ đông member type');
+        }
+
+        async function testCodoDongInvestment() {
+            logTestResult('Cổ đông Investment', 'info', 'Testing investment capabilities for Cổ đông member type');
+        }
+
+        async function testCodoDongBenefits() {
+            logTestResult('Cổ đông Benefits', 'info', 'Testing benefits and privileges for Cổ đông member type');
+        }
+
+        // Angel Tests
+        async function testAngelRegistration() {
+            const testData = {
+                email: `angel${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test Angel User',
+                roles: ['Angel'],
+                investmentAmount: 5000000, // 5M VNĐ
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Angel Registration', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Angel Registration', 'error', { error: error.message });
+            }
+        }
+
+        async function testAngelCardSelection() {
+            logTestResult('Angel Card Selection', 'info', 'Testing card selection for Angel member type');
+        }
+
+        async function testAngelInvestment() {
+            logTestResult('Angel Investment', 'info', 'Testing investment capabilities for Angel member type');
+        }
+
+        async function testAngelBenefits() {
+            logTestResult('Angel Benefits', 'info', 'Testing benefits and privileges for Angel member type');
+        }
+
+        // Seed Tests
+        async function testSeedRegistration() {
+            const testData = {
+                email: `seed${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test Seed User',
+                roles: ['Seed'],
+                investmentAmount: 2000000, // 2M VNĐ
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Seed Registration', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Seed Registration', 'error', { error: error.message });
+            }
+        }
+
+        async function testSeedCardSelection() {
+            logTestResult('Seed Card Selection', 'info', 'Testing card selection for Seed member type');
+        }
+
+        async function testSeedInvestment() {
+            logTestResult('Seed Investment', 'info', 'Testing investment capabilities for Seed member type');
+        }
+
+        async function testSeedBenefits() {
+            logTestResult('Seed Benefits', 'info', 'Testing benefits and privileges for Seed member type');
+        }
+
+        // Retail Tests
+        async function testRetailRegistration() {
+            const testData = {
+                email: `retail${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test Retail User',
+                roles: ['Retail'],
+                investmentAmount: 500000, // 500K VNĐ
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Retail Registration', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Retail Registration', 'error', { error: error.message });
+            }
+        }
+
+        async function testRetailCardSelection() {
+            logTestResult('Retail Card Selection', 'info', 'Testing card selection for Retail member type');
+        }
+
+        async function testRetailInvestment() {
+            logTestResult('Retail Investment', 'info', 'Testing investment capabilities for Retail member type');
+        }
+
+        async function testRetailBenefits() {
+            logTestResult('Retail Benefits', 'info', 'Testing benefits and privileges for Retail member type');
+        }
+
+        // Card Package Tests
+        async function testStandardCard() {
+            await testCardPackage('Standard', 2000000, 12, 200);
+        }
+
+        async function testSilverCard() {
+            await testCardPackage('Silver', 8000000, 15, 800);
+        }
+
+        async function testGoldCard() {
+            await testCardPackage('Gold', 18000000, 18, 1800);
+        }
+
+        async function testPlatinumCard() {
+            await testCardPackage('Platinum', 38000000, 20, 3800);
+        }
+
+        async function testDiamondCard() {
+            await testCardPackage('Diamond', 100000000, 24, 10000);
+        }
+
+        async function testCardPackage(cardType, price, sessions, padToken) {
+            const testData = {
+                userId: 'test-user-' + Date.now(),
+                cardType: cardType,
+                price: price,
+                sessions: sessions,
+                paymentMethod: 'bank_transfer',
+                paymentStatus: 'pending'
+            };
+
+            try {
+                const response = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult(`${cardType} Card Package`, response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult(`${cardType} Card Package`, 'error', { error: error.message });
+            }
+        }
+
+        // Run all member tests
+        async function runAllMemberTests() {
+            logTestResult('Member Test Suite', 'info', 'Starting comprehensive member type test suite...');
+            
+            await testCodoDongRegistration();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testAngelRegistration();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testSeedRegistration();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testRetailRegistration();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testCodoDongCardSelection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testAngelCardSelection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testSeedCardSelection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testRetailCardSelection();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testCodoDongInvestment();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testAngelInvestment();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testSeedInvestment();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testRetailInvestment();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testCodoDongBenefits();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testAngelBenefits();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testSeedBenefits();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testRetailBenefits();
+            
+            logTestResult('Member Test Suite', 'success', 'Comprehensive member type test suite completed!');
+        }
+
+        // Run all card tests
+        async function runAllCardTests() {
+            logTestResult('Card Test Suite', 'info', 'Starting comprehensive card package test suite...');
+            
+            await testStandardCard();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testSilverCard();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testGoldCard();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testPlatinumCard();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await testDiamondCard();
+            
+            logTestResult('Card Test Suite', 'success', 'Comprehensive card package test suite completed!');
+        }
+
+        // Utility functions
+        function logTestResult(testName, status, data) {
+            const timestamp = new Date().toLocaleTimeString();
+            const result = {
+                timestamp,
+                testName,
+                status,
+                data
+            };
+            
+            testResults.push(result);
+            
+            const testResultsDiv = document.getElementById('test-results');
+            const statusClass = status === 'success' ? 'text-green-600' : 
+                              status === 'error' ? 'text-red-600' : 
+                              status === 'info' ? 'text-blue-600' : 'text-gray-600';
+            const statusIcon = status === 'success' ? 'fa-check-circle' : 
+                              status === 'error' ? 'fa-times-circle' : 
+                              status === 'info' ? 'fa-info-circle' : 'fa-question-circle';
+            
+            const resultHtml = `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center">
+                            <i class="fas ${statusIcon} ${statusClass} mr-2"></i>
+                            <span class="font-semibold">${testName}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">${timestamp}</span>
+                            <span class="text-sm ${statusClass} font-semibold">${status.toUpperCase()}</span>
+                        </div>
+                    </div>
+                    <pre class="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            
+            testResultsDiv.innerHTML = resultHtml + testResultsDiv.innerHTML;
+        }
+
+        function clearResults() {
+            testResults = [];
+            testStats = { passed: 0, failed: 0, total: 0 };
+            document.getElementById('test-results').innerHTML = '<p class="text-gray-500">Chưa có kết quả test...</p>';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            logTestResult('Member Type Test Suite', 'info', 'Member type test suite initialized and ready');
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,82 @@
+root@cloud:~/PhucAnDuongCMS-3# pm2 logs phuan-app --lines 10
+[TAILING] Tailing last 10 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-out.log last 10 lines:
+0|phuan-ap | > NODE_ENV=production node dist/index.js 500M
+0|phuan-ap | 
+0|phuan-ap | 
+0|phuan-ap | > rest-express@1.0.0 start
+0|phuan-ap | > NODE_ENV=production node dist/index.js 500M
+0|phuan-ap | 
+0|phuan-ap | 
+0|phuan-ap | > rest-express@1.0.0 start
+0|phuan-ap | > NODE_ENV=production node dist/index.js 500M
+0|phuan-ap | 
+
+/root/.pm2/logs/phuan-app-error.log last 10 lines:
+0|phuan-ap |     at file:///root/PhucAnDuongCMS-3/dist/index.js:467:9
+0|phuan-ap |     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+0|phuan-ap |     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+0|phuan-ap |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|phuan-ap | 
+0|phuan-ap | Node.js v20.19.5
+0|phuan-ap | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|phuan-ap |     at file:///root/PhucAnDuongCMS-3/dist/index.js:467:9
+0|phuan-ap |     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+0|phuan-ap |     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+
+^C
+root@cloud:~/PhucAnDuongCMS-3# cat > /root/PhucAnDuongCMS-3/ecosystem.config.cjs << 'EOF'
+module.exports = {
+  apps: [{
+    name: "phuan-app",
+    script: "./dist/index.js",
+    max_memory_restart: "500M",
+    env: {
+      NODE_ENV: "production",
+      PORT: 5000,
+      DATABASE_URL: "postgresql://postgres:PhucAn2025!@localhost:5432/phuanduong_db",
+      SESSION_SECRET: "842d16f5919911b5d66ad480f029e63db95b776bf2a0080d3fb0ec8497c9995f"
+    }
+  }]
+}
+EOF
+root@cloud:~/PhucAnDuongCMS-3# pm2 restart phuan-app
+pm2 logs phuan-app --lines 10
+Use --update-env to update environment variables
+[PM2] Applying action restartProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ 1.0.0   │ fork    │ 2782652  │ 0s     │ 1    │ online    │ 0%       │ 4.0kb    │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[TAILING] Tailing last 10 lines for [phuan-app] process (change the value with --lines option)
+/root/.pm2/logs/phuan-app-out.log last 10 lines:
+0|phuan-ap | > NODE_ENV=production node dist/index.js 500M
+0|phuan-ap | 
+0|phuan-ap | 
+0|phuan-ap | > rest-express@1.0.0 start
+0|phuan-ap | > NODE_ENV=production node dist/index.js 500M
+0|phuan-ap | 
+0|phuan-ap | 
+0|phuan-ap | > rest-express@1.0.0 start
+0|phuan-ap | > NODE_ENV=production node dist/index.js 500M
+0|phuan-ap | 
+
+/root/.pm2/logs/phuan-app-error.log last 10 lines:
+0|phuan-ap |     at file:///root/PhucAnDuongCMS-3/dist/index.js:467:9
+0|phuan-ap |     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+0|phuan-ap |     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+0|phuan-ap |     at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+0|phuan-ap | 
+0|phuan-ap | Node.js v20.19.5
+0|phuan-ap | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|phuan-ap |     at file:///root/PhucAnDuongCMS-3/dist/index.js:467:9
+0|phuan-ap |     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+0|phuan-ap |     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+
+0|phuan-app  | Error: DATABASE_URL must be set. Did you forget to provision a database?
+0|phuan-app  |     at file:///root/PhucAnDuongCMS-3/dist/index.js:467:9
+0|phuan-app  |     at ModuleJob.run (node:internal/modules/esm/module_job:325:25)
+0|phuan-app  |     at async ModuleLoader.import (node:internal/modules/esm/loader:606:24)
+

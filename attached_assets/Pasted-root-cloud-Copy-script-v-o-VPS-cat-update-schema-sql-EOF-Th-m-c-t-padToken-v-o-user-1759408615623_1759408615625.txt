@@ -1,0 +1,66 @@
+root@cloud:~# # Copy script vào VPS
+cat > ~/update_schema.sql << 'EOF'
+-- Thêm cột padToken vào users
+ALTER TABLE users ADD COLUMN IF NOT EXISTS pad_token DECIMAL(15, 2) DEFAULT 0;
+
+-- Tạo bảng roles
+CREATE TABLE IF NOT EXISTS roles (
+  id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL UNIQUE,
+  display_name TEXT NOT NULL,
+  description TEXT,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Tạo bảng user_roles
+CREATE TABLE IF NOT EXISTS user_roles (
+  id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id VARCHAR NOT NULL REFERENCES users(id),
+  role_id VARCHAR NOT NULL REFERENCES roles(id),
+  assigned_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Tạo bảng asset_contributions
+CREATE TABLE IF NOT EXISTS asset_contributions (
+  id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id VARCHAR NOT NULL REFERENCES users(id),
+  asset_name TEXT NOT NULL,
+  asset_description TEXT,
+  valuation_amount DECIMAL(15, 2) NOT NULL,
+  pad_token_amount DECIMAL(15, 2) NOT NULL,
+  contract_document_path TEXT,
+  status TEXT NOT NULL DEFAULT 'pending',
+  approved_by VARCHAR REFERENCES users(id),
+  approved_at TIMESTAMP,
+  rejection_reason TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Thêm cột vào transactions
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS contribution_type TEXT;
+ALTER TABLE transactions ADD COLUMN IF NOT EXISTS pad_token_amount DECIMAL(15, 2) DEFAULT 0;
+
+-- Thêm cột vào profit_distribution
+ALTER TABLE profit_distribution ADD COLUMN IF NOT EXISTS distribution_type TEXT DEFAULT 'capital';
+ALTER TABLE profit_distribution ADD COLUMN IF NOT EXISTS pad_token_amount DECIMAL(15, 2) DEFAULT 0;
+
+-- Thêm dữ liệu vai trò mặc định
+INSERT INTO roles (name, display_name, description) VALUES
+  ('sang_lap', 'Sáng lập', 'Cổ đông sáng lập'),
+  ('thien_than', 'Thiên thần', 'Nhà đầu tư thiên thần'),
+  ('phat_trien', 'Phát triển', 'Đối tác phát triển'),
+  ('dong_hanh', 'Đồng hành', 'Đối tác đồng hành'),
+  ('khach_hang', 'Khách hàng', 'Khách hàng thường'),
+  ('gop_tai_san', 'Góp tài sản', 'Góp vốn bằng tài sản'),
+  ('sweat_equity', 'Sweat Equity', 'Góp công sức')
+ON CONFLICT (name) DO NOTHING;
+
+-- Tạo indexes
+CREATE INDEX IF NOT EXISTS idx_user_roles_user_id ON user_roles(user_id);
+CREATE INDEX IF NOT EXISTS idx_user_roles_role_id ON user_roles(role_id);
+CREATE INDEX IF NOT EXISTS idx_asset_contributions_user_id ON asset_contributions(user_id);
+echo "✅ Database schema đã được cập nhật!"d phuanduong_db -f ~/update_schema.sqltribution_type);
+psql: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "postgres"
+
+✅ Database schema đã được cập nhật!

@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App khám hàng Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-gradient-to-r from-teal-600 to-teal-700 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                    <i class="fas fa-hospital text-2xl mr-3"></i>
+                    <h1 class="text-xl font-bold">Phúc An Dương</h1>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="hover:text-teal-200 transition-colors">Trang chủ</a>
+                    <a href="#cards" class="hover:text-teal-200 transition-colors">Thẻ chăm sóc</a>
+                    <a href="#benefits" class="hover:text-teal-200 transition-colors">Quyền lợi</a>
+                    <a href="#faq" class="hover:text-teal-200 transition-colors">FAQ</a>
+                </div>
+                <div class="flex space-x-4">
+                    <button onclick="openLoginModal()" class="bg-white text-teal-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        Đăng nhập
+                    </button>
+                    <button onclick="openRegisterModal()" class="bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-400 transition-colors">
+                        Đăng ký
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="bg-gradient-to-br from-teal-50 to-blue-50 py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+                    App khám hàng <span class="text-teal-600">Phúc An Dương</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-4xl mx-auto leading-relaxed">
+                    Đăng ký đóng hàng online, quản lý thẻ chăm sóc, theo dõi quyền lợi minh bạch 
+                    <span class="font-semibold text-teal-600">49% - 5% - 8%</span> theo tỷ lệ phần trăm. 
+                    Không cần đặt lợi nhuận. Chia sẻ khi có hiệu quả thuần tế sau thuế.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="openRegisterModal()" class="bg-teal-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-teal-700 transition-colors shadow-lg transform hover:scale-105">
+                        <i class="fas fa-user-plus mr-2"></i>Bắt đầu đăng ký
+                    </button>
+                    <a href="#cards" class="bg-white text-teal-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg border-2 border-teal-600">
+                        <i class="fas fa-credit-card mr-2"></i>Xem quyền lợi thẻ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Thống kê hệ thống</h2>
+                <p class="text-lg text-gray-600">Dữ liệu được cập nhật theo thời gian thực từ database</p>
+                <div class="mt-4 text-sm text-gray-500" id="lastUpdated">
+                    <i class="fas fa-clock mr-2"></i>Đang tải dữ liệu...
+                </div>
+            </div>
+            
+            <!-- Main Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-12">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-8 shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="text-4xl font-bold mb-2" id="activeCards">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
+                    </div>
+                    <div class="text-blue-100">Thẻ đang hoạt động</div>
+                    <div class="text-sm text-blue-200 mt-2" id="activeCardsDetail">Đang tải chi tiết...</div>
+                </div>
+                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-8 shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="text-4xl font-bold mb-2" id="totalBranches">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
+                    </div>
+                    <div class="text-green-100">Chi nhánh liên kết</div>
+                    <div class="text-sm text-green-200 mt-2" id="totalBranchesDetail">Đang tải chi tiết...</div>
+                </div>
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-8 shadow-lg transform hover:scale-105 transition duration-300">
+                    <div class="text-4xl font-bold mb-2" id="profitSharing">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
+                    </div>
+                    <div class="text-purple-100">Minh bạch quyền lợi</div>
+                    <div class="text-sm text-purple-200 mt-2" id="profitSharingDetail">Đang tải chi tiết...</div>
+                </div>
+            </div>
+            
+            <!-- Additional Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 p-3 rounded-full">
+                            <i class="fas fa-users text-orange-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-2xl font-bold text-gray-900" id="totalUsers">-</div>
+                            <div class="text-sm text-gray-600">Tổng người dùng</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-3 rounded-full">
+                            <i class="fas fa-coins text-green-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-2xl font-bold text-gray-900" id="totalPadToken">-</div>
+                            <div class="text-sm text-gray-600">VCA Token phân phối</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-3 rounded-full">
+                            <i class="fas fa-chart-line text-blue-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-2xl font-bold text-gray-900" id="monthlyGrowth">-</div>
+                            <div class="text-sm text-gray-600">Tăng trưởng tháng (%)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center">
+                        <div class="bg-red-100 p-3 rounded-full">
+                            <i class="fas fa-dollar-sign text-red-600 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-2xl font-bold text-gray-900" id="totalRevenue">-</div>
+                            <div class="text-sm text-gray-600">Tổng doanh thu (VNĐ)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="mt-12 bg-gray-50 rounded-lg p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Hoạt động gần đây (30 ngày)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue-600" id="newRegistrations">-</div>
+                        <div class="text-sm text-gray-600">Đăng ký mới</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green-600" id="newCards">-</div>
+                        <div class="text-sm text-gray-600">Thẻ mới</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600" id="totalInvestment">-</div>
+                        <div class="text-sm text-gray-600">Tổng đầu tư (VNĐ)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">
+                            <i class="fas fa-user-plus text-teal-600 mr-2"></i>
+                            Đăng ký thẻ chăm sóc & Vai trò đồng hành
+                        </h2>
+                        <button onclick="closeRegistrationModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form id="registration-form" class="space-y-6">
+                        <!-- Personal Information -->
+                        <div class="bg-gradient-to-r from-blue-50 to-teal-50 p-6 rounded-lg border border-blue-200">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                                <i class="fas fa-user text-blue-600 mr-2"></i>
+                                Thông tin cá nhân
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-envelope text-gray-400 mr-1"></i>Email *
+                                    </label>
+                                    <input type="email" id="reg-email" required 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                           placeholder="user@example.com">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        <i class="fas fa-phone text-gray-400 mr-1"></i>Số điện thoại *
+                                    </label>
+                                    <input type="tel" id="reg-phone" required 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                           placeholder="0123456789">
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    <i class="fas fa-id-card text-gray-400 mr-1"></i>Họ và tên *
+                                </label>
+                                <input type="text" id="reg-name" required 
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                       placeholder="Nguyễn Văn A">
+                            </div>
+                        </div>
+                        
+                        <!-- Card Selection -->
+                        <div class="bg-gradient-to-r from-green-50 to-teal-50 p-6 rounded-lg border border-green-200">
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800 flex items-center">
+                                <i class="fas fa-id-card text-green-600 mr-2"></i>
+                                Chọn loại thẻ (Tùy chọn)
+                            </h3>
+                            <p class="text-sm text-gray-600 mb-4">Bạn có thể chọn thẻ ngay bây giờ hoặc chọn sau khi đăng ký</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div class="card-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-green-500 hover:shadow-lg transition-all duration-300 transform hover:scale-105" data-card="Standard">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <i class="fas fa-id-card text-gray-600"></i>
+                                        </div>
+                                        <h4 class="font-semibold text-gray-800">Standard</h4>
+                                        <p class="text-sm text-gray-600">2,000,000 VNĐ</p>
+                                        <p class="text-xs text-blue-600">200 VCA Token</p>
+                                        <p class="text-xs text-gray-500 mt-1">12 lượt tư vấn</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-300" data-card="Silver">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-gray-200 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <i class="fas fa-id-card text-gray-700"></i>
+                                        </div>
+                                        <h4 class="font-semibold text-gray-800">Silver</h4>
+                                        <p class="text-sm text-gray-600">8,000,000 VNĐ</p>
+                                        <p class="text-xs text-blue-600">800 VCA Token</p>
+                                        <p class="text-xs text-gray-500 mt-1">15 lượt tư vấn</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-300" data-card="Gold">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-yellow-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <i class="fas fa-id-card text-yellow-600"></i>
+                                        </div>
+                                        <h4 class="font-semibold text-gray-800">Gold</h4>
+                                        <p class="text-sm text-gray-600">18,000,000 VNĐ</p>
+                                        <p class="text-xs text-blue-600">1,800 VCA Token</p>
+                                        <p class="text-xs text-gray-500 mt-1">18 lượt tư vấn</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-300" data-card="Platinum">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-gray-300 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <i class="fas fa-id-card text-gray-800"></i>
+                                        </div>
+                                        <h4 class="font-semibold text-gray-800">Platinum</h4>
+                                        <p class="text-sm text-gray-600">38,000,000 VNĐ</p>
+                                        <p class="text-xs text-blue-600">3,800 VCA Token</p>
+                                        <p class="text-xs text-gray-500 mt-1">20 lượt tư vấn</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-300" data-card="Diamond">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <i class="fas fa-gem text-blue-600"></i>
+                                        </div>
+                                        <h4 class="font-semibold text-gray-800">Diamond</h4>
+                                        <p class="text-sm text-gray-600">100,000,000 VNĐ</p>
+                                        <p class="text-xs text-blue-600">10,000 VCA Token</p>
+                                        <p class="text-xs text-gray-500 mt-1">24 lượt tư vấn</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="card-option border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-blue-500 transition duration-300" data-card="">
+                                    <div class="text-center">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                                            <i class="fas fa-times text-gray-500"></i>
+                                        </div>
+                                        <h4 class="font-semibold text-gray-800">Không chọn thẻ</h4>
+                                        <p class="text-sm text-gray-600">Chỉ đăng ký vai trò</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Role Selection -->
+                        <div>
+                            <h3 class="text-lg font-semibold mb-4 text-gray-800">Vai trò đồng hành (có thể chọn nhiều)</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Cổ đông" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Cổ đông</div>
+                                        <div class="text-xs text-gray-500">100M+ VNĐ</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Angel" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Angel</div>
+                                        <div class="text-xs text-gray-500">50M+ VNĐ</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Seed" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Seed</div>
+                                        <div class="text-xs text-gray-500">20M+ VNĐ</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Retail" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Retail</div>
+                                        <div class="text-xs text-gray-500">1M+ VNĐ</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Sáng lập" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Sáng lập</div>
+                                        <div class="text-xs text-gray-500">500M+ VNĐ</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Thiên thần" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Thiên thần</div>
+                                        <div class="text-xs text-gray-500">200M+ VNĐ</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Phát triển" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Phát triển</div>
+                                        <div class="text-xs text-gray-500">100M+ VNĐ</div>
+                                    </div>
+                                </label>
+                                
+                                <label class="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-blue-50 transition duration-300">
+                                    <input type="checkbox" name="roles" value="Đồng hành" class="mr-3 text-blue-600 focus:ring-blue-500">
+                                    <div>
+                                        <div class="font-medium text-sm">Đồng hành</div>
+                                        <div class="text-xs text-gray-500">50M+ VNĐ</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <!-- Investment Amount -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Số tiền đầu tư (VNĐ)</label>
+                            <input type="number" id="reg-investment" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   placeholder="1000000" min="0">
+                            <p class="text-xs text-gray-500 mt-1">Nhập số tiền đầu tư để tính VCA Token bonus</p>
+                        </div>
+                        
+                        <!-- Referral Code -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Mã giới thiệu (tùy chọn)</label>
+                            <input type="text" id="reg-referral" 
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                   placeholder="REF123">
+                        </div>
+                        
+                        <!-- Benefits Display -->
+                        <div id="benefits-display" class="bg-blue-50 p-4 rounded-lg hidden">
+                            <h3 class="font-semibold mb-3 text-blue-800">Quyền lợi của bạn</h3>
+                            <div id="benefits-content" class="space-y-2 text-sm">
+                                <!-- Benefits will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="flex gap-4 pt-6">
+                            <button type="submit" id="submit-registration" 
+                                    class="flex-1 bg-gradient-to-r from-teal-600 to-blue-600 text-white py-4 px-8 rounded-lg hover:from-teal-700 hover:to-blue-700 transition-all duration-300 font-semibold text-lg shadow-lg transform hover:scale-105">
+                                <i class="fas fa-paper-plane mr-2"></i>Đăng ký ngay
+                            </button>
+                            <button type="button" id="cancel-registration" 
+                                    class="flex-1 bg-gray-200 text-gray-800 py-4 px-8 rounded-lg hover:bg-gray-300 transition-all duration-300 font-semibold text-lg">
+                                <i class="fas fa-times mr-2"></i>Hủy
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Selection Interface -->
+    <div id="cardSelectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <!-- Header -->
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-white bg-gradient-to-r from-green-400 to-green-600 py-4 px-8 rounded-lg shadow-lg mb-4">
+                            Chọn Gói Thẻ Chăm Sóc Sức Khỏe
+                        </h2>
+                        <p class="text-lg text-gray-600">Chọn gói phù hợp với nhu cầu chăm sóc sức khỏe của bạn</p>
+                    </div>
+
+                    <!-- Card Packages Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Standard Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-gray-600 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Standard</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">2M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói cơ bản</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">12 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">VCA Token: 200</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Standard', 2000000, 12)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Silver Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-gray-700 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Silver</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">8M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói bạc</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">15 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">VCA Token: 800</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Silver', 8000000, 15)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Gold Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-yellow-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-yellow-600 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Gold</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">18M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói vàng</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">18 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">VCA Token: 1,800</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Gold', 18000000, 18)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Platinum Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-gray-800 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Platinum</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">38M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói bạch kim</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">20 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">VCA Token: 3,800</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Platinum', 38000000, 20)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Diamond Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-gem text-blue-600 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Diamond</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">100M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói kim cương</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">24 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">VCA Token: 10,000</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Diamond', 100000000, 24)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-4 justify-center">
+                        <button onclick="closeCardSelection()" 
+                                class="bg-gray-500 text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-600 transition duration-300">
+                            <i class="fas fa-arrow-left mr-2"></i>Quay lại
+                        </button>
+                        <button onclick="goToRegistration()" 
+                                class="bg-blue-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                            <i class="fas fa-edit mr-2"></i>Chỉnh sửa đăng ký
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Registration Section -->
+    <section id="actions" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Đăng ký hành động</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Investment Registration -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="text-center mb-6">
+                        <div class="bg-teal-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-chart-line text-2xl text-teal-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900">Đăng ký đóng hàng</h3>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium">Cổ đông</span>
+                            <span class="text-sm text-gray-600">Từ 100M VNĐ</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium">Angel</span>
+                            <span class="text-sm text-gray-600">Từ 50M VNĐ</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium">Seed</span>
+                            <span class="text-sm text-gray-600">Từ 20M VNĐ</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <span class="font-medium">Retail</span>
+                            <span class="text-sm text-gray-600">Từ 1M VNĐ</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openInvestmentForm()" class="w-full bg-teal-600 text-white py-3 rounded-lg font-semibold hover:bg-teal-700 transition-colors">
+                        Mở form đăng ký nhận
+                    </button>
+                </div>
+
+                <!-- Card Management -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="text-center mb-6">
+                        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-credit-card text-2xl text-blue-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900">Quản lý thẻ</h3>
+                    </div>
+                    
+                    <p class="text-gray-600 mb-6">Theo dõi lợi tức và quản lý thẻ chăm sóc của bạn</p>
+                    
+                    <button onclick="openCardManagement()" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                        Mở form đăng ký nhận
+                    </button>
+                </div>
+
+                <!-- Transparent Benefits -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="text-center mb-6">
+                        <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fas fa-chart-pie text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900">Minh bạch quyền lợi</h3>
+                    </div>
+                    
+                    <div class="space-y-3 mb-6">
+                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                            <span class="font-medium">49% chia lãi</span>
+                            <span class="text-sm text-green-600">✓</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                            <span class="font-medium">30% Pool Vốn</span>
+                            <span class="text-sm text-blue-600">✓</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                            <span class="font-medium">19% Pool Công</span>
+                            <span class="text-sm text-purple-600">✓</span>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openBenefitsForm()" class="w-full bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                        Mở form đăng ký nhận
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card Types Section -->
+    <section id="cards" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Các hạng thẻ</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="cardTypes">
+                <!-- Card types will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">Câu hỏi thường gặp</h2>
+            
+            <div class="space-y-6">
+                <div class="bg-white rounded-lg shadow-md">
+                    <button onclick="toggleFAQ(1)" class="w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">App có cam kết lợi nhuận không?</h3>
+                            <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-1"></i>
+                        </div>
+                    </button>
+                    <div class="px-6 pb-6 hidden" id="faq-content-1">
+                        <p class="text-gray-600">Không, chúng tôi không cam kết lợi nhuận. Chia sẻ khi có hiệu quả thuần tế sau thuế. Chúng tôi minh bạch về quyền lợi và chỉ chia sẻ khi có lợi nhuận thực tế.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md">
+                    <button onclick="toggleFAQ(2)" class="w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">Maxout 210% nghĩa là gì?</h3>
+                            <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-2"></i>
+                        </div>
+                    </button>
+                    <div class="px-6 pb-6 hidden" id="faq-content-2">
+                        <p class="text-gray-600">Maxout 210% có nghĩa là tổng số tiền bạn có thể nhận được tối đa là 210% so với số tiền đầu tư ban đầu. Đây là giới hạn tối đa để đảm bảo tính bền vững của hệ thống.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md">
+                    <button onclick="toggleFAQ(3)" class="w-full text-left p-6 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-lg font-semibold text-gray-900">Tôi có thể đăng ký Cổ đông không?</h3>
+                            <i class="fas fa-chevron-down transform transition-transform" id="faq-icon-3"></i>
+                        </div>
+                    </button>
+                    <div class="px-6 pb-6 hidden" id="faq-content-3">
+                        <p class="text-gray-600">Có, bạn có thể đăng ký trở thành Cổ đông với mức đầu tư tối thiểu 100 triệu VNĐ. Với vai trò Cổ đông, bạn sẽ có quyền lợi đặc biệt và tỷ lệ chia lãi cao hơn.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-hospital text-2xl mr-3"></i>
+                        <h3 class="text-xl font-bold">Phúc An Dương</h3>
+                    </div>
+                    <p class="text-gray-400">App khám hàng với quyền lợi minh bạch và chia sẻ lợi nhuận công bằng.</p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Dịch vụ</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#cards" class="hover:text-white transition-colors">Thẻ chăm sóc</a></li>
+                        <li><a href="#benefits" class="hover:text-white transition-colors">Quyền lợi</a></li>
+                        <li><a href="#faq" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Hỗ trợ</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Liên hệ</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Hướng dẫn</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Báo cáo</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Liên hệ</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p><i class="fas fa-phone mr-2"></i>0123 456 789</p>
+                        <p><i class="fas fa-envelope mr-2"></i>info@phucanduong.com</p>
+                        <p><i class="fas fa-map-marker-alt mr-2"></i>Hà Nội, Việt Nam</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Phúc An Dương. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
+</html>

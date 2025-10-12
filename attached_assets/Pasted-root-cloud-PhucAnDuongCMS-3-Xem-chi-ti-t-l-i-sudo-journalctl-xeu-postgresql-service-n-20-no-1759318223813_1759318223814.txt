@@ -1,0 +1,126 @@
+root@cloud:~/PhucAnDuongCMS-3# # Xem chi tiết lỗi
+sudo journalctl -xeu postgresql.service -n 20 --no-pager
+Oct 01 18:29:40 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit postgresql.service has entered the 'failed' state with result 'exit-code'.
+Oct 01 18:29:40 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+░░ Subject: A start job for unit postgresql.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit postgresql.service has finished with a failure.
+░░ 
+░░ The job identifier is 6812538 and the job result is failed.
+Oct 01 18:29:40 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93240.
+░░ Subject: Automatic restarting of a unit has been scheduled
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ Automatic restarting of the unit postgresql.service has been scheduled, as the result for
+░░ the configured Restart= setting for the unit.
+Oct 01 18:29:40 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+░░ Subject: A stop job for unit postgresql.service has finished
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A stop job for unit postgresql.service has finished.
+░░ 
+░░ The job identifier is 6812611 and the job result is done.
+Oct 01 18:29:46 cloud systemd[1]: Starting PostgreSQL RDBMS...
+░░ Subject: A start job for unit postgresql.service has begun execution
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit postgresql.service has begun execution.
+░░ 
+░░ The job identifier is 6812611.
+Oct 01 18:29:46 cloud postgres[2544264]: 2025-10-01 18:29:46.810 +07 [2544264] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 18:29:46 cloud postgres[2544264]: 2025-10-01 18:29:46.810 +07 [2544264] HINT:  Is another postmaster (PID 2544221) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 18:29:46 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ An ExecStart= process belonging to unit postgresql.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Oct 01 18:29:46 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit postgresql.service has entered the 'failed' state with result 'exit-code'.
+Oct 01 18:29:46 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+░░ Subject: A start job for unit postgresql.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit postgresql.service has finished with a failure.
+░░ 
+░░ The job identifier is 6812611 and the job result is failed.
+Oct 01 18:29:47 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93241.
+░░ Subject: Automatic restarting of a unit has been scheduled
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ Automatic restarting of the unit postgresql.service has been scheduled, as the result for
+░░ the configured Restart= setting for the unit.
+Oct 01 18:29:47 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+░░ Subject: A stop job for unit postgresql.service has finished
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A stop job for unit postgresql.service has finished.
+░░ 
+░░ The job identifier is 6812684 and the job result is done.
+Oct 01 18:29:53 cloud systemd[1]: Starting PostgreSQL RDBMS...
+░░ Subject: A start job for unit postgresql.service has begun execution
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit postgresql.service has begun execution.
+░░ 
+░░ The job identifier is 6812684.
+Oct 01 18:29:53 cloud postgres[2544316]: 2025-10-01 18:29:53.602 +07 [2544316] FATAL:  lock file "postmaster.pid" already exists
+Oct 01 18:29:53 cloud postgres[2544316]: 2025-10-01 18:29:53.602 +07 [2544316] HINT:  Is another postmaster (PID 2544273) running in data directory "/var/lib/postgresql/14/main"?
+Oct 01 18:29:53 cloud systemd[1]: postgresql.service: Main process exited, code=exited, status=1/FAILURE
+░░ Subject: Unit process exited
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ An ExecStart= process belonging to unit postgresql.service has exited.
+░░ 
+░░ The process' exit code is 'exited' and its exit status is 1.
+Oct 01 18:29:53 cloud systemd[1]: postgresql.service: Failed with result 'exit-code'.
+░░ Subject: Unit failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ The unit postgresql.service has entered the 'failed' state with result 'exit-code'.
+Oct 01 18:29:53 cloud systemd[1]: Failed to start PostgreSQL RDBMS.
+░░ Subject: A start job for unit postgresql.service has failed
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A start job for unit postgresql.service has finished with a failure.
+░░ 
+░░ The job identifier is 6812684 and the job result is failed.
+Oct 01 18:29:53 cloud systemd[1]: postgresql.service: Scheduled restart job, restart counter is at 93242.
+░░ Subject: Automatic restarting of a unit has been scheduled
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ Automatic restarting of the unit postgresql.service has been scheduled, as the result for
+░░ the configured Restart= setting for the unit.
+Oct 01 18:29:53 cloud systemd[1]: Stopped PostgreSQL RDBMS.
+░░ Subject: A stop job for unit postgresql.service has finished
+░░ Defined-By: systemd
+░░ Support: http://www.ubuntu.com/support
+░░ 
+░░ A stop job for unit postgresql.service has finished.
+░░ 
+░░ The job identifier is 6812757 and the job result is done.
+root@cloud:~/PhucAnDuongCMS-3# 

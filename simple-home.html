@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vcare Global - Simple Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold">V</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-800">Vcare Global</h1>
+                        <p class="text-sm text-gray-600">Hội Tụ Những Tinh Hoa</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="testLogin()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                        Đăng nhập
+                    </button>
+                    <button onclick="testRegister()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                        Đăng ký ngay
+                    </button>
+                    <button onclick="testBenefits()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        Test
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-6">App khách hàng Vcare Global</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                Hệ thống chăm sóc sức khỏe toàn diện, quản lý thẻ chăm sóc thông minh
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="testRegister()" class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
+                    Bắt đầu đăng ký
+                </button>
+                <button onclick="testBenefits()" class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-50">
+                    Xem quyền lợi thẻ
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="text-center p-6 bg-blue-50 rounded-lg">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">400+</div>
+                    <div class="text-gray-600">Thẻ đang hoạt động</div>
+                </div>
+                <div class="text-center p-6 bg-green-50 rounded-lg">
+                    <div class="text-4xl font-bold text-green-600 mb-2">10+</div>
+                    <div class="text-gray-600">Chi nhánh liên kết</div>
+                </div>
+                <div class="text-center p-6 bg-purple-50 rounded-lg">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">49%</div>
+                    <div class="text-gray-600">Minh bạch theo quý</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Các hạng thẻ & quyền lợi</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Standard Card</h3>
+                    <div class="text-2xl font-bold text-blue-600 mb-2">2.000.000 ₫</div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>12 lượt tư vấn/2 năm</li>
+                        <li>8% Referral</li>
+                        <li>5% VIP</li>
+                        <li>49% lợi tức</li>
+                    </ul>
+                    <button onclick="alert('Standard Card selected!')" class="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                        Mở thẻ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Gold Card</h3>
+                    <div class="text-2xl font-bold text-yellow-600 mb-2">18.000.000 ₫</div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>18 lượt tư vấn/2 năm</li>
+                        <li>8% Referral</li>
+                        <li>5% VIP</li>
+                        <li>49% lợi tức</li>
+                    </ul>
+                    <button onclick="alert('Gold Card selected!')" class="w-full mt-4 bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">
+                        Mở thẻ
+                    </button>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Diamond Card</h3>
+                    <div class="text-2xl font-bold text-purple-600 mb-2">100.000.000 ₫</div>
+                    <ul class="text-gray-600 space-y-2">
+                        <li>24 lượt tư vấn/2 năm</li>
+                        <li>8% Referral</li>
+                        <li>5% VIP</li>
+                        <li>49% lợi tức</li>
+                    </ul>
+                    <button onclick="alert('Diamond Card selected!')" class="w-full mt-4 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700">
+                        Mở thẻ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function testLogin() {
+            console.log('Login button clicked');
+            alert('Nút Đăng nhập hoạt động!');
+        }
+
+        function testRegister() {
+            console.log('Register button clicked');
+            alert('Nút Đăng ký hoạt động!');
+        }
+
+        function testBenefits() {
+            console.log('Benefits button clicked');
+            const benefitsSection = document.getElementById('benefits');
+            if (benefitsSection) {
+                benefitsSection.scrollIntoView({ behavior: 'smooth' });
+                console.log('Scrolled to benefits section');
+            } else {
+                console.error('Benefits section not found');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Simple home page loaded successfully!');
+            console.log('All functions available:', {
+                testLogin: typeof testLogin,
+                testRegister: typeof testRegister,
+                testBenefits: typeof testBenefits
+            });
+        });
+
+        // Global functions for onclick
+        window.testLogin = testLogin;
+        window.testRegister = testRegister;
+        window.testBenefits = testBenefits;
+    </script>
+</body>
+</html>

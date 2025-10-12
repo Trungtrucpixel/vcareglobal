@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCare Global - User Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- User Header -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <!-- VCare Global Logo -->
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                        <!-- Globe with DNA helix -->
+                        <svg viewBox="0 0 48 48" class="w-full h-full">
+                            <!-- Globe outline -->
+                            <circle cx="24" cy="24" r="22" fill="none" stroke="#2563EB" stroke-width="1.8"/>
+                            <!-- Globe grid lines -->
+                            <line x1="2" y1="24" x2="46" y2="24" stroke="#2563EB" stroke-width="0.8" opacity="0.6"/>
+                            <line x1="24" y1="2" x2="24" y2="46" stroke="#2563EB" stroke-width="0.8" opacity="0.6"/>
+                            <ellipse cx="24" cy="24" rx="22" ry="11" fill="none" stroke="#2563EB" stroke-width="0.8" opacity="0.4"/>
+                            <ellipse cx="24" cy="24" rx="11" ry="22" fill="none" stroke="#2563EB" stroke-width="0.8" opacity="0.4"/>
+                            
+                            <!-- DNA double helix -->
+                            <path d="M12 16 Q18 13 24 16 Q30 19 30 24 Q30 29 24 32 Q18 35 12 32" 
+                                  stroke="#2563EB" stroke-width="2" fill="none"/>
+                            <path d="M12 32 Q18 29 24 32 Q30 29 30 24 Q30 19 24 16 Q18 13 12 16" 
+                                  stroke="#2563EB" stroke-width="2" fill="none"/>
+                            
+                            <!-- Connecting lines -->
+                            <line x1="16" y1="20" x2="22" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                            <line x1="22" y1="20" x2="28" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                            <line x1="16" y1="28" x2="22" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                            <line x1="22" y1="28" x2="28" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Vcare Global User</h1>
+                        <p class="text-sm text-blue-100" id="userWelcome">Xin chào, User</p>
+                        <p class="text-xs text-blue-200" id="userType">Hội Tụ Những Tinh Hoa</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">Tài khoản: <strong id="userAccountInfo">user@vcareglobal.com</strong></span>
+                    <a href="/" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 text-sm">
+                        Về trang chủ
+                    </a>
+                    <button onclick="logout()" class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 text-sm">
+                        Đăng xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Menu -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex space-x-8">
+                <a href="#dashboard" onclick="showSection('dashboard')" class="nav-link active py-4 text-blue-600 border-b-2 border-blue-600">
+                    📊 Dashboard
+                </a>
+                <a href="#care-cards" onclick="showSection('care-cards')" class="nav-link py-4 text-gray-600 hover:text-blue-600">
+                    💳 Thẻ chăm sóc
+                </a>
+                <a href="#referrals" onclick="showSection('referrals')" class="nav-link py-4 text-gray-600 hover:text-blue-600">
+                    👥 Referral
+                </a>
+                <a href="#appointments" onclick="showSection('appointments')" class="nav-link py-4 text-gray-600 hover:text-blue-600">
+                    📅 Đặt lịch hẹn
+                </a>
+                <a href="#support" onclick="showSection('support')" class="nav-link py-4 text-gray-600 hover:text-blue-600">
+                    🆘 Hỗ trợ
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-8">
+        <!-- Dashboard Section -->
+        <div id="dashboard-section">
+        <!-- User Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Thẻ chăm sóc</h3>
+                        <p class="text-2xl font-bold text-blue-600" id="userCardType">Gold Card</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-green-100 text-green-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Lượt tư vấn</h3>
+                        <p class="text-2xl font-bold text-green-600" id="userSessions">18/18</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">VCA Digital Share</h3>
+                        <p class="text-2xl font-bold text-yellow-600" id="userVcaToken">1,800</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-4">
+                        <h3 class="text-lg font-semibold text-gray-800">Trạng thái</h3>
+                        <p class="text-2xl font-bold text-purple-600" id="userStatus">Hoạt động</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Functions -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- My Card -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💳 Thẻ chăm sóc của tôi</h2>
+                </div>
+                <div class="p-6">
+                    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg p-6 text-white mb-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <h3 class="text-2xl font-bold" id="cardName">Gold Card</h3>
+                                <p class="text-yellow-100">Thẻ chăm sóc sức khỏe cao cấp</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl">💎</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Lượt tư vấn còn lại:</span>
+                            <span class="font-semibold" id="remainingSessions">18 lượt</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Thời hạn:</span>
+                            <span class="font-semibold">24 tháng</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Ngày hết hạn:</span>
+                            <span class="font-semibold" id="expiryDate">24/12/2026</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Trạng thái:</span>
+                            <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm" id="cardStatus">Hoạt động</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 space-y-2">
+                        <button onclick="bookConsultation()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            📅 Đặt lịch tư vấn
+                        </button>
+                        <button onclick="viewCardHistory()" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700">
+                            📋 Xem lịch sử sử dụng
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Orders -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📋 Đơn hàng của tôi</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <h4 class="font-semibold" id="orderCardName">Gold Card</h4>
+                                    <p class="text-sm text-gray-600" id="orderId">Mã đơn hàng: ORD-123456</p>
+                                </div>
+                                <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm" id="orderStatus">Chờ duyệt</span>
+                            </div>
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <div>Ngày đặt: <span id="orderDate">12/12/2024</span></div>
+                                <div>Giá: <span class="font-semibold" id="orderPrice">18.000.000 ₫</span></div>
+                                <div>Phương thức thanh toán: <span id="paymentMethod">Chuyển khoản</span></div>
+                            </div>
+                            <div class="mt-3">
+                                <button onclick="trackOrder()" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                    Theo dõi đơn hàng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6">
+                        <button onclick="buyMoreCards()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                            💳 Mua thêm thẻ
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VCA Digital Share Info -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💰 VCA Digital Share</h2>
+                </div>
+                <div class="p-6">
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-600" id="vcaBalance">1,800</div>
+                            <div class="text-sm text-yellow-700">VCA Digital Share hiện tại</div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Tỷ lệ quy đổi:</span>
+                            <span class="font-semibold">100 VCA = 1M VNĐ</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Giá trị tương đương:</span>
+                            <span class="font-semibold" id="vcaValue">18.000.000 ₫</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Maxout limit:</span>
+                            <span class="font-semibold" id="maxoutLimit">37.800.000 ₫</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 space-y-2">
+                        <button onclick="withdrawVca()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">
+                            💸 Rút VCA Digital Share
+                        </button>
+                        <button onclick="viewVcaHistory()" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700">
+                            📊 Lịch sử VCA Digital Share
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Type Upgrade -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">⬆️ Nâng cấp loại thành viên</h2>
+                </div>
+                <div class="p-6">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🏆</span>
+                            <div>
+                                <h3 class="font-semibold text-blue-800">Loại thành viên hiện tại</h3>
+                                <p class="text-sm text-blue-700" id="currentUserType">Card Customer</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="font-semibold text-gray-800">Các loại thành viên có thể nâng cấp:</h4>
+                        
+                        <!-- Vcare Home to Angel -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h5 class="font-semibold text-gray-800">👼 Angel Investor</h5>
+                                    <p class="text-sm text-gray-600">Cổ đông thiên thần</p>
+                                </div>
+                                <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium">≥100M ₫</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                                <div>
+                                    <span class="text-gray-600">VCA Multiplier:</span>
+                                    <span class="font-semibold">2.5x</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">Maxout:</span>
+                                    <span class="font-semibold">5.0x</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">Sessions:</span>
+                                    <span class="font-semibold">21/năm</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">Inheritance:</span>
+                                    <span class="font-semibold">Có</span>
+                                </div>
+                            </div>
+                            <button onclick="showUpgradeModal('angel', '100000000')" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">
+                                🚀 Nâng cấp lên Angel
+                            </button>
+                        </div>
+
+                        <!-- Angel to Seed -->
+                        <div class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h5 class="font-semibold text-gray-800">🌱 Seed Investor</h5>
+                                    <p class="text-sm text-gray-600">Cổ đông Seed</p>
+                                </div>
+                                <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">≥50M ₫</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                                <div>
+                                    <span class="text-gray-600">VCA Multiplier:</span>
+                                    <span class="font-semibold">1.2x</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">Maxout:</span>
+                                    <span class="font-semibold">4.0x</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">Sessions:</span>
+                                    <span class="font-semibold">18/năm</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-600">Inheritance:</span>
+                                    <span class="font-semibold">Có</span>
+                                </div>
+                            </div>
+                            <button onclick="showUpgradeModal('seed', '50000000')" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                                🚀 Nâng cấp lên Seed
+                            </button>
+                        </div>
+
+                        <!-- Seed to Founder -->
+                        <div class="border border-red-200 rounded-lg p-4 bg-red-50">
+                            <div class="flex justify-between items-start mb-3">
+                                <div>
+                                    <h5 class="font-semibold text-red-800">🏆 Founder</h5>
+                                    <p class="text-sm text-red-600">Cổ đông sáng lập</p>
+                                </div>
+                                <span class="px-3 py-1 bg-red-100 text-red-800 rounded-full text-sm font-medium">≥245M ₫</span>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 text-sm mb-4">
+                                <div>
+                                    <span class="text-red-600">VCA Multiplier:</span>
+                                    <span class="font-semibold">3.0x</span>
+                                </div>
+                                <div>
+                                    <span class="text-red-600">Maxout:</span>
+                                    <span class="font-semibold">Unlimited</span>
+                                </div>
+                                <div>
+                                    <span class="text-red-600">Sessions:</span>
+                                    <span class="font-semibold">24/năm</span>
+                                </div>
+                                <div>
+                                    <span class="text-red-600">Inheritance:</span>
+                                    <span class="font-semibold">Có</span>
+                                </div>
+                            </div>
+                            <button onclick="showUpgradeModal('founder', '245000000')" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
+                                🚀 Nâng cấp lên Founder
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-yellow-800 mb-2">💡 Lưu ý khi nâng cấp:</h4>
+                        <ul class="text-sm text-yellow-700 space-y-1">
+                            <li>• VCA Digital Share sẽ được tính lại theo vcaDigitalShareMultiplier mới</li>
+                            <li>• Maxout limit sẽ thay đổi theo loại thành viên</li>
+                            <li>• Số lượt tư vấn sẽ được cập nhật</li>
+                            <li>• Quyền thừa kế sẽ được kích hoạt</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Profile Settings -->
+            <div class="bg-white rounded-lg shadow-md">
+                <div class="p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">👤 Thông tin cá nhân</h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Họ và tên</label>
+                            <input type="text" id="userFullName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" value="Nguyễn Văn A">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" id="userEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" value="user@vcareglobal.com">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
+                            <input type="tel" id="userPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" value="0934177422">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ</label>
+                            <textarea id="userAddress" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" rows="2">123 Đường ABC, Quận 1, TP.HCM</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 space-y-2">
+                        <button onclick="updateProfile()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            💾 Cập nhật thông tin
+                        </button>
+                        <button onclick="changePassword()" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700">
+                            🔐 Đổi mật khẩu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Care Cards Section -->
+        <div id="care-cards-section" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">💳 Quản lý thẻ chăm sóc</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Current Card -->
+                    <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg p-6 text-white">
+                        <div class="flex justify-between items-center mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold" id="currentCardName">Gold Card</h3>
+                                <p class="text-yellow-100">Thẻ chăm sóc sức khỏe cao cấp</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl">💎</div>
+                                <span class="text-sm bg-white text-yellow-600 px-2 py-1 rounded-full">Hoạt động</span>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <p class="text-yellow-100">Lượt tư vấn:</p>
+                                <p class="font-bold">18/18 lượt</p>
+                            </div>
+                            <div>
+                                <p class="text-yellow-100">Thời hạn:</p>
+                                <p class="font-bold">24 tháng</p>
+                            </div>
+                            <div>
+                                <p class="text-yellow-100">Ngày hết hạn:</p>
+                                <p class="font-bold">24/12/2026</p>
+                            </div>
+                            <div>
+                                <p class="text-yellow-100">VCA Digital Share:</p>
+                                <p class="font-bold">1,800 VCA</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Benefits -->
+                    <div class="space-y-4">
+                        <h4 class="text-lg font-semibold text-gray-800">Quyền lợi thẻ:</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center p-3 bg-blue-50 rounded-lg">
+                                <span class="text-blue-600 mr-3">🏥</span>
+                                <div>
+                                    <p class="font-semibold">Tư vấn sức khỏe</p>
+                                    <p class="text-sm text-gray-600">18 lượt tư vấn trong 2 năm</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 bg-green-50 rounded-lg">
+                                <span class="text-green-600 mr-3">💰</span>
+                                <div>
+                                    <p class="font-semibold">Chia sẻ lợi nhuận</p>
+                                    <p class="text-sm text-gray-600">49% lợi tức sau thuế</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-3 bg-purple-50 rounded-lg">
+                                <span class="text-purple-600 mr-3">🎁</span>
+                                <div>
+                                    <p class="font-semibold">Hoa hồng giới thiệu</p>
+                                    <p class="text-sm text-gray-600">8% cho mỗi người được giới thiệu</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 space-y-2">
+                            <button onclick="bookConsultation()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                                📅 Đặt lịch tư vấn
+                            </button>
+                            <button onclick="viewCardHistory()" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700">
+                                📋 Xem lịch sử sử dụng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Cards Collection -->
+                <div class="mt-8 bg-blue-50 rounded-lg p-6">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">💳 Bộ sưu tập thẻ của bạn</h4>
+                    <p class="text-gray-600 mb-4">Bạn đang sở hữu <strong>2 thẻ</strong> chăm sóc sức khỏe</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <!-- Card 1: Gold Card -->
+                        <div class="bg-gradient-to-r from-yellow-400 to-yellow-600 rounded-lg p-4 text-white">
+                            <div class="flex justify-between items-center mb-2">
+                                <h5 class="font-bold">Gold Card #1</h5>
+                                <span class="text-xs bg-white text-yellow-600 px-2 py-1 rounded-full">Hoạt động</span>
+                            </div>
+                            <p class="text-xs text-yellow-100 mb-2">VCG-001 | Kích hoạt: 15/12/2024</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div>
+                                    <span class="text-yellow-100">Còn lại:</span>
+                                    <span class="font-bold">16/18 lượt</span>
+                                </div>
+                                <div>
+                                    <span class="text-yellow-100">Hết hạn:</span>
+                                    <span class="font-bold">15/12/2026</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Silver Card -->
+                        <div class="bg-gradient-to-r from-gray-400 to-gray-600 rounded-lg p-4 text-white">
+                            <div class="flex justify-between items-center mb-2">
+                                <h5 class="font-bold">Silver Card #2</h5>
+                                <span class="text-xs bg-white text-gray-600 px-2 py-1 rounded-full">Hoạt động</span>
+                            </div>
+                            <p class="text-xs text-gray-100 mb-2">VCG-002 | Kích hoạt: 20/11/2024</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div>
+                                    <span class="text-gray-100">Còn lại:</span>
+                                    <span class="font-bold">13/15 lượt</span>
+                                </div>
+                                <div>
+                                    <span class="text-gray-100">Hết hạn:</span>
+                                    <span class="font-bold">20/11/2026</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Stats -->
+                    <div class="bg-white rounded-lg p-4">
+                        <h5 class="font-semibold text-gray-800 mb-3">📊 Tổng kết bộ sưu tập:</h5>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                            <div class="text-center">
+                                <div class="text-xl font-bold text-blue-600">2</div>
+                                <div class="text-gray-600">Tổng số thẻ</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xl font-bold text-green-600">29</div>
+                                <div class="text-gray-600">Lượt tư vấn</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xl font-bold text-purple-600">23M ₫</div>
+                                <div class="text-gray-600">Tổng giá trị</div>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-xl font-bold text-yellow-600">49%</div>
+                                <div class="text-gray-600">Chia sẻ lợi nhuận</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buy More Cards -->
+                <div class="mt-8 bg-green-50 rounded-lg p-6">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">🛒 Mua thêm thẻ chăm sóc</h4>
+                    <p class="text-gray-600 mb-4">Mua thêm thẻ để tăng số lượt tư vấn và quyền lợi. Mỗi thẻ hoạt động độc lập!</p>
+                    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 text-center">
+                            <h5 class="font-semibold">Standard</h5>
+                            <p class="text-blue-600 font-bold">2M ₫</p>
+                            <p class="text-sm text-gray-600">12 lượt</p>
+                            <button onclick="buyCard('standard')" class="mt-2 bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">Mua</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-200 text-center">
+                            <h5 class="font-semibold">Silver</h5>
+                            <p class="text-gray-600 font-bold">5M ₫</p>
+                            <p class="text-sm text-gray-600">15 lượt</p>
+                            <button onclick="buyCard('silver')" class="mt-2 bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700">Mua</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-yellow-300 text-center">
+                            <h5 class="font-semibold">Gold</h5>
+                            <p class="text-yellow-600 font-bold">18M ₫</p>
+                            <p class="text-sm text-gray-600">18 lượt</p>
+                            <button onclick="buyCard('gold')" class="mt-2 bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700">Mua</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-gray-300 text-center">
+                            <h5 class="font-semibold">Platinum</h5>
+                            <p class="text-gray-700 font-bold">50M ₫</p>
+                            <p class="text-sm text-gray-600">21 lượt</p>
+                            <button onclick="buyCard('platinum')" class="mt-2 bg-gray-700 text-white px-3 py-1 rounded text-sm hover:bg-gray-800">Mua</button>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-purple-300 text-center">
+                            <h5 class="font-semibold">Diamond</h5>
+                            <p class="text-purple-600 font-bold">100M ₫</p>
+                            <p class="text-sm text-gray-600">24 lượt</p>
+                            <button onclick="buyCard('diamond')" class="mt-2 bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">Mua</button>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <h5 class="font-semibold text-yellow-800 mb-2">💡 Lưu ý khi mua nhiều thẻ:</h5>
+                        <ul class="text-sm text-yellow-700 space-y-1">
+                            <li>• Mỗi thẻ có thời hạn 2 năm riêng biệt</li>
+                            <li>• Số lượt tư vấn của các thẻ được cộng dồn</li>
+                            <li>• VCA Digital Share và chia sẻ lợi nhuận tăng theo tổng giá trị thẻ</li>
+                            <li>• Có thể sử dụng đồng thời nhiều thẻ</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referrals Section -->
+        <div id="referrals-section" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">👥 Chương trình Referral</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Referral Stats -->
+                    <div class="space-y-6">
+                        <div class="bg-blue-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-blue-800 mb-4">📊 Thống kê Referral</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue-600">0</div>
+                                    <div class="text-sm text-blue-700">Người đã giới thiệu</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue-600">0 ₫</div>
+                                    <div class="text-sm text-blue-700">Tổng hoa hồng</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue-600">8%</div>
+                                    <div class="text-sm text-blue-700">Tỷ lệ hoa hồng</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue-600">0</div>
+                                    <div class="text-sm text-blue-700">Thẻ được mua</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Referral Link -->
+                        <div class="bg-green-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-green-800 mb-4">🔗 Link giới thiệu của bạn</h3>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" id="referralLink" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg" value="https://vcareglobal.com/ref/USER123456" readonly>
+                                <button onclick="copyReferralLink()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                                    📋 Copy
+                                </button>
+                            </div>
+                            <p class="text-sm text-green-700 mt-2">Chia sẻ link này để nhận hoa hồng 8% khi người được giới thiệu mua thẻ!</p>
+                        </div>
+                    </div>
+
+                    <!-- Referral List -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">👥 Danh sách người được giới thiệu</h3>
+                        <div class="bg-gray-50 rounded-lg p-6 text-center">
+                            <div class="text-gray-500 mb-4">
+                                <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                <p class="text-lg font-semibold">Chưa có người được giới thiệu</p>
+                                <p class="text-sm">Chia sẻ link giới thiệu để bắt đầu kiếm hoa hồng!</p>
+                            </div>
+                            <button onclick="shareReferral()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                📤 Chia sẻ ngay
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Section -->
+        <div id="appointments-section" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">📅 Đặt lịch hẹn tư vấn</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Book Appointment -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">🆕 Đặt lịch mới</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Loại tư vấn</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                    <option value="">Chọn loại tư vấn</option>
+                                    <option value="general">Tư vấn sức khỏe tổng quát</option>
+                                    <option value="specialist">Tư vấn chuyên khoa</option>
+                                    <option value="nutrition">Tư vấn dinh dưỡng</option>
+                                    <option value="mental">Tư vấn tâm lý</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ngày hẹn</label>
+                                <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Giờ hẹn</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                    <option value="">Chọn giờ hẹn</option>
+                                    <option value="09:00">09:00 - 09:30</option>
+                                    <option value="09:30">09:30 - 10:00</option>
+                                    <option value="10:00">10:00 - 10:30</option>
+                                    <option value="10:30">10:30 - 11:00</option>
+                                    <option value="14:00">14:00 - 14:30</option>
+                                    <option value="14:30">14:30 - 15:00</option>
+                                    <option value="15:00">15:00 - 15:30</option>
+                                    <option value="15:30">15:30 - 16:00</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Ghi chú</label>
+                                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" rows="3" placeholder="Mô tả vấn đề sức khỏe cần tư vấn..."></textarea>
+                            </div>
+                            
+                            <button type="submit" onclick="submitAppointment()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                                📅 Đặt lịch hẹn
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Appointment History -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">📋 Lịch sử đặt hẹn</h3>
+                        <div class="space-y-4">
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h4 class="font-semibold">Tư vấn sức khỏe tổng quát</h4>
+                                        <p class="text-sm text-gray-600">Ngày: 15/12/2024 - 10:00</p>
+                                    </div>
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">Hoàn thành</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">Bác sĩ: Dr. Nguyễn Văn A</p>
+                                <p class="text-sm text-gray-600">Ghi chú: Kiểm tra sức khỏe định kỳ</p>
+                            </div>
+                            
+                            <div class="border border-gray-200 rounded-lg p-4">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <h4 class="font-semibold">Tư vấn dinh dưỡng</h4>
+                                        <p class="text-sm text-gray-600">Ngày: 20/12/2024 - 14:00</p>
+                                    </div>
+                                    <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">Đã đặt</span>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-2">Bác sĩ: Dr. Trần Thị B</p>
+                                <p class="text-sm text-gray-600">Ghi chú: Tư vấn chế độ ăn uống</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Section -->
+        <div id="support-section" class="hidden">
+            <div class="bg-white rounded-lg shadow-md p-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">🆘 Hỗ trợ khách hàng</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Contact Info -->
+                    <div class="space-y-6">
+                        <div class="bg-blue-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-blue-800 mb-4">📞 Thông tin liên hệ</h3>
+                            <div class="space-y-3">
+                                <div class="flex items-center">
+                                    <span class="text-blue-600 mr-3">📧</span>
+                                    <div>
+                                        <p class="font-semibold">Email hỗ trợ</p>
+                                        <p class="text-sm text-gray-600">support@vcareglobal.com</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-blue-600 mr-3">📞</span>
+                                    <div>
+                                        <p class="font-semibold">Hotline</p>
+                                        <p class="text-sm text-gray-600">1900-xxxx (8:00-22:00)</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-blue-600 mr-3">💬</span>
+                                    <div>
+                                        <p class="font-semibold">Chat trực tuyến</p>
+                                        <p class="text-sm text-gray-600">Hỗ trợ 24/7</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FAQ -->
+                        <div class="bg-green-50 rounded-lg p-6">
+                            <h3 class="text-lg font-semibold text-green-800 mb-4">❓ Câu hỏi thường gặp</h3>
+                            <div class="space-y-3">
+                                <button onclick="toggleFAQ('faq1')" class="w-full text-left p-3 bg-white rounded-lg hover:bg-gray-50">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-semibold">Làm thế nào để sử dụng thẻ chăm sóc?</span>
+                                        <span class="text-green-600">+</span>
+                                    </div>
+                                </button>
+                                <button onclick="toggleFAQ('faq2')" class="w-full text-left p-3 bg-white rounded-lg hover:bg-gray-50">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-semibold">VCA Digital Share được tính như thế nào?</span>
+                                        <span class="text-green-600">+</span>
+                                    </div>
+                                </button>
+                                <button onclick="toggleFAQ('faq3')" class="w-full text-left p-3 bg-white rounded-lg hover:bg-gray-50">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-semibold">Làm sao để rút VCA Digital Share?</span>
+                                        <span class="text-green-600">+</span>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Support Form -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">📝 Gửi yêu cầu hỗ trợ</h3>
+                        <form class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Loại hỗ trợ</label>
+                                <select class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                    <option value="">Chọn loại hỗ trợ</option>
+                                    <option value="technical">Hỗ trợ kỹ thuật</option>
+                                    <option value="billing">Vấn đề thanh toán</option>
+                                    <option value="card">Vấn đề thẻ chăm sóc</option>
+                                    <option value="vca">Vấn đề VCA Digital Share</option>
+                                    <option value="other">Khác</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Tiêu đề</label>
+                                <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Mô tả ngắn gọn vấn đề...">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Nội dung</label>
+                                <textarea class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" rows="5" placeholder="Mô tả chi tiết vấn đề cần hỗ trợ..."></textarea>
+                            </div>
+                            
+                            <button type="submit" onclick="submitSupport()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                                📤 Gửi yêu cầu hỗ trợ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Share Referral Modal -->
+    <div id="shareReferralModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📤 Chia sẻ link giới thiệu</h2>
+                    <button onclick="closeShareModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- Preview Message -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <h3 class="font-semibold text-blue-800 mb-2">📝 Nội dung chia sẻ:</h3>
+                        <div class="text-sm text-blue-700 bg-white p-3 rounded border">
+                            🎉 Tham gia VCare Global - Hệ thống chăm sóc sức khỏe toàn diện!<br><br>
+                            💳 Nhận hoa hồng 8% khi mua thẻ chăm sóc<br>
+                            💰 Chia sẻ lợi nhuận 49% sau thuế<br>
+                            🏥 Tư vấn sức khỏe chuyên nghiệp<br><br>
+                            🔗 Đăng ký ngay: <span id="previewLink" class="font-mono text-xs">https://vcareglobal.com/ref/USER123456</span>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Buttons -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                        <button onclick="shareToSocial('facebook')" class="flex flex-col items-center p-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                            <span class="text-sm font-medium">Facebook</span>
+                        </button>
+
+                        <button onclick="shareToSocial('zalo')" class="flex flex-col items-center p-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm-1 15h-1v-4h-1l3-6v4h1v6z"/>
+                            </svg>
+                            <span class="text-sm font-medium">Zalo</span>
+                        </button>
+
+                        <button onclick="shareToSocial('telegram')" class="flex flex-col items-center p-4 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors">
+                            <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                            </svg>
+                            <span class="text-sm font-medium">Telegram</span>
+                        </button>
+
+                        <button onclick="shareToSocial('whatsapp')" class="flex flex-col items-center p-4 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                            <svg class="w-8 h-8 mb-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
+                            </svg>
+                            <span class="text-sm font-medium">WhatsApp</span>
+                        </button>
+                    </div>
+
+                    <!-- Other Share Options -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <button onclick="shareToSocial('email')" class="flex items-center p-4 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                            <span class="font-medium">📧 Chia sẻ qua Email</span>
+                        </button>
+
+                        <button onclick="shareToSocial('sms')" class="flex items-center p-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            </svg>
+                            <span class="font-medium">📱 Chia sẻ qua SMS</span>
+                        </button>
+                    </div>
+
+                    <!-- Copy Button -->
+                    <div class="text-center">
+                        <button onclick="shareToSocial('copy')" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 font-semibold">
+                            📋 Copy nội dung chia sẻ
+                        </button>
+                    </div>
+
+                    <!-- Tips -->
+                    <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-yellow-800 mb-2">💡 Mẹo chia sẻ hiệu quả:</h4>
+                        <ul class="text-sm text-yellow-700 space-y-1">
+                            <li>• Chia sẻ với bạn bè, gia đình quan tâm đến sức khỏe</li>
+                            <li>• Giải thích về lợi ích của thẻ chăm sóc VCare Global</li>
+                            <li>• Nhắc về hoa hồng 8% khi họ mua thẻ</li>
+                            <li>• Theo dõi số người đã đăng ký qua link của bạn</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Type Upgrade Modal -->
+    <div id="upgradeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">⬆️ Nâng cấp loại thành viên</h2>
+                    <button onclick="closeUpgradeModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- Current vs New Type Comparison -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <!-- Current Type -->
+                        <div class="bg-gray-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-3">📋 Loại hiện tại</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Loại:</span>
+                                    <span class="font-semibold" id="currentTypeName">Card Customer</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">VCA Multiplier:</span>
+                                    <span class="font-semibold" id="currentMultiplier">1.0x</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Maxout:</span>
+                                    <span class="font-semibold" id="currentMaxout">2.1x</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-600">Sessions:</span>
+                                    <span class="font-semibold" id="currentSessions">12/năm</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- New Type -->
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-green-800 mb-3">🚀 Loại mới</h3>
+                            <div class="space-y-2 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-green-600">Loại:</span>
+                                    <span class="font-semibold text-green-800" id="newTypeName">Angel Investor</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-green-600">VCA Multiplier:</span>
+                                    <span class="font-semibold text-green-800" id="newMultiplier">2.5x</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-green-600">Maxout:</span>
+                                    <span class="font-semibold text-green-800" id="newMaxout">5.0x</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-green-600">Sessions:</span>
+                                    <span class="font-semibold text-green-800" id="newSessions">21/năm</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Investment Amount -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">💰 Số tiền đầu tư cần thiết</h4>
+                        <div class="text-2xl font-bold text-blue-600 mb-2" id="requiredAmount">100,000,000 ₫</div>
+                        <p class="text-sm text-blue-700">Số tiền tối thiểu để nâng cấp lên loại thành viên này</p>
+                    </div>
+
+                    <!-- Upgrade Benefits -->
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-yellow-800 mb-2">🎁 Lợi ích khi nâng cấp:</h4>
+                        <ul class="text-sm text-yellow-700 space-y-1">
+                            <li id="benefit1">• VCA Digital Share vcaDigitalShareMultiplier tăng từ 1.0x lên 2.5x</li>
+                            <li id="benefit2">• Maxout limit tăng từ 2.1x lên 5.0x</li>
+                            <li id="benefit3">• Số lượt tư vấn tăng từ 12 lên 21/năm</li>
+                            <li id="benefit4">• Được quyền thừa kế cổ phần</li>
+                        </ul>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-3">💳 Phương thức thanh toán</h4>
+                        <div class="space-y-3">
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                <input type="radio" name="paymentMethod" value="bank_transfer" class="text-blue-600 focus:ring-blue-500" checked>
+                                <div class="ml-3">
+                                    <div class="font-medium">Chuyển khoản ngân hàng</div>
+                                    <div class="text-sm text-gray-600">Vietcombank - 0123 4567 8901</div>
+                                </div>
+                            </label>
+                            <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
+                                <input type="radio" name="paymentMethod" value="cash" class="text-blue-600 focus:ring-blue-500">
+                                <div class="ml-3">
+                                    <div class="font-medium">Thanh toán tại chi nhánh</div>
+                                    <div class="text-sm text-gray-600">Đến trực tiếp chi nhánh gần nhất</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Upload Payment Proof -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">📎 Upload chứng từ thanh toán</label>
+                        <input type="file" id="paymentProof" accept="image/*,.pdf" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <p class="text-xs text-gray-700 mt-1">Chấp nhận file: JPG, PNG, PDF (tối đa 5MB)</p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-4">
+                        <button onclick="closeUpgradeModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                            Hủy
+                        </button>
+                        <button onclick="submitUpgradeRequest()" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            🚀 Gửi yêu cầu nâng cấp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📅 Đặt lịch tư vấn</h2>
+                    <button onclick="closeBookingModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-6">
+                        <!-- Select Card -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💳 Chọn thẻ chăm sóc</label>
+                            <select id="bookingCardId" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                <option value="">-- Chọn thẻ --</option>
+                                <option value="Gold Card #1">Gold Card #1 - 16/18 lượt còn lại</option>
+                                <option value="Silver Card #2">Silver Card #2 - 13/15 lượt còn lại</option>
+                            </select>
+                        </div>
+
+                        <!-- Select Date -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📅 Chọn ngày</label>
+                            <input type="date" id="bookingDate" min="2024-12-21" max="2025-12-31" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        </div>
+
+                        <!-- Select Time -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">⏰ Chọn giờ</label>
+                            <select id="bookingTime" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                <option value="">-- Chọn giờ --</option>
+                                <option value="09:00">09:00 - 09:30</option>
+                                <option value="09:30">09:30 - 10:00</option>
+                                <option value="10:00">10:00 - 10:30</option>
+                                <option value="10:30">10:30 - 11:00</option>
+                                <option value="14:00">14:00 - 14:30</option>
+                                <option value="14:30">14:30 - 15:00</option>
+                                <option value="15:00">15:00 - 15:30</option>
+                                <option value="15:30">15:30 - 16:00</option>
+                            </select>
+                        </div>
+
+                        <!-- Reason -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📝 Lý do tư vấn</label>
+                            <select id="bookingReason" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                <option value="">-- Chọn lý do --</option>
+                                <option value="Tư vấn sức khỏe tổng quát">Tư vấn sức khỏe tổng quát</option>
+                                <option value="Tư vấn dinh dưỡng">Tư vấn dinh dưỡng</option>
+                                <option value="Tư vấn tâm lý">Tư vấn tâm lý</option>
+                                <option value="Tư vấn thể thao">Tư vấn thể thao</option>
+                                <option value="Khám chuyên khoa">Khám chuyên khoa</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+
+                        <!-- Notes -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">📄 Ghi chú thêm (tùy chọn)</label>
+                            <textarea id="bookingNotes" rows="3" placeholder="Mô tả thêm về tình trạng sức khỏe hoặc câu hỏi cụ thể..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex space-x-4">
+                        <button onclick="closeBookingModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                            Hủy
+                        </button>
+                        <button onclick="submitBooking()" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            ✅ Đặt lịch
+                        </button>
+                    </div>
+
+                    <div class="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <h4 class="font-semibold text-blue-800 mb-2">ℹ️ Lưu ý:</h4>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• Lịch hẹn sẽ được xác nhận trong vòng 24 giờ</li>
+                            <li>• Vui lòng đến đúng giờ hẹn</li>
+                            <li>• Có thể hủy/hỗi lịch trước 2 giờ</li>
+                            <li>• Hotline hỗ trợ: 1900-1234</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card History Modal -->
+    <div id="cardHistoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📋 Lịch sử sử dụng thẻ</h2>
+                    <button onclick="closeCardHistoryModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- Summary Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-blue-600">29</div>
+                            <div class="text-sm text-gray-600">Tổng lượt đã sử dụng</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600">5</div>
+                            <div class="text-sm text-gray-600">Lần tư vấn thành công</div>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-yellow-600">68%</div>
+                            <div class="text-sm text-gray-600">Tỷ lệ sử dụng</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-purple-600">2.1M ₫</div>
+                            <div class="text-sm text-gray-600">Giá trị đã sử dụng</div>
+                        </div>
+                    </div>
+
+                    <!-- History Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Ngày</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Loại tư vấn</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Thẻ sử dụng</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Lượt sử dụng</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cardHistoryBody" class="bg-white divide-y divide-gray-200">
+                                <!-- History data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders Modal -->
+    <div id="ordersModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📦 Đơn hàng của bạn</h2>
+                    <button onclick="closeOrdersModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- Order Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-blue-600">3</div>
+                            <div class="text-sm text-gray-600">Tổng đơn hàng</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600">2</div>
+                            <div class="text-sm text-gray-600">Hoàn thành</div>
+                        </div>
+                        <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-yellow-600">1</div>
+                            <div class="text-sm text-gray-600">Chờ duyệt</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-purple-600">73M ₫</div>
+                            <div class="text-sm text-gray-600">Tổng giá trị</div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Mã đơn</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Ngày đặt</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Sản phẩm</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Số tiền</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Trạng thái</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersBody" class="bg-white divide-y divide-gray-200">
+                                <!-- Orders data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💰 Rút VCA Digital Share</h2>
+                    <button onclick="closeWithdrawModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-6">
+                        <!-- Current Balance -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                            <h3 class="font-semibold text-blue-800 mb-2">💎 Số dư hiện tại</h3>
+                            <div class="text-2xl font-bold text-blue-600">2,250 VCA</div>
+                            <div class="text-sm text-blue-700">≈ 22,500,000 ₫</div>
+                        </div>
+
+                        <!-- Withdraw Amount -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">💰 Số tiền muốn rút (₫)</label>
+                            <input type="number" id="withdrawAmount" min="5000000" step="100000" placeholder="Nhập số tiền..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                            <p class="text-xs text-gray-700 mt-1">Số tiền tối thiểu: 5,000,000 ₫</p>
+                        </div>
+
+                        <!-- Bank Information -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">🏦 Thông tin ngân hàng</label>
+                            <textarea id="bankInfo" rows="3" placeholder="Tên chủ tài khoản: Nguyễn Văn A&#10;Số tài khoản: 1234567890&#10;Ngân hàng: Vietcombank&#10;Chi nhánh: Hà Nội" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                        </div>
+
+                        <!-- Withdraw Rules -->
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                            <h4 class="font-semibold text-yellow-800 mb-2">⚠️ Quy định rút tiền:</h4>
+                            <ul class="text-sm text-yellow-700 space-y-1">
+                                <li>• Số tiền tối thiểu: 5,000,000 ₫</li>
+                                <li>• Thời gian xử lý: 24-48 giờ làm việc</li>
+                                <li>• Phí giao dịch: 1% (tối thiểu 50,000 ₫)</li>
+                                <li>• Thuế: 10% (nếu rút > 10,000,000 ₫)</li>
+                                <li>• Chỉ rút được vào tài khoản đã đăng ký</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex space-x-4">
+                        <button onclick="closeWithdrawModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                            Hủy
+                        </button>
+                        <button onclick="submitWithdrawRequest()" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            💰 Gửi yêu cầu rút tiền
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VCA History Modal -->
+    <div id="vcaHistoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">📊 Lịch sử VCA Digital Share</h2>
+                    <button onclick="closeVCAHistoryModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <!-- VCA Summary -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-blue-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-blue-600">2,250</div>
+                            <div class="text-sm text-gray-600">VCA hiện tại</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-green-600">3,070</div>
+                            <div class="text-sm text-gray-600">VCA đã nhận</div>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-red-600">820</div>
+                            <div class="text-sm text-gray-600">VCA đã rút</div>
+                        </div>
+                        <div class="bg-purple-50 p-4 rounded-lg text-center">
+                            <div class="text-2xl font-bold text-purple-600">22.5M ₫</div>
+                            <div class="text-sm text-gray-600">Giá trị hiện tại</div>
+                        </div>
+                    </div>
+
+                    <!-- VCA History Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Ngày</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Loại giao dịch</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Số VCA</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Số dư</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="vcaHistoryBody" class="bg-white divide-y divide-gray-200">
+                                <!-- VCA history data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ Modal -->
+    <div id="faqModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">❓ Câu hỏi thường gặp</h2>
+                    <button onclick="closeFAQModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <!-- FAQ Item 1 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button onclick="toggleFAQItem(1)" class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50">
+                                <h3 class="font-semibold text-gray-800">Thẻ chăm sóc VCare Global hoạt động như thế nào?</h3>
+                                <span id="faq-icon-1" class="text-2xl font-bold text-blue-600">+</span>
+                            </button>
+                            <div id="faq-content-1" class="hidden px-6 pb-4">
+                                <p class="text-gray-600">Thẻ chăm sóc VCare Global cung cấp các lượt tư vấn sức khỏe trong 2 năm. Mỗi thẻ có số lượt tư vấn khác nhau tùy theo loại thẻ (Standard: 12 lượt, Gold: 18 lượt, Platinum: 21 lượt, Diamond: 24 lượt).</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 2 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button onclick="toggleFAQItem(2)" class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50">
+                                <h3 class="font-semibold text-gray-800">Làm sao để rút VCA Digital Share?</h3>
+                                <span id="faq-icon-2" class="text-2xl font-bold text-blue-600">+</span>
+                            </button>
+                            <div id="faq-content-2" class="hidden px-6 pb-4">
+                                <p class="text-gray-600">Để rút VCA Digital Share, bạn cần có tối thiểu 5,000,000 ₫ trong tài khoản. Thời gian xử lý là 24-48 giờ làm việc. Phí giao dịch là 1% (tối thiểu 50,000 ₫) và thuế 10% nếu rút trên 10,000,000 ₫.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 3 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button onclick="toggleFAQItem(3)" class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50">
+                                <h3 class="font-semibold text-gray-800">Tỷ lệ chia sẻ lợi nhuận là bao nhiêu?</h3>
+                                <span id="faq-icon-3" class="text-2xl font-bold text-blue-600">+</span>
+                            </button>
+                            <div id="faq-content-3" class="hidden px-6 pb-4">
+                                <p class="text-gray-600">VCare Global chia sẻ 49% lợi nhuận sau thuế cho các thành viên, 5% cho VIP support, và 8% cho referral commission. Phần còn lại được sử dụng cho vận hành và phát triển hệ thống.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 4 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button onclick="toggleFAQItem(4)" class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50">
+                                <h3 class="font-semibold text-gray-800">Làm sao để nâng cấp loại thành viên?</h3>
+                                <span id="faq-icon-4" class="text-2xl font-bold text-blue-600">+</span>
+                            </button>
+                            <div id="faq-content-4" class="hidden px-6 pb-4">
+                                <p class="text-gray-600">Để nâng cấp loại thành viên, bạn cần đầu tư số tiền tương ứng (Angel: ≥100M ₫, Seed: ≥50M ₫, Founder: ≥245M ₫). Gửi yêu cầu nâng cấp qua dashboard, admin sẽ xem xét và duyệt trong 24-48 giờ.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 5 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button onclick="toggleFAQItem(5)" class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50">
+                                <h3 class="font-semibold text-gray-800">Có thể sở hữu nhiều thẻ chăm sóc không?</h3>
+                                <span id="faq-icon-5" class="text-2xl font-bold text-blue-600">+</span>
+                            </button>
+                            <div id="faq-content-5" class="hidden px-6 pb-4">
+                                <p class="text-gray-600">Có, bạn có thể sở hữu nhiều thẻ chăm sóc cùng lúc. Mỗi thẻ hoạt động độc lập với thời hạn 2 năm riêng biệt. Số lượt tư vấn được cộng dồn, và VCA Digital Share tăng theo tổng giá trị thẻ.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 6 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button onclick="toggleFAQItem(6)" class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50">
+                                <h3 class="font-semibold text-gray-800">Làm sao để đặt lịch tư vấn?</h3>
+                                <span id="faq-icon-6" class="text-2xl font-bold text-blue-600">+</span>
+                            </button>
+                            <div id="faq-content-6" class="hidden px-6 pb-4">
+                                <p class="text-gray-600">Trong dashboard, click vào tab "💳 Thẻ chăm sóc", chọn thẻ muốn sử dụng và click "📅 Đặt lịch tư vấn". Chọn ngày, giờ và lý do tư vấn. Lịch hẹn sẽ được xác nhận trong 24 giờ.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Support -->
+                    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+                        <h3 class="font-semibold text-blue-800 mb-3">📞 Cần hỗ trợ thêm?</h3>
+                        <p class="text-blue-700 mb-4">Nếu bạn không tìm thấy câu trả lời cho câu hỏi của mình, hãy liên hệ với chúng tôi:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center">
+                                <span class="text-blue-600 mr-2">📧</span>
+                                <span class="text-sm">support@vcareglobal.com</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-blue-600 mr-2">📞</span>
+                                <span class="text-sm">1900-1234 (24/7)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-blue-600 mr-2">💬</span>
+                                <span class="text-sm">Live Chat trên website</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-blue-600 mr-2">📍</span>
+                                <span class="text-sm">Chi nhánh gần nhất</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Load user data from localStorage
+        function loadUserData() {
+            const userData = localStorage.getItem('userLoginData');
+            if (userData) {
+                const data = JSON.parse(userData);
+                
+                // Update header
+                document.getElementById('userWelcome').textContent = `Xin chào, ${data.name}`;
+                document.getElementById('userAccountInfo').textContent = data.email;
+                
+                // Update dashboard with order data
+                if (data.orderData) {
+                    document.getElementById('userCardType').textContent = data.orderData.cardType.toUpperCase() + ' Card';
+                    document.getElementById('cardName').textContent = data.orderData.cardType.toUpperCase() + ' Card';
+                    document.getElementById('orderCardName').textContent = data.orderData.cardType.toUpperCase() + ' Card';
+                    document.getElementById('orderId').textContent = `Mã đơn hàng: ${data.orderData.orderId}`;
+                    document.getElementById('orderPrice').textContent = `${data.orderData.cardData.price.toLocaleString('vi-VN')} ₫`;
+                    
+                    // Calculate VCA Digital Share
+                    const vcaToken = Math.floor(data.orderData.cardData.price / 1000000 * 100);
+                    document.getElementById('userVcaToken').textContent = vcaToken.toLocaleString();
+                    document.getElementById('vcaBalance').textContent = vcaToken.toLocaleString();
+                    document.getElementById('vcaValue').textContent = `${data.orderData.cardData.price.toLocaleString('vi-VN')} ₫`;
+                    
+                    // Calculate maxout (2.1x for card customer)
+                    const maxoutAmount = Math.floor(data.orderData.cardData.price * 2.1);
+                    document.getElementById('maxoutLimit').textContent = `${maxoutAmount.toLocaleString('vi-VN')} ₫`;
+                    
+                    // Update user info
+                    document.getElementById('userFullName').value = data.orderData.customerInfo.name || data.name;
+                    document.getElementById('userEmail').value = data.email;
+                    document.getElementById('userPhone').value = data.orderData.customerInfo.phone || '';
+                    document.getElementById('userAddress').value = data.orderData.customerInfo.address || '';
+                }
+            }
+        }
+
+        // User functions
+        function bookConsultation() {
+            showBookingModal();
+        }
+
+        function viewCardHistory() {
+            showCardHistoryModal();
+        }
+
+        function trackOrder() {
+            showOrdersModal();
+        }
+
+        // Booking Modal
+        function showBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeBookingModal() {
+            document.getElementById('bookingModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function submitBooking() {
+            const cardId = document.getElementById('bookingCardId').value;
+            const date = document.getElementById('bookingDate').value;
+            const time = document.getElementById('bookingTime').value;
+            const reason = document.getElementById('bookingReason').value;
+
+            if (!cardId || !date || !time || !reason) {
+                alert('Vui lòng điền đầy đủ thông tin đặt lịch!');
+                return;
+            }
+
+            alert(`✅ Đặt lịch tư vấn thành công!\n\n📅 Ngày: ${date}\n⏰ Giờ: ${time}\n💳 Thẻ: ${cardId}\n📝 Lý do: ${reason}\n\n📞 Chúng tôi sẽ liên hệ xác nhận trong 24h.`);
+            closeBookingModal();
+        }
+
+        // Card History Modal
+        function showCardHistoryModal() {
+            const modal = document.getElementById('cardHistoryModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadCardHistory();
+        }
+
+        function closeCardHistoryModal() {
+            document.getElementById('cardHistoryModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadCardHistory() {
+            const historyData = [
+                { date: '2024-12-15', type: 'Tư vấn sức khỏe', card: 'Gold Card #1', sessions: '1/18', status: 'Hoàn thành' },
+                { date: '2024-12-10', type: 'Tư vấn dinh dưỡng', card: 'Gold Card #1', sessions: '2/18', status: 'Hoàn thành' },
+                { date: '2024-12-05', type: 'Khám tổng quát', card: 'Silver Card #2', sessions: '1/15', status: 'Hoàn thành' },
+                { date: '2024-11-28', type: 'Tư vấn tâm lý', card: 'Gold Card #1', sessions: '3/18', status: 'Hoàn thành' },
+                { date: '2024-11-20', type: 'Tư vấn thể thao', card: 'Silver Card #2', sessions: '2/15', status: 'Hoàn thành' }
+            ];
+
+            const tbody = document.getElementById('cardHistoryBody');
+            tbody.innerHTML = '';
+            
+            historyData.forEach(record => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${record.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${record.type}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${record.card}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${record.sessions}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                            ${record.status}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Orders Modal
+        function showOrdersModal() {
+            const modal = document.getElementById('ordersModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadOrders();
+        }
+
+        function closeOrdersModal() {
+            document.getElementById('ordersModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadOrders() {
+            const ordersData = [
+                { id: 'ORD-001', date: '2024-12-15', item: 'Gold Card', amount: '18,000,000 ₫', status: 'Hoàn thành' },
+                { id: 'ORD-002', date: '2024-11-20', item: 'Silver Card', amount: '5,000,000 ₫', status: 'Hoàn thành' },
+                { id: 'ORD-003', date: '2024-12-20', item: 'Platinum Card', amount: '50,000,000 ₫', status: 'Chờ duyệt' }
+            ];
+
+            const tbody = document.getElementById('ordersBody');
+            tbody.innerHTML = '';
+            
+            ordersData.forEach(order => {
+                const statusColor = order.status === 'Hoàn thành' ? 'bg-green-100 text-green-800' : 
+                                  order.status === 'Chờ duyệt' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${order.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${order.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${order.item}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${order.amount}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
+                            ${order.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <button onclick="viewOrderDetails('${order.id}')" class="text-indigo-600 hover:text-indigo-900">
+                            Xem chi tiết
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function viewOrderDetails(orderId) {
+            alert(`📋 Chi tiết đơn hàng ${orderId}:\n\n• Mã đơn hàng: ${orderId}\n• Ngày đặt: 2024-12-20\n• Sản phẩm: Platinum Card\n• Số tiền: 50,000,000 ₫\n• Phương thức: Chuyển khoản\n• Trạng thái: Chờ duyệt\n\n📞 Liên hệ: 1900-1234 để được hỗ trợ.`);
+        }
+
+        function buyMoreCards() {
+            window.location.href = '/';
+        }
+
+        function withdrawVca() {
+            showWithdrawModal();
+        }
+
+        function viewVcaHistory() {
+            showVCAHistoryModal();
+        }
+
+        // Withdraw Modal
+        function showWithdrawModal() {
+            const modal = document.getElementById('withdrawModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeWithdrawModal() {
+            document.getElementById('withdrawModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function submitWithdrawRequest() {
+            const amount = document.getElementById('withdrawAmount').value;
+            const bankInfo = document.getElementById('bankInfo').value;
+
+            if (!amount || !bankInfo) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            if (parseInt(amount) < 5000000) {
+                alert('Số tiền rút tối thiểu là 5,000,000 ₫!');
+                return;
+            }
+
+            alert(`✅ Yêu cầu rút tiền đã được gửi!\n\n💰 Số tiền: ${parseInt(amount).toLocaleString('vi-VN')} ₫\n🏦 Thông tin ngân hàng: ${bankInfo}\n📋 Trạng thái: Chờ duyệt\n⏰ Thời gian xử lý: 24-48 giờ\n\n📞 Admin sẽ liên hệ xác nhận trong thời gian sớm nhất.`);
+            closeWithdrawModal();
+        }
+
+        // VCA History Modal
+        function showVCAHistoryModal() {
+            const modal = document.getElementById('vcaHistoryModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            loadVCAHistory();
+        }
+
+        function closeVCAHistoryModal() {
+            document.getElementById('vcaHistoryModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function loadVCAHistory() {
+            const vcaHistory = [
+                { date: '2024-12-15', type: 'Mua thẻ Gold', amount: '+1,800 VCA', balance: '1,800 VCA', status: 'Hoàn thành' },
+                { date: '2024-11-20', type: 'Mua thẻ Silver', amount: '+500 VCA', balance: '2,300 VCA', status: 'Hoàn thành' },
+                { date: '2024-12-01', type: 'Chia sẻ lợi nhuận', amount: '+450 VCA', balance: '2,750 VCA', status: 'Hoàn thành' },
+                { date: '2024-11-15', type: 'Hoa hồng referral', amount: '+320 VCA', balance: '2,430 VCA', status: 'Hoàn thành' },
+                { date: '2024-12-18', type: 'Rút tiền', amount: '-500 VCA', balance: '2,250 VCA', status: 'Chờ duyệt' }
+            ];
+
+            const tbody = document.getElementById('vcaHistoryBody');
+            tbody.innerHTML = '';
+            
+            vcaHistory.forEach(record => {
+                const isPositive = record.amount.startsWith('+');
+                const amountColor = isPositive ? 'text-green-600' : 'text-red-600';
+                const statusColor = record.status === 'Hoàn thành' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${record.date}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${record.type}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium ${amountColor}">${record.amount}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${record.balance}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusColor}">
+                            ${record.status}
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateProfile() {
+            alert('Thông tin cá nhân đã được cập nhật!');
+        }
+
+        function changePassword() {
+            alert('Chức năng đổi mật khẩu đang được phát triển...');
+        }
+
+        function logout() {
+            if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                localStorage.removeItem('userLoginData');
+                window.location.href = '/';
+            }
+        }
+
+        // Navigation functions
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('care-cards-section').classList.add('hidden');
+            document.getElementById('referrals-section').classList.add('hidden');
+            document.getElementById('appointments-section').classList.add('hidden');
+            document.getElementById('support-section').classList.add('hidden');
+
+            // Show selected section
+            document.getElementById(section + '-section').classList.remove('hidden');
+
+            // Update navigation active state
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active', 'text-blue-600', 'border-b-2', 'border-blue-600');
+                link.classList.add('text-gray-600');
+            });
+            
+            const activeLink = document.querySelector(`[onclick="showSection('${section}')"]`);
+            if (activeLink) {
+                activeLink.classList.add('active', 'text-blue-600', 'border-b-2', 'border-blue-600');
+                activeLink.classList.remove('text-gray-600');
+            }
+        }
+
+        // New functions for additional pages
+        function buyCard(cardType) {
+            showBuyNewCardModal(cardType);
+        }
+
+        function showBuyNewCardModal(cardType) {
+            const cardInfo = {
+                'standard': { name: 'Standard Card', price: '2,000,000 ₫', sessions: '12 lượt/2 năm' },
+                'silver': { name: 'Silver Card', price: '5,000,000 ₫', sessions: '15 lượt/2 năm' },
+                'gold': { name: 'Gold Card', price: '18,000,000 ₫', sessions: '18 lượt/2 năm' },
+                'platinum': { name: 'Platinum Card', price: '50,000,000 ₫', sessions: '21 lượt/2 năm' },
+                'diamond': { name: 'Diamond Card', price: '100,000,000 ₫', sessions: '24 lượt/2 năm' }
+            };
+
+            const card = cardInfo[cardType] || cardInfo['standard'];
+            
+            if (confirm(`🛒 Mua ${card.name}?\n\n💰 Giá: ${card.price}\n📅 Quyền lợi: ${card.sessions}\n🎁 Bonus: 8% Referral + 49% Lợi nhuận\n\nBạn có muốn tiếp tục?`)) {
+                // Simulate purchase process
+                alert(`✅ Đã mua ${card.name} thành công!\n\n💰 Số tiền: ${card.price}\n📋 Mã đơn hàng: ORD-${Date.now()}\n📧 Thông tin đã gửi qua email\n\n🚀 Thẻ sẽ được kích hoạt trong 24h!`);
+                
+                // Redirect to homepage for full purchase flow
+                window.location.href = '/';
+            }
+        }
+
+        function copyReferralLink() {
+            const linkInput = document.getElementById('referralLink');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('Đã copy link giới thiệu!');
+        }
+
+        function shareReferral() {
+            showShareReferralModal();
+        }
+
+        function showShareReferralModal() {
+            // Update preview link with actual referral link
+            const referralLink = document.getElementById('referralLink').value;
+            document.getElementById('previewLink').textContent = referralLink;
+            
+            document.getElementById('shareReferralModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareReferralModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function shareToSocial(platform) {
+            const referralLink = document.getElementById('referralLink').value;
+            const shareText = `🎉 Tham gia VCare Global - Hệ thống chăm sóc sức khỏe toàn diện!\n\n💳 Nhận hoa hồng 8% khi mua thẻ chăm sóc\n💰 Chia sẻ lợi nhuận 49% sau thuế\n🏥 Tư vấn sức khỏe chuyên nghiệp\n\n🔗 Đăng ký ngay: ${referralLink}`;
+            
+            let shareUrl = '';
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralLink)}&quote=${encodeURIComponent(shareText)}`;
+                    break;
+                case 'zalo':
+                    shareUrl = `https://zalo.me/share?url=${encodeURIComponent(referralLink)}&title=${encodeURIComponent('VCare Global - Hệ thống chăm sóc sức khỏe')}`;
+                    break;
+                case 'telegram':
+                    shareUrl = `https://t.me/share/url?url=${encodeURIComponent(referralLink)}&text=${encodeURIComponent(shareText)}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(shareText + '\n' + referralLink)}`;
+                    break;
+                case 'email':
+                    shareUrl = `mailto:?subject=${encodeURIComponent('VCare Global - Mời tham gia')}&body=${encodeURIComponent(shareText + '\n\n' + referralLink)}`;
+                    break;
+                case 'sms':
+                    shareUrl = `sms:?body=${encodeURIComponent(shareText + '\n' + referralLink)}`;
+                    break;
+                case 'copy':
+                    navigator.clipboard.writeText(shareText + '\n\n' + referralLink).then(() => {
+                        alert('Đã copy nội dung chia sẻ vào clipboard!');
+                        closeShareModal();
+                    });
+                    return;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+                closeShareModal();
+            }
+        }
+
+        function submitAppointment() {
+            alert('Lịch hẹn đã được đặt thành công! Chúng tôi sẽ liên hệ xác nhận.');
+        }
+
+        // User Type Upgrade Functions
+        function showUpgradeModal(targetType, requiredAmount) {
+            // User type configurations
+            const userTypes = {
+                'card_customer': { name: 'Card Customer', vcaDigitalShareMultiplier: '1.0x', maxout: '2.1x', sessions: '12/năm', inheritance: 'Không' },
+                'vcare_home': { name: 'Vcare Home', vcaDigitalShareMultiplier: '1.0x', maxout: '3.0x', sessions: '15/năm', inheritance: 'Không' },
+                'angel': { name: 'Angel Investor', vcaDigitalShareMultiplier: '2.5x', maxout: '5.0x', sessions: '21/năm', inheritance: 'Có' },
+                'seed': { name: 'Seed Investor', vcaDigitalShareMultiplier: '1.2x', maxout: '4.0x', sessions: '18/năm', inheritance: 'Có' },
+                'founder': { name: 'Founder', vcaDigitalShareMultiplier: '3.0x', maxout: 'Unlimited', sessions: '24/năm', inheritance: 'Có' }
+            };
+
+            // Get current user type (default to card_customer)
+            const currentType = 'card_customer';
+            const currentConfig = userTypes[currentType];
+            const targetConfig = userTypes[targetType];
+
+            // Update modal content
+            document.getElementById('currentTypeName').textContent = currentConfig.name;
+            document.getElementById('currentMultiplier').textContent = currentConfig.vcaDigitalShareMultiplier;
+            document.getElementById('currentMaxout').textContent = currentConfig.maxout;
+            document.getElementById('currentSessions').textContent = currentConfig.sessions;
+
+            document.getElementById('newTypeName').textContent = targetConfig.name;
+            document.getElementById('newMultiplier').textContent = targetConfig.vcaDigitalShareMultiplier;
+            document.getElementById('newMaxout').textContent = targetConfig.maxout;
+            document.getElementById('newSessions').textContent = targetConfig.sessions;
+
+            // Update required amount
+            document.getElementById('requiredAmount').textContent = parseInt(requiredAmount).toLocaleString('vi-VN') + ' ₫';
+
+            // Update benefits
+            document.getElementById('benefit1').textContent = `• VCA Digital Share vcaDigitalShareMultiplier tăng từ ${currentConfig.vcaDigitalShareMultiplier} lên ${targetConfig.vcaDigitalShareMultiplier}`;
+            document.getElementById('benefit2').textContent = `• Maxout limit tăng từ ${currentConfig.maxout} lên ${targetConfig.maxout}`;
+            document.getElementById('benefit3').textContent = `• Số lượt tư vấn tăng từ ${currentConfig.sessions} lên ${targetConfig.sessions}`;
+            document.getElementById('benefit4').textContent = targetConfig.inheritance === 'Có' ? '• Được quyền thừa kế cổ phần' : '• Quyền thừa kế không thay đổi';
+
+            // Store upgrade data
+            window.upgradeData = {
+                targetType: targetType,
+                requiredAmount: requiredAmount,
+                currentType: currentType
+            };
+
+            // Show modal
+            document.getElementById('upgradeModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUpgradeModal() {
+            document.getElementById('upgradeModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function submitUpgradeRequest() {
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+            const paymentProof = document.getElementById('paymentProof').files[0];
+
+            // Validation
+            if (!paymentProof) {
+                alert('Vui lòng upload chứng từ thanh toán!');
+                return;
+            }
+
+            // Create upgrade request data
+            const upgradeRequest = {
+                targetType: window.upgradeData.targetType,
+                requiredAmount: window.upgradeData.requiredAmount,
+                currentType: window.upgradeData.currentType,
+                paymentMethod: paymentMethod,
+                paymentProof: paymentProof.name, // In real app, would upload file
+                requestDate: new Date().toISOString(),
+                status: 'pending'
+            };
+
+            // Simulate API call
+            console.log('Upgrade request:', upgradeRequest);
+
+            // Make API call to server
+            fetch('/api/upgrade-request', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(upgradeRequest)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert(`✅ ${data.message}\n\n💰 Số tiền: ${parseInt(upgradeRequest.requiredAmount).toLocaleString('vi-VN')} ₫\n📋 Mã yêu cầu: ${data.data.requestId}\n📋 Trạng thái: Chờ duyệt\n⏰ Thời gian xử lý: 24-48 giờ\n\n📞 Admin sẽ liên hệ xác nhận trong thời gian sớm nhất.`);
+                } else {
+                    alert(`❌ ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`✅ Yêu cầu nâng cấp lên ${upgradeRequest.targetType.toUpperCase()} đã được gửi!\n\n💰 Số tiền: ${parseInt(upgradeRequest.requiredAmount).toLocaleString('vi-VN')} ₫\n📋 Trạng thái: Chờ duyệt\n⏰ Thời gian xử lý: 24-48 giờ\n\n📞 Admin sẽ liên hệ xác nhận trong thời gian sớm nhất.`);
+            });
+
+            // Close modal
+            closeUpgradeModal();
+        }
+
+        function submitSupport() {
+            alert('Yêu cầu hỗ trợ đã được gửi! Chúng tôi sẽ phản hồi trong 24h.');
+        }
+
+        function toggleFAQ(faqId) {
+            showFAQModal();
+        }
+
+        function showFAQModal() {
+            const modal = document.getElementById('faqModal');
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeFAQModal() {
+            document.getElementById('faqModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleFAQItem(itemId) {
+            const content = document.getElementById(`faq-content-${itemId}`);
+            const icon = document.getElementById(`faq-icon-${itemId}`);
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.textContent = '−';
+            } else {
+                content.classList.add('hidden');
+                icon.textContent = '+';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            console.log('VCare Global User Dashboard loaded successfully!');
+        });
+    </script>
+</body>
+</html>

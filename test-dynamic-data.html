@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Dynamic Data - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Dynamic Data - Phúc An Dương</h1>
+        
+        <!-- API Test Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">API Test</h2>
+            <div class="flex gap-4 mb-4">
+                <button onclick="testGetHomeStats()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-play mr-2"></i>Test GET /
+                </button>
+                <button onclick="testGetRegisterInfo()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-info-circle mr-2"></i>Test GET /api/register/info
+                </button>
+                <button onclick="testPostRegister()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-paper-plane mr-2"></i>Test POST /api/register
+                </button>
+            </div>
+            <div id="api-results" class="bg-gray-100 p-4 rounded-md min-h-[200px]">
+                <p class="text-gray-500">Chưa có kết quả test...</p>
+            </div>
+        </div>
+
+        <!-- Dynamic Statistics Display -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Hiển thị dữ liệu động</h2>
+            
+            <!-- Main Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold mb-2" id="activeCards">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
+                    </div>
+                    <div class="text-blue-100">Thẻ đang hoạt động</div>
+                </div>
+                <div class="bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold mb-2" id="totalBranches">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
+                    </div>
+                    <div class="text-green-100">Chi nhánh liên kết</div>
+                </div>
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold mb-2" id="profitSharing">
+                        <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
+                    </div>
+                    <div class="text-purple-100">Minh bạch quyền lợi</div>
+                </div>
+            </div>
+
+            <!-- Additional Statistics -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="bg-orange-100 p-2 rounded-full mr-3">
+                            <i class="fas fa-users text-orange-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900" id="totalUsers">-</div>
+                            <div class="text-sm text-gray-600">Tổng người dùng</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="bg-green-100 p-2 rounded-full mr-3">
+                            <i class="fas fa-coins text-green-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900" id="totalPadToken">-</div>
+                            <div class="text-sm text-gray-600">PAD Token</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 p-2 rounded-full mr-3">
+                            <i class="fas fa-chart-line text-blue-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900" id="monthlyGrowth">-</div>
+                            <div class="text-sm text-gray-600">Tăng trưởng (%)</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center">
+                        <div class="bg-red-100 p-2 rounded-full mr-3">
+                            <i class="fas fa-dollar-sign text-red-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-xl font-bold text-gray-900" id="totalRevenue">-</div>
+                            <div class="text-sm text-gray-600">Doanh thu</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Updated -->
+            <div class="mt-6 text-center text-sm text-gray-500" id="lastUpdated">
+                <i class="fas fa-clock mr-2"></i>Đang tải dữ liệu...
+            </div>
+        </div>
+
+        <!-- Card Types Display -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Loại thẻ có sẵn</h2>
+            <div id="cardTypesDisplay" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="text-center text-gray-500">
+                    <i class="fas fa-spinner fa-spin mr-2"></i>Đang tải...
+                </div>
+            </div>
+        </div>
+
+        <!-- Investment Roles Display -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Vai trò đầu tư</h2>
+            <div id="investmentRolesDisplay" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="text-center text-gray-500">
+                    <i class="fas fa-spinner fa-spin mr-2"></i>Đang tải...
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        async function testGetHomeStats() {
+            try {
+                const response = await fetch('/');
+                const data = await response.json();
+                
+                document.getElementById('api-results').innerHTML = `
+                    <h3 class="font-bold text-green-600 mb-2">GET / - Success</h3>
+                    <pre class="text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>
+                `;
+                
+                // Update display with real data
+                updateStatisticsDisplay(data);
+            } catch (error) {
+                document.getElementById('api-results').innerHTML = `
+                    <h3 class="font-bold text-red-600 mb-2">GET / - Error</h3>
+                    <p class="text-red-600">${error.message}</p>
+                `;
+            }
+        }
+
+        async function testGetRegisterInfo() {
+            try {
+                const response = await fetch('/api/register/info');
+                const data = await response.json();
+                
+                document.getElementById('api-results').innerHTML = `
+                    <h3 class="font-bold text-green-600 mb-2">GET /api/register/info - Success</h3>
+                    <pre class="text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('api-results').innerHTML = `
+                    <h3 class="font-bold text-red-600 mb-2">GET /api/register/info - Error</h3>
+                    <p class="text-red-600">${error.message}</p>
+                `;
+            }
+        }
+
+        async function testPostRegister() {
+            const sampleData = {
+                email: "test@example.com",
+                phone: "0123456789",
+                name: "Nguyễn Văn Test",
+                cardType: "Diamond",
+                roles: ["Cổ đông", "Angel"],
+                investmentAmount: 150000000,
+                referralCode: "TEST123"
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(sampleData)
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('api-results').innerHTML = `
+                    <h3 class="font-bold text-green-600 mb-2">POST /api/register - Success</h3>
+                    <pre class="text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('api-results').innerHTML = `
+                    <h3 class="font-bold text-red-600 mb-2">POST /api/register - Error</h3>
+                    <p class="text-red-600">${error.message}</p>
+                `;
+            }
+        }
+
+        // Update statistics display
+        function updateStatisticsDisplay(data) {
+            // Main statistics
+            if (data.activeCards !== undefined) {
+                document.getElementById('activeCards').innerHTML = `${data.activeCards}+`;
+            }
+            
+            if (data.totalBranches !== undefined) {
+                document.getElementById('totalBranches').innerHTML = `${data.totalBranches}+`;
+            }
+            
+            if (data.profitSharingPercentage !== undefined) {
+                document.getElementById('profitSharing').innerHTML = `${data.profitSharingPercentage}%`;
+            }
+
+            // Additional statistics
+            if (data.totalUsers !== undefined) {
+                document.getElementById('totalUsers').textContent = formatNumber(data.totalUsers);
+            }
+            
+            if (data.totalPadTokenDistributed !== undefined) {
+                document.getElementById('totalPadToken').textContent = formatNumber(data.totalPadTokenDistributed);
+            }
+            
+            if (data.monthlyGrowth !== undefined) {
+                document.getElementById('monthlyGrowth').textContent = `+${data.monthlyGrowth}%`;
+            }
+            
+            if (data.totalRevenue !== undefined) {
+                document.getElementById('totalRevenue').textContent = formatCurrency(data.totalRevenue);
+            }
+
+            // Last updated
+            if (data.lastUpdated) {
+                const lastUpdated = new Date(data.lastUpdated);
+                document.getElementById('lastUpdated').innerHTML = `
+                    <i class="fas fa-clock mr-2"></i>
+                    Cập nhật lần cuối: ${lastUpdated.toLocaleString('vi-VN')}
+                `;
+            }
+
+            // Card types
+            if (data.cardTypes) {
+                const cardTypesHtml = data.cardTypes.map(card => `
+                    <div class="border border-gray-200 rounded-lg p-4 text-center">
+                        <h3 class="font-semibold text-gray-900">${card.name}</h3>
+                        <p class="text-blue-600 font-bold">${formatCurrency(card.price)}</p>
+                        <p class="text-sm text-gray-600">${card.sessions} lượt tư vấn</p>
+                        <p class="text-xs text-green-600">${card.padToken} PAD Token</p>
+                        <p class="text-xs text-gray-500">Số lượng: ${card.count}</p>
+                    </div>
+                `).join('');
+                
+                document.getElementById('cardTypesDisplay').innerHTML = cardTypesHtml;
+            }
+
+            // Investment roles
+            if (data.investmentRoles) {
+                const rolesHtml = data.investmentRoles.map(role => `
+                    <div class="border border-gray-200 rounded-lg p-4 text-center">
+                        <h3 class="font-semibold text-gray-900">${role.name}</h3>
+                        <p class="text-blue-600 font-bold">Từ ${formatCurrency(role.minAmount)}</p>
+                        <p class="text-sm text-gray-600">${role.description}</p>
+                        <p class="text-xs text-green-600">${role.padTokenMultiplier}x PAD Token</p>
+                        <p class="text-xs text-gray-500">Số lượng: ${role.count}</p>
+                    </div>
+                `).join('');
+                
+                document.getElementById('investmentRolesDisplay').innerHTML = rolesHtml;
+            }
+        }
+
+        // Helper functions
+        function formatNumber(num) {
+            if (num === undefined || num === null) return '-';
+            return new Intl.NumberFormat('vi-VN').format(num);
+        }
+
+        function formatCurrency(amount) {
+            if (amount === undefined || amount === null) return '-';
+            if (amount >= 1000000000) {
+                return `${(amount / 1000000000).toFixed(1)}B VNĐ`;
+            } else if (amount >= 1000000) {
+                return `${(amount / 1000000).toFixed(1)}M VNĐ`;
+            } else if (amount >= 1000) {
+                return `${(amount / 1000).toFixed(1)}K VNĐ`;
+            } else {
+                return `${formatNumber(amount)} VNĐ`;
+            }
+        }
+
+        // Auto-load data on page load
+        window.addEventListener('load', () => {
+            testGetHomeStats();
+        });
+    </script>
+</body>
+</html>
+

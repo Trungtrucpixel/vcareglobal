@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Frontend Only - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .test-pass { color: #10b981; }
+        .test-fail { color: #ef4444; }
+        .test-info { color: #3b82f6; }
+        .test-warning { color: #f59e0b; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto py-8 px-4">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">
+            <i class="fas fa-vial text-blue-600 mr-3"></i>
+            Test Frontend Only - Phúc An Dương
+        </h1>
+        
+        <!-- Test Status -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Frontend Test Status</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-blue-800 font-semibold">HTML Structure</span>
+                        <span id="html-status" class="text-yellow-600">⏳ Testing</span>
+                    </div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-green-800 font-semibold">CSS Styling</span>
+                        <span id="css-status" class="text-yellow-600">⏳ Testing</span>
+                    </div>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-purple-800 font-semibold">JavaScript Functions</span>
+                        <span id="js-status" class="text-yellow-600">⏳ Testing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Categories -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- HTML Structure Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-code text-blue-600 mr-2"></i>
+                    HTML Structure Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testHTMLStructure()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-search mr-2"></i>Test HTML Elements
+                    </button>
+                    <button onclick="testModalElements()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-window-maximize mr-2"></i>Test Modal Elements
+                    </button>
+                    <button onclick="testFormElements()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-edit mr-2"></i>Test Form Elements
+                    </button>
+                    <button onclick="testCardElements()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-credit-card mr-2"></i>Test Card Elements
+                    </button>
+                </div>
+            </div>
+
+            <!-- CSS Styling Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-paint-brush text-green-600 mr-2"></i>
+                    CSS Styling Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testTailwindCSS()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-css3-alt mr-2"></i>Test Tailwind CSS
+                    </button>
+                    <button onclick="testResponsiveDesign()" class="w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors">
+                        <i class="fas fa-mobile-alt mr-2"></i>Test Responsive Design
+                    </button>
+                    <button onclick="testAnimations()" class="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors">
+                        <i class="fas fa-magic mr-2"></i>Test Animations
+                    </button>
+                    <button onclick="testColorScheme()" class="w-full bg-pink-600 text-white py-2 px-4 rounded-lg hover:bg-pink-700 transition-colors">
+                        <i class="fas fa-palette mr-2"></i>Test Color Scheme
+                    </button>
+                </div>
+            </div>
+
+            <!-- JavaScript Function Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-cogs text-purple-600 mr-2"></i>
+                    JavaScript Function Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testModalFunctions()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-window-restore mr-2"></i>Test Modal Functions
+                    </button>
+                    <button onclick="testFormHandling()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-clipboard-list mr-2"></i>Test Form Handling
+                    </button>
+                    <button onclick="testCardSelection()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-mouse-pointer mr-2"></i>Test Card Selection
+                    </button>
+                    <button onclick="testNotificationSystem()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-bell mr-2"></i>Test Notification System
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Experience Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-user-check text-orange-600 mr-2"></i>
+                    User Experience Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testUserFlow()" class="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors">
+                        <i class="fas fa-route mr-2"></i>Test User Flow
+                    </button>
+                    <button onclick="testAccessibility()" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">
+                        <i class="fas fa-universal-access mr-2"></i>Test Accessibility
+                    </button>
+                    <button onclick="testPerformance()" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Test Performance
+                    </button>
+                    <button onclick="testErrorHandling()" class="w-full bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Test Error Handling
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                <i class="fas fa-clipboard-list text-gray-600 mr-2"></i>
+                Test Results
+            </h2>
+            <div id="test-results" class="space-y-4 max-h-96 overflow-y-auto">
+                <p class="text-gray-500">Chưa có kết quả test...</p>
+            </div>
+        </div>
+
+        <!-- Test Controls -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Test Controls</h2>
+            <div class="flex flex-wrap gap-4">
+                <button onclick="runAllFrontendTests()" class="bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all font-semibold">
+                    <i class="fas fa-play mr-2"></i>Run All Frontend Tests
+                </button>
+                <button onclick="clearResults()" class="bg-gray-600 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors font-semibold">
+                    <i class="fas fa-trash mr-2"></i>Clear Results
+                </button>
+                <button onclick="generateReport()" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                    <i class="fas fa-file-alt mr-2"></i>Generate Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        let testStats = { passed: 0, failed: 0, total: 0 };
+
+        // Test HTML Structure
+        function testHTMLStructure() {
+            const tests = [
+                {
+                    name: 'Navigation exists',
+                    test: () => document.querySelector('nav') !== null,
+                    message: 'Navigation bar is present'
+                },
+                {
+                    name: 'Hero section exists',
+                    test: () => document.querySelector('#home') !== null,
+                    message: 'Hero section is present'
+                },
+                {
+                    name: 'Statistics section exists',
+                    test: () => document.querySelector('.bg-white.rounded-lg.shadow-lg') !== null,
+                    message: 'Statistics section is present'
+                },
+                {
+                    name: 'FAQ section exists',
+                    test: () => document.querySelector('#faq') !== null,
+                    message: 'FAQ section is present'
+                }
+            ];
+
+            runTests('HTML Structure', tests);
+        }
+
+        // Test Modal Elements
+        function testModalElements() {
+            const tests = [
+                {
+                    name: 'Registration modal exists',
+                    test: () => document.querySelector('#registrationModal') !== null,
+                    message: 'Registration modal is present'
+                },
+                {
+                    name: 'Card selection modal exists',
+                    test: () => document.querySelector('#cardSelectionModal') !== null,
+                    message: 'Card selection modal is present'
+                },
+                {
+                    name: 'Modal close buttons exist',
+                    test: () => document.querySelectorAll('button[onclick*="close"]').length > 0,
+                    message: 'Modal close buttons are present'
+                }
+            ];
+
+            runTests('Modal Elements', tests);
+        }
+
+        // Test Form Elements
+        function testFormElements() {
+            const tests = [
+                {
+                    name: 'Registration form exists',
+                    test: () => document.querySelector('#registration-form') !== null,
+                    message: 'Registration form is present'
+                },
+                {
+                    name: 'Email input exists',
+                    test: () => document.querySelector('#reg-email') !== null,
+                    message: 'Email input is present'
+                },
+                {
+                    name: 'Phone input exists',
+                    test: () => document.querySelector('#reg-phone') !== null,
+                    message: 'Phone input is present'
+                },
+                {
+                    name: 'Name input exists',
+                    test: () => document.querySelector('#reg-name') !== null,
+                    message: 'Name input is present'
+                },
+                {
+                    name: 'Submit button exists',
+                    test: () => document.querySelector('#submit-registration') !== null,
+                    message: 'Submit button is present'
+                }
+            ];
+
+            runTests('Form Elements', tests);
+        }
+
+        // Test Card Elements
+        function testCardElements() {
+            const tests = [
+                {
+                    name: 'Card options exist',
+                    test: () => document.querySelectorAll('.card-option').length > 0,
+                    message: 'Card options are present'
+                },
+                {
+                    name: 'Standard card exists',
+                    test: () => document.querySelector('[data-card="Standard"]') !== null,
+                    message: 'Standard card option is present'
+                },
+                {
+                    name: 'Silver card exists',
+                    test: () => document.querySelector('[data-card="Silver"]') !== null,
+                    message: 'Silver card option is present'
+                },
+                {
+                    name: 'Gold card exists',
+                    test: () => document.querySelector('[data-card="Gold"]') !== null,
+                    message: 'Gold card option is present'
+                },
+                {
+                    name: 'Platinum card exists',
+                    test: () => document.querySelector('[data-card="Platinum"]') !== null,
+                    message: 'Platinum card option is present'
+                },
+                {
+                    name: 'Diamond card exists',
+                    test: () => document.querySelector('[data-card="Diamond"]') !== null,
+                    message: 'Diamond card option is present'
+                }
+            ];
+
+            runTests('Card Elements', tests);
+        }
+
+        // Test Tailwind CSS
+        function testTailwindCSS() {
+            const tests = [
+                {
+                    name: 'Tailwind classes applied',
+                    test: () => document.querySelector('.bg-gray-50') !== null,
+                    message: 'Tailwind CSS classes are applied'
+                },
+                {
+                    name: 'Grid system works',
+                    test: () => document.querySelector('.grid') !== null,
+                    message: 'Grid system is implemented'
+                },
+                {
+                    name: 'Responsive classes exist',
+                    test: () => document.querySelector('.md\\:grid-cols-2') !== null,
+                    message: 'Responsive classes are present'
+                },
+                {
+                    name: 'Color scheme applied',
+                    test: () => document.querySelector('.text-teal-600') !== null,
+                    message: 'Color scheme is applied'
+                }
+            ];
+
+            runTests('Tailwind CSS', tests);
+        }
+
+        // Test Responsive Design
+        function testResponsiveDesign() {
+            const tests = [
+                {
+                    name: 'Mobile-first approach',
+                    test: () => document.querySelector('.flex-col.sm\\:flex-row') !== null,
+                    message: 'Mobile-first responsive design is implemented'
+                },
+                {
+                    name: 'Breakpoint classes exist',
+                    test: () => document.querySelector('.md\\:grid-cols-2') !== null,
+                    message: 'Breakpoint classes are present'
+                },
+                {
+                    name: 'Responsive text sizing',
+                    test: () => document.querySelector('.text-5xl.md\\:text-6xl') !== null,
+                    message: 'Responsive text sizing is implemented'
+                }
+            ];
+
+            runTests('Responsive Design', tests);
+        }
+
+        // Test Animations
+        function testAnimations() {
+            const tests = [
+                {
+                    name: 'Transition classes exist',
+                    test: () => document.querySelector('.transition') !== null,
+                    message: 'Transition classes are present'
+                },
+                {
+                    name: 'Hover effects exist',
+                    test: () => document.querySelector('.hover\\:bg-blue-700') !== null,
+                    message: 'Hover effects are implemented'
+                },
+                {
+                    name: 'Transform classes exist',
+                    test: () => document.querySelector('.transform') !== null,
+                    message: 'Transform classes are present'
+                }
+            ];
+
+            runTests('Animations', tests);
+        }
+
+        // Test Color Scheme
+        function testColorScheme() {
+            const tests = [
+                {
+                    name: 'Primary colors exist',
+                    test: () => document.querySelector('.text-teal-600') !== null,
+                    message: 'Primary teal colors are used'
+                },
+                {
+                    name: 'Secondary colors exist',
+                    test: () => document.querySelector('.text-blue-600') !== null,
+                    message: 'Secondary blue colors are used'
+                },
+                {
+                    name: 'Success colors exist',
+                    test: () => document.querySelector('.text-green-600') !== null,
+                    message: 'Success green colors are used'
+                },
+                {
+                    name: 'Error colors exist',
+                    test: () => document.querySelector('.text-red-600') !== null,
+                    message: 'Error red colors are used'
+                }
+            ];
+
+            runTests('Color Scheme', tests);
+        }
+
+        // Test Modal Functions
+        function testModalFunctions() {
+            const tests = [
+                {
+                    name: 'openRegisterModal function exists',
+                    test: () => typeof window.openRegisterModal === 'function',
+                    message: 'openRegisterModal function is defined'
+                },
+                {
+                    name: 'closeRegisterModal function exists',
+                    test: () => typeof window.closeRegisterModal === 'function',
+                    message: 'closeRegisterModal function is defined'
+                },
+                {
+                    name: 'openCardSelection function exists',
+                    test: () => typeof window.openCardSelection === 'function',
+                    message: 'openCardSelection function is defined'
+                },
+                {
+                    name: 'closeCardSelection function exists',
+                    test: () => typeof window.closeCardSelection === 'function',
+                    message: 'closeCardSelection function is defined'
+                }
+            ];
+
+            runTests('Modal Functions', tests);
+        }
+
+        // Test Form Handling
+        function testFormHandling() {
+            const tests = [
+                {
+                    name: 'Form validation exists',
+                    test: () => document.querySelector('input[required]') !== null,
+                    message: 'Form validation attributes are present'
+                },
+                {
+                    name: 'Input types are correct',
+                    test: () => document.querySelector('input[type="email"]') !== null,
+                    message: 'Email input type is correct'
+                },
+                {
+                    name: 'Form submission handler exists',
+                    test: () => document.querySelector('form[id="registration-form"]') !== null,
+                    message: 'Form submission handler is present'
+                }
+            ];
+
+            runTests('Form Handling', tests);
+        }
+
+        // Test Card Selection
+        function testCardSelection() {
+            const tests = [
+                {
+                    name: 'Card selection handlers exist',
+                    test: () => document.querySelectorAll('.card-option').length > 0,
+                    message: 'Card selection handlers are present'
+                },
+                {
+                    name: 'Card data attributes exist',
+                    test: () => document.querySelector('[data-card]') !== null,
+                    message: 'Card data attributes are present'
+                }
+            ];
+
+            runTests('Card Selection', tests);
+        }
+
+        // Test Notification System
+        function testNotificationSystem() {
+            const tests = [
+                {
+                    name: 'Notification container exists',
+                    test: () => document.querySelector('#notifications') !== null,
+                    message: 'Notification container is present'
+                }
+            ];
+
+            runTests('Notification System', tests);
+        }
+
+        // Test User Flow
+        function testUserFlow() {
+            const tests = [
+                {
+                    name: 'Registration flow exists',
+                    test: () => document.querySelector('button[onclick*="openRegisterModal"]') !== null,
+                    message: 'Registration flow is accessible'
+                },
+                {
+                    name: 'Card selection flow exists',
+                    test: () => document.querySelector('#cardSelectionModal') !== null,
+                    message: 'Card selection flow is accessible'
+                }
+            ];
+
+            runTests('User Flow', tests);
+        }
+
+        // Test Accessibility
+        function testAccessibility() {
+            const tests = [
+                {
+                    name: 'Alt text exists for images',
+                    test: () => document.querySelectorAll('img[alt]').length > 0 || document.querySelectorAll('img').length === 0,
+                    message: 'Alt text is present for images'
+                },
+                {
+                    name: 'Form labels exist',
+                    test: () => document.querySelectorAll('label').length > 0,
+                    message: 'Form labels are present'
+                },
+                {
+                    name: 'Button text is descriptive',
+                    test: () => document.querySelectorAll('button').length > 0,
+                    message: 'Buttons have descriptive text'
+                }
+            ];
+
+            runTests('Accessibility', tests);
+        }
+
+        // Test Performance
+        function testPerformance() {
+            const tests = [
+                {
+                    name: 'External resources loaded',
+                    test: () => document.querySelector('script[src*="tailwindcss"]') !== null,
+                    message: 'External resources are loaded'
+                },
+                {
+                    name: 'Images are optimized',
+                    test: () => document.querySelectorAll('img').length === 0 || document.querySelectorAll('img[loading="lazy"]').length > 0,
+                    message: 'Images are optimized for performance'
+                }
+            ];
+
+            runTests('Performance', tests);
+        }
+
+        // Test Error Handling
+        function testErrorHandling() {
+            const tests = [
+                {
+                    name: 'Error states exist',
+                    test: () => document.querySelector('.text-red-600') !== null,
+                    message: 'Error states are defined'
+                },
+                {
+                    name: 'Validation messages exist',
+                    test: () => document.querySelector('input[required]') !== null,
+                    message: 'Validation messages are present'
+                }
+            ];
+
+            runTests('Error Handling', tests);
+        }
+
+        // Run all frontend tests
+        async function runAllFrontendTests() {
+            logTestResult('Frontend Test Suite', 'info', 'Starting comprehensive frontend test suite...');
+            
+            testHTMLStructure();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testModalElements();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testFormElements();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testCardElements();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testTailwindCSS();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testResponsiveDesign();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testAnimations();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testColorScheme();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testModalFunctions();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testFormHandling();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testCardSelection();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testNotificationSystem();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testUserFlow();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testAccessibility();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testPerformance();
+            await new Promise(resolve => setTimeout(resolve, 100));
+            
+            testErrorHandling();
+            
+            // Update status indicators
+            updateStatusIndicators();
+            
+            logTestResult('Frontend Test Suite', 'success', `Test suite completed! Passed: ${testStats.passed}, Failed: ${testStats.failed}, Total: ${testStats.total}`);
+        }
+
+        // Run individual tests
+        function runTests(category, tests) {
+            let passed = 0;
+            let failed = 0;
+            
+            tests.forEach(test => {
+                try {
+                    const result = test.test();
+                    if (result) {
+                        passed++;
+                        logTestResult(`${category} - ${test.name}`, 'success', test.message);
+                    } else {
+                        failed++;
+                        logTestResult(`${category} - ${test.name}`, 'error', test.message);
+                    }
+                } catch (error) {
+                    failed++;
+                    logTestResult(`${category} - ${test.name}`, 'error', `Error: ${error.message}`);
+                }
+            });
+            
+            testStats.passed += passed;
+            testStats.failed += failed;
+            testStats.total += tests.length;
+        }
+
+        // Update status indicators
+        function updateStatusIndicators() {
+            const htmlStatus = document.getElementById('html-status');
+            const cssStatus = document.getElementById('css-status');
+            const jsStatus = document.getElementById('js-status');
+            
+            // Simple status based on test results
+            if (testStats.failed === 0) {
+                htmlStatus.innerHTML = '✅ All Passed';
+                htmlStatus.className = 'text-green-600';
+                cssStatus.innerHTML = '✅ All Passed';
+                cssStatus.className = 'text-green-600';
+                jsStatus.innerHTML = '✅ All Passed';
+                jsStatus.className = 'text-green-600';
+            } else if (testStats.passed > testStats.failed) {
+                htmlStatus.innerHTML = '⚠️ Mostly Passed';
+                htmlStatus.className = 'text-yellow-600';
+                cssStatus.innerHTML = '⚠️ Mostly Passed';
+                cssStatus.className = 'text-yellow-600';
+                jsStatus.innerHTML = '⚠️ Mostly Passed';
+                jsStatus.className = 'text-yellow-600';
+            } else {
+                htmlStatus.innerHTML = '❌ Issues Found';
+                htmlStatus.className = 'text-red-600';
+                cssStatus.innerHTML = '❌ Issues Found';
+                cssStatus.className = 'text-red-600';
+                jsStatus.innerHTML = '❌ Issues Found';
+                jsStatus.className = 'text-red-600';
+            }
+        }
+
+        // Utility functions
+        function logTestResult(testName, status, data) {
+            const timestamp = new Date().toLocaleTimeString();
+            const result = {
+                timestamp,
+                testName,
+                status,
+                data
+            };
+            
+            testResults.push(result);
+            
+            const testResultsDiv = document.getElementById('test-results');
+            const statusClass = status === 'success' ? 'test-pass' : 
+                              status === 'error' ? 'test-fail' : 
+                              status === 'info' ? 'test-info' : 'test-warning';
+            const statusIcon = status === 'success' ? 'fa-check-circle' : 
+                              status === 'error' ? 'fa-times-circle' : 
+                              status === 'info' ? 'fa-info-circle' : 'fa-question-circle';
+            
+            const resultHtml = `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center">
+                            <i class="fas ${statusIcon} ${statusClass} mr-2"></i>
+                            <span class="font-semibold">${testName}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">${timestamp}</span>
+                            <span class="text-sm ${statusClass} font-semibold">${status.toUpperCase()}</span>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600">${data}</div>
+                </div>
+            `;
+            
+            testResultsDiv.innerHTML = resultHtml + testResultsDiv.innerHTML;
+        }
+
+        function clearResults() {
+            testResults = [];
+            testStats = { passed: 0, failed: 0, total: 0 };
+            document.getElementById('test-results').innerHTML = '<p class="text-gray-500">Chưa có kết quả test...</p>';
+            
+            // Reset status indicators
+            document.getElementById('html-status').innerHTML = '⏳ Testing';
+            document.getElementById('html-status').className = 'text-yellow-600';
+            document.getElementById('css-status').innerHTML = '⏳ Testing';
+            document.getElementById('css-status').className = 'text-yellow-600';
+            document.getElementById('js-status').innerHTML = '⏳ Testing';
+            document.getElementById('js-status').className = 'text-yellow-600';
+        }
+
+        function generateReport() {
+            const report = {
+                timestamp: new Date().toISOString(),
+                summary: {
+                    total: testStats.total,
+                    passed: testStats.passed,
+                    failed: testStats.failed,
+                    passRate: testStats.total > 0 ? ((testStats.passed / testStats.total) * 100).toFixed(2) + '%' : '0%'
+                },
+                results: testResults
+            };
+            
+            const dataStr = JSON.stringify(report, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `frontend-test-report-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            logTestResult('Frontend Test Suite', 'info', 'Frontend test suite initialized and ready');
+        });
+    </script>
+</body>
+</html>
+

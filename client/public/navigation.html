@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation - Phúc An Đường</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <style>
+        .navigation {
+            background: linear-gradient(135deg, #43B0A5 0%, #2D7D7A 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            color: white;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 2rem;
+        }
+
+        .nav-item {
+            position: relative;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-roles {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .role-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .pad-token-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .pad-token-amount {
+            font-weight: 600;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .pad-token-value {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .dropdown-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            padding: 0.5rem 0;
+            display: none;
+            z-index: 1001;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #374151;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f3f4f6;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background-color: #e5e7eb;
+            margin: 0.5rem 0;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #2D7D7A;
+                flex-direction: column;
+                padding: 1rem;
+                gap: 0.5rem;
+            }
+
+            .nav-menu.show {
+                display: flex;
+            }
+
+            .mobile-menu-toggle {
+                display: block;
+            }
+
+            .user-info {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .pad-token-info {
+                font-size: 0.8rem;
+                padding: 0.25rem 0.75rem;
+            }
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navigation">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                🏥 Phúc An Đường
+            </a>
+
+            <ul class="nav-menu" id="navMenu">
+                <li class="nav-item">
+                    <a href="/dashboard" class="nav-link" data-page="dashboard">
+                        📊 Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/cards" class="nav-link" data-page="cards">
+                        💳 Thẻ
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/branches" class="nav-link" data-page="branches">
+                        🏢 Chi nhánh
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/staff" class="nav-link" data-page="staff">
+                        👥 Nhân viên
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/cash-flow" class="nav-link" data-page="cash-flow">
+                        💰 Dòng tiền
+                    </a>
+                </li>
+                <li class="nav-item" id="adminTab" style="display: none;">
+                    <a href="/admin" class="nav-link" data-page="admin">
+                        ⚙️ Quản trị
+                    </a>
+                </li>
+            </ul>
+
+            <div class="user-info">
+                <div class="pad-token-info" id="padTokenInfo">
+                    <span class="loading-spinner" id="padTokenSpinner"></span>
+                    <span id="padTokenAmount" style="display: none;">0 PAD</span>
+                    <span class="pad-token-value" id="padTokenValue" style="display: none;">0 VNĐ</span>
+                </div>
+
+                <div class="user-details" id="userDetails" style="display: none;">
+                    <div class="user-name" id="userName">Người dùng</div>
+                    <div class="user-roles" id="userRoles"></div>
+                </div>
+
+                <div class="dropdown">
+                    <button class="dropdown-toggle" id="userDropdown">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                    </button>
+                    <div class="dropdown-menu" id="userDropdownMenu">
+                        <div class="dropdown-item" id="userProfile">
+                            👤 Thông tin cá nhân
+                        </div>
+                        <div class="dropdown-item" id="userSettings">
+                            ⚙️ Cài đặt
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-item" id="logoutBtn">
+                            🚪 Đăng xuất
+                        </div>
+                    </div>
+                </div>
+
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    ☰
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        class NavigationManager {
+            constructor() {
+                this.currentUser = null;
+                this.init();
+            }
+
+            init() {
+                this.setupEventListeners();
+                this.loadUserInfo();
+                this.setupRoleBasedNavigation();
+            }
+
+            setupEventListeners() {
+                // User dropdown
+                const userDropdown = document.getElementById('userDropdown');
+                const userDropdownMenu = document.getElementById('userDropdownMenu');
+                
+                userDropdown.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    userDropdownMenu.classList.toggle('show');
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!userDropdown.contains(e.target)) {
+                        userDropdownMenu.classList.remove('show');
+                    }
+                });
+
+                // Mobile menu toggle
+                const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+                const navMenu = document.getElementById('navMenu');
+                
+                mobileMenuToggle.addEventListener('click', () => {
+                    navMenu.classList.toggle('show');
+                });
+
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    this.logout();
+                });
+
+                // Navigation links
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const page = link.dataset.page;
+                        this.navigateToPage(page);
+                    });
+                });
+            }
+
+            async loadUserInfo() {
+                try {
+                    const response = await fetch('/api/user');
+                    if (response.ok) {
+                        this.currentUser = await response.json();
+                        this.updateUserDisplay();
+                        this.updatePadTokenDisplay();
+                    } else {
+                        this.showLoginPrompt();
+                    }
+                } catch (error) {
+                    console.error('Error loading user info:', error);
+                    this.showLoginPrompt();
+                }
+            }
+
+            updateUserDisplay() {
+                if (!this.currentUser) return;
+
+                const userName = document.getElementById('userName');
+                const userAvatar = document.getElementById('userAvatar');
+                const userRoles = document.getElementById('userRoles');
+                const userDetails = document.getElementById('userDetails');
+
+                userName.textContent = this.currentUser.name || this.currentUser.email;
+                userAvatar.textContent = (this.currentUser.name || this.currentUser.email).charAt(0).toUpperCase();
+                userDetails.style.display = 'flex';
+
+                // Update roles display
+                userRoles.innerHTML = '';
+                const roles = this.currentUser.roles || [this.currentUser.role];
+                roles.forEach(role => {
+                    const roleName = typeof role === 'object' ? role.name : role;
+                    const roleBadge = document.createElement('span');
+                    roleBadge.className = 'role-badge';
+                    roleBadge.textContent = this.getRoleDisplayName(roleName);
+                    userRoles.appendChild(roleBadge);
+                });
+            }
+
+            updatePadTokenDisplay() {
+                if (!this.currentUser) return;
+
+                const padTokenAmount = document.getElementById('padTokenAmount');
+                const padTokenValue = document.getElementById('padTokenValue');
+                const padTokenSpinner = document.getElementById('padTokenSpinner');
+
+                const padToken = this.currentUser.padToken || 0;
+                const padTokenValueVND = padToken * 10000; // 1 PAD = 10,000 VNĐ
+
+                padTokenAmount.textContent = `${padToken.toLocaleString()} PAD`;
+                padTokenValue.textContent = `${padTokenValueVND.toLocaleString('vi-VN')} VNĐ`;
+
+                padTokenSpinner.style.display = 'none';
+                padTokenAmount.style.display = 'inline';
+                padTokenValue.style.display = 'inline';
+            }
+
+            getRoleDisplayName(role) {
+                const roleNames = {
+                    'admin': 'Quản trị viên',
+                    'accountant': 'Kế toán',
+                    'branch': 'Chi nhánh',
+                    'staff': 'Nhân viên',
+                    'customer': 'Khách hàng',
+                    'shareholder': 'Cổ đông',
+                    'sang_lap': 'Sáng lập',
+                    'thien_than': 'Thiên thần',
+                    'phat_trien': 'Phát triển',
+                    'dong_hanh': 'Đồng hành',
+                    'gop_tai_san': 'Góp tài sản',
+                    'sweat_equity': 'Sweat Equity'
+                };
+                return roleNames[role] || role;
+            }
+
+            setupRoleBasedNavigation() {
+                if (!this.currentUser) return;
+
+                const roles = this.currentUser.roles || [this.currentUser.role];
+                const roleNames = roles.map(r => typeof r === 'object' ? r.name : r);
+
+                // Show/hide admin tab based on roles
+                const adminTab = document.getElementById('adminTab');
+                if (roleNames.includes('admin') || roleNames.includes('accountant')) {
+                    adminTab.style.display = 'block';
+                }
+
+                // Update active navigation based on current page
+                this.updateActiveNavigation();
+            }
+
+            updateActiveNavigation() {
+                const currentPage = window.location.pathname.split('/')[1] || 'dashboard';
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.dataset.page === currentPage) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+
+            navigateToPage(page) {
+                // Close mobile menu
+                document.getElementById('navMenu').classList.remove('show');
+                
+                // Navigate to page
+                window.location.href = `/${page}`;
+            }
+
+            async logout() {
+                try {
+                    await fetch('/api/logout', { method: 'POST' });
+                    window.location.href = '/login';
+                } catch (error) {
+                    console.error('Logout error:', error);
+                    // Force redirect even if logout fails
+                    window.location.href = '/login';
+                }
+            }
+
+            showLoginPrompt() {
+                // Hide user info and show login prompt
+                document.getElementById('userDetails').style.display = 'none';
+                document.getElementById('padTokenInfo').style.display = 'none';
+                
+                // You could show a login button here
+                console.log('User not authenticated');
+            }
+
+            // Method to refresh user info (useful after role changes)
+            async refreshUserInfo() {
+                await this.loadUserInfo();
+                this.setupRoleBasedNavigation();
+            }
+        }
+
+        // Initialize navigation when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            window.navigationManager = new NavigationManager();
+        });
+
+        // Export for use in other scripts
+        if (typeof module !== 'undefined' && module.exports) {
+            module.exports = NavigationManager;
+        }
+    </script>
+</body>
+</html>
+

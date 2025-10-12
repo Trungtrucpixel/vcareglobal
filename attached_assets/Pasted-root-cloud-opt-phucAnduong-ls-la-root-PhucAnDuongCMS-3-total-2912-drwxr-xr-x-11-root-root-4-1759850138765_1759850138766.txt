@@ -1,0 +1,74 @@
+root@cloud:/opt/phucAnduong# ls -la /root/PhucAnDuongCMS-3/
+total 2912
+drwxr-xr-x  11 root root    4096 Oct  1 18:33  .
+drwx------  11 root root    4096 Oct  3 02:08  ..
+-rw-r--r--   1 root root    6148 Sep 24 00:04  .DS_Store
+drwxr-xr-x   3 root root      17 Sep 24 00:04  .config
+-rw-r--r--   1 root root     221 Oct  2 01:05  .env
+drwxr-xr-x   7 root root     150 Sep 24 00:04  .git
+-rw-r--r--   1 root root      67 Sep 24 00:04  .gitignore
+drwxr-xr-x   3 root root      19 Sep 24 00:04  .local
+-rw-r--r--   1 root root    1152 Sep 24 00:04  .replit
+-rw-r--r--   1 root root 2574484 Sep 24 00:04 'Lưu trữ.zip'
+drwxr-xr-x   2 root root    4096 Sep 24 00:04  attached_assets
+drwxr-xr-x   3 root root      52 Sep 24 00:04  client
+-rw-r--r--   1 root root     459 Sep 24 00:04  components.json
+drwxr-xr-x   6 root root     100 Sep 25 13:16  dist
+-rw-r--r--   1 root root     325 Sep 24 00:04  drizzle.config.ts
+-rw-r--r--   1 root root     229 Oct  1 16:51  ecosystem.config.cjs
+-rw-r--r--   1 root root     419 Oct  1 16:01  hash-password.js
+drwxr-xr-x 367 root root   12288 Oct  1 15:30  node_modules
+-rw-r--r--   1 root root  310206 Oct  1 15:17  package-lock.json
+-rw-r--r--   1 root root    3804 Sep 25 13:08  package.json
+-rw-r--r--   1 root root      80 Sep 24 00:04  postcss.config.js
+-rw-r--r--   1 root root    3889 Sep 24 00:04  replit.md
+drwxr-xr-x   2 root root    4096 Oct  2 23:18  server
+drwxr-xr-x   2 root root      71 Oct  2 23:12  shared
+-rw-r--r--   1 root root    2852 Sep 24 00:04  tailwind.config.ts
+-rw-r--r--   1 root root     639 Sep 25 13:18  tsconfig.json
+-rw-r--r--   1 root root    1080 Sep 24 00:04  vite.config.ts
+root@cloud:/opt/phucAnduong# ls -la /root/
+total 104
+drwx------ 11 root root  4096 Oct  3 02:08  .
+drwxr-xr-x 18 root root   263 Jan 22  2024  ..
+-rw-------  1 root root 20258 Oct  3 02:08  .bash_history
+-rw-r--r--  1 root root    37 Jan 22  2024  .bash_profile
+-rw-r--r--  1 root root  3122 Jan 22  2024  .bashrc
+drwx------  2 root root    34 Jan 22  2024  .cache
+-rw-------  1 root root    20 Oct  2 00:56  .lesshst
+drwxr-xr-x  3 root root    19 Sep 23 12:07  .local
+drwxr-xr-x  5 root root    84 Sep 25 13:00  .npm
+drwxr-xr-x  5 root root   180 Oct  1 15:48  .pm2
+-rw-r--r--  1 root root   161 Jul  9  2019  .profile
+-rw-------  1 root root   333 Oct  1 16:04  .psql_history
+drwx------  2 root root    71 Sep 23 23:56  .ssh
+-rw-------  1 root root  9972 Jan 22  2024  .viminfo
+drwxr-xr-x 11 root root  4096 Oct  1 18:33  PhucAnDuongCMS-3
+-rw-r--r--  1 root root  4900 Oct  7 02:00  backup.log
+-rwxr-xr-x  1 root root  1201 Oct  2 13:29  backup_phuan.sh
+drwxr-xr-x  2 root root  4096 Oct  7 02:00  backups
+drwxr-xr-x 18 root root  4096 Sep 25 13:02  node_modules
+-rw-r--r--  1 root root  8492 Sep 25 13:02  package-lock.json
+-rw-r--r--  1 root root    56 Sep 25 13:02  package.json
+drwx------  3 root root    17 Jan 22  2024  snap
+-rw-r--r--  1 root root   426 Sep 23 12:02 'udo -u postgres psql'
+-rw-r--r--  1 root root  2598 Oct  2 19:21  update_schema.sql
+root@cloud:/opt/phucAnduong# cd /root/PhucAnDuongCMS-3
+pm2 delete phuan-app
+pm2 start npm --name phuan-app -- start --max-memory-restart 500M
+pm2 save
+[PM2] Applying action deleteProcessId on app [phuan-app](ids: [ 0 ])
+[PM2] [phuan-app](0) ✓
+┌────┬───────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name      │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+└────┴───────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Starting /usr/bin/npm in fork_mode (1 instance)
+[PM2] Done.
+┌────┬──────────────┬─────────────┬─────────┬─────────┬──────────┬────────┬──────┬───────────┬──────────┬──────────┬──────────┬──────────┐
+│ id │ name         │ namespace   │ version │ mode    │ pid      │ uptime │ ↺    │ status    │ cpu      │ mem      │ user     │ watching │
+├────┼──────────────┼─────────────┼─────────┼─────────┼──────────┼────────┼──────┼───────────┼──────────┼──────────┼──────────┼──────────┤
+│ 0  │ phuan-app    │ default     │ N/A     │ fork    │ 2773053  │ 0s     │ 0    │ online    │ 0%       │ 772.0kb  │ root     │ disabled │
+└────┴──────────────┴─────────────┴─────────┴─────────┴──────────┴────────┴──────┴───────────┴──────────┴──────────┴──────────┴──────────┘
+[PM2] Saving current process list...
+[PM2] Successfully saved in /root/.pm2/dump.pm2
+root@cloud:~/PhucAnDuongCMS-3# 

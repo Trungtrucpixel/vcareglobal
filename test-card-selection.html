@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Card Selection - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Card Selection Interface - Phúc An Dương</h1>
+        
+        <!-- Test Buttons -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Test Functions</h2>
+            <div class="flex gap-4 flex-wrap">
+                <button onclick="openCardSelection()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-play mr-2"></i>Mở giao diện chọn gói
+                </button>
+                <button onclick="testBuyPackage()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-shopping-cart mr-2"></i>Test mua gói
+                </button>
+                <button onclick="testRegistrationFlow()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-user-plus mr-2"></i>Test luồng đăng ký
+                </button>
+            </div>
+        </div>
+
+        <!-- Registration Form (for testing) -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Form đăng ký (Test)</h2>
+            <form id="test-registration-form" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
+                        <input type="email" id="test-email" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               value="test@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Số điện thoại *</label>
+                        <input type="tel" id="test-phone" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               value="0123456789">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Họ và tên *</label>
+                    <input type="text" id="test-name" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           value="Nguyễn Văn Test">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Vai trò</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="test-roles" value="Cổ đông" class="mr-2">
+                            <span class="text-sm">Cổ đông</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="test-roles" value="Angel" class="mr-2">
+                            <span class="text-sm">Angel</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Mã giới thiệu</label>
+                    <input type="text" id="test-referral" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                           value="TEST123">
+                </div>
+            </form>
+        </div>
+
+        <!-- Test Results -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Kết quả test</h2>
+            <div id="test-results" class="space-y-4">
+                <p class="text-gray-500">Chưa có kết quả test...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Selection Interface -->
+    <div id="cardSelectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <!-- Header -->
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-white bg-gradient-to-r from-green-400 to-green-600 py-4 px-8 rounded-lg shadow-lg mb-4">
+                            Chọn Gói Thẻ Chăm Sóc Sức Khỏe
+                        </h2>
+                        <p class="text-lg text-gray-600">Chọn gói phù hợp với nhu cầu chăm sóc sức khỏe của bạn</p>
+                    </div>
+
+                    <!-- Card Packages Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                        <!-- Standard Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-gray-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-gray-600 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Standard</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">2M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói cơ bản</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">12 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">PAD Token: 200</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Standard', 2000000, 12)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Silver Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-gray-700 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Silver</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">8M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói bạc</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">15 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">PAD Token: 800</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Silver', 8000000, 15)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Gold Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-yellow-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-yellow-600 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Gold</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">18M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói vàng</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">18 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">PAD Token: 1,800</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Gold', 18000000, 18)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Platinum Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-id-card text-gray-800 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Platinum</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">38M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói bạch kim</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">20 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">PAD Token: 3,800</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Platinum', 38000000, 20)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+
+                        <!-- Diamond Package -->
+                        <div class="bg-white border-2 border-gray-200 rounded-xl p-6 shadow-lg hover:shadow-xl transition duration-300 hover:border-green-300">
+                            <div class="text-center mb-6">
+                                <div class="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                    <i class="fas fa-gem text-blue-600 text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">Diamond</h3>
+                                <div class="text-3xl font-bold text-green-600 mb-2">100M VNĐ</div>
+                                <div class="text-sm text-gray-500">Gói kim cương</div>
+                            </div>
+                            
+                            <div class="space-y-3 mb-6">
+                                <div class="flex items-center">
+                                    <i class="fas fa-calendar-alt text-blue-500 mr-3"></i>
+                                    <span class="text-gray-700">24 lượt tư vấn/2 năm</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-percentage text-green-500 mr-3"></i>
+                                    <span class="text-gray-700">8% Referral & 5% VIP</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-chart-line text-purple-500 mr-3"></i>
+                                    <span class="text-gray-700">49% lợi tức</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-coins text-yellow-500 mr-3"></i>
+                                    <span class="text-gray-700">PAD Token: 10,000</span>
+                                </div>
+                            </div>
+
+                            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                <h4 class="font-semibold text-gray-900 mb-2">Dự đoán lợi nhuận</h4>
+                                <div class="text-sm text-gray-600">
+                                    <div>6 tháng: 12.000 VNĐ</div>
+                                    <div>5 năm: 40.000 VNĐ</div>
+                                </div>
+                            </div>
+
+                            <button onclick="buyCardPackage('Diamond', 100000000, 24)" 
+                                    class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition duration-300 shadow-lg">
+                                <i class="fas fa-shopping-cart mr-2"></i>Mua Ngay
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex gap-4 justify-center">
+                        <button onclick="closeCardSelection()" 
+                                class="bg-gray-500 text-white py-3 px-8 rounded-lg font-semibold hover:bg-gray-600 transition duration-300">
+                            <i class="fas fa-arrow-left mr-2"></i>Quay lại
+                        </button>
+                        <button onclick="goToRegistration()" 
+                                class="bg-blue-600 text-white py-3 px-8 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                            <i class="fas fa-edit mr-2"></i>Chỉnh sửa đăng ký
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        function openCardSelection() {
+            document.getElementById('cardSelectionModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            logTestResult('Mở giao diện chọn gói', 'success', 'Giao diện đã mở');
+        }
+
+        function closeCardSelection() {
+            document.getElementById('cardSelectionModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            logTestResult('Đóng giao diện chọn gói', 'success', 'Giao diện đã đóng');
+        }
+
+        function goToRegistration() {
+            closeCardSelection();
+            logTestResult('Chuyển về form đăng ký', 'success', 'Chuyển hướng thành công');
+        }
+
+        function buyCardPackage(cardType, price, sessions) {
+            logTestResult(`Mua gói ${cardType}`, 'success', {
+                cardType: cardType,
+                price: price,
+                sessions: sessions,
+                padToken: Math.round(price / 10000) // 100 PAD = 1M VNĐ
+            });
+            
+            // Show success notification
+            showNotification(`Mua gói ${cardType} thành công!`, 'success');
+            
+            // Close modal after 2 seconds
+            setTimeout(() => {
+                closeCardSelection();
+            }, 2000);
+        }
+
+        function testBuyPackage() {
+            buyCardPackage('Gold', 18000000, 18);
+        }
+
+        function testRegistrationFlow() {
+            logTestResult('Test luồng đăng ký', 'success', {
+                step1: 'Điền form đăng ký',
+                step2: 'Chọn gói thẻ',
+                step3: 'Mua gói',
+                step4: 'Xác nhận thành công'
+            });
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg max-w-sm ${
+                type === 'success' ? 'bg-green-500 text-white' :
+                type === 'error' ? 'bg-red-500 text-white' :
+                'bg-blue-500 text-white'
+            }`;
+            
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'info'}-circle mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+
+        function logTestResult(testName, status, data) {
+            const testResults = document.getElementById('test-results');
+            const statusClass = status === 'success' ? 'text-green-600' : 'text-red-600';
+            const statusIcon = status === 'success' ? 'fa-check-circle' : 'fa-times-circle';
+            
+            const resultHtml = `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <i class="fas ${statusIcon} ${statusClass} mr-2"></i>
+                        <span class="font-semibold">${testName}</span>
+                        <span class="ml-auto text-sm ${statusClass}">${status.toUpperCase()}</span>
+                    </div>
+                    <pre class="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            
+            testResults.innerHTML = resultHtml + testResults.innerHTML;
+        }
+
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            logTestResult('Page loaded', 'success', 'Test interface ready');
+        });
+    </script>
+</body>
+</html>

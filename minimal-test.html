@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-6">Minimal Button Test</h1>
+    
+    <div class="space-y-4">
+        <button onclick="alert('Direct alert works!')" class="bg-blue-600 text-white px-6 py-2 rounded-lg">
+            Direct Alert
+        </button>
+        
+        <button onclick="test1()" class="bg-green-600 text-white px-6 py-2 rounded-lg">
+            Test 1
+        </button>
+        
+        <button onclick="test2()" class="bg-red-600 text-white px-6 py-2 rounded-lg">
+            Test 2
+        </button>
+    </div>
+
+    <script>
+        function test1() {
+            alert('Test 1 works!');
+        }
+
+        function test2() {
+            alert('Test 2 works!');
+        }
+
+        // Auto test on load
+        window.onload = function() {
+            alert('Page loaded - JavaScript is working!');
+        };
+    </script>
+</body>
+</html>

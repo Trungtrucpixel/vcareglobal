@@ -1,0 +1,62 @@
+root@cloud:~# pm2 show phuan-app
+ Describing process with id 0 - name phuan-app 
+┌───────────────────┬──────────────────────────────────────┐
+│ status            │ online                               │
+│ name              │ phuan-app                            │
+│ namespace         │ default                              │
+│ version           │ 1.0.0                                │
+│ restarts          │ 0                                    │
+│ uptime            │ 34m                                  │
+│ script path       │ /root/PhucAnDuongCMS-3/dist/index.js │
+│ script args       │ N/A                                  │
+│ error log path    │ /root/.pm2/logs/phuan-app-error.log  │
+│ out log path      │ /root/.pm2/logs/phuan-app-out.log    │
+│ pid path          │ /root/.pm2/pids/phuan-app-0.pid      │
+│ interpreter       │ node                                 │
+│ interpreter args  │ N/A                                  │
+│ script id         │ 0                                    │
+│ exec cwd          │ /root/PhucAnDuongCMS-3               │
+│ exec mode         │ fork_mode                            │
+│ node.js version   │ 20.19.5                              │
+│ node env          │ production                           │
+│ watch & reload    │ ✘                                    │
+│ unstable restarts │ 0                                    │
+│ created at        │ 2025-10-01T08:55:46.210Z             │
+└───────────────────┴──────────────────────────────────────┘
+ Actions available 
+┌────────────────────────┐
+│ km:heapdump            │
+│ km:cpu:profiling:start │
+│ km:cpu:profiling:stop  │
+│ km:heap:sampling:start │
+│ km:heap:sampling:stop  │
+└────────────────────────┘
+ Trigger via: pm2 trigger phuan-app <action_name>
+
+ Code metrics value 
+┌────────────────────────┬───────────┐
+│ Used Heap Size         │ 19.49 MiB │
+│ Heap Usage             │ 93.87 %   │
+│ Heap Size              │ 20.77 MiB │
+│ Event Loop Latency p95 │ 1.19 ms   │
+│ Event Loop Latency     │ 0.42 ms   │
+│ Active handles         │ 5         │
+│ Active requests        │ 0         │
+│ HTTP                   │ 0 req/min │
+│ HTTP P95 Latency       │ 42 ms     │
+│ HTTP Mean Latency      │ 7 ms      │
+└────────────────────────┴───────────┘
+ Divergent env variables from local env 
+┌────────────────┬──────────────────────────────────────────┐
+│ PWD            │ /root/PhucAnDuongCMS-3                   │
+│ SSH_CONNECTION │ 115.74.130.181 49765 103.72.96.173 24700 │
+│ XDG_SESSION_ID │ 506                                      │
+│ SSH_CLIENT     │ 115.74.130.181 49765 24700               │
+│ SSH_TTY        │ /dev/pts/0                               │
+└────────────────┴──────────────────────────────────────────┘
+
+ Add your own code metrics: http://bit.ly/code-metrics
+ Use `pm2 logs phuan-app [--lines 1000]` to display logs
+ Use `pm2 env 0` to display environment variables
+ Use `pm2 monit` to monitor CPU and Memory usage phuan-app
+root@cloud:~# 

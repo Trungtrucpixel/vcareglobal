@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Member Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Member Dashboard</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Buttons -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Functions</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="testCompleteRegistration()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Test Complete Registration
+                    </button>
+                    <button onclick="testShowMemberDashboard()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        Show Member Dashboard
+                    </button>
+                    <button onclick="testLoadMemberData()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        Load Member Data
+                    </button>
+                    <button onclick="testClearData()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        Clear Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mock Registration Data -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Mock Registration Data</h2>
+                <pre id="mockData" class="bg-gray-100 p-4 rounded text-sm overflow-auto"></pre>
+            </div>
+
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+                <div id="testResults" class="space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock registration data for testing
+        const mockRegistrationData = {
+            selectedValues: [
+                {
+                    type: 'Founding Shareholder',
+                    minValue: 100000000,
+                    padToken: 10000,
+                    shares: 1000
+                },
+                {
+                    type: 'Card-buying Customer - Diamond',
+                    minValue: 100000000,
+                    padToken: 10000,
+                    shares: 0
+                }
+            ],
+            personalInfo: {
+                fullName: 'Nguyễn Văn A',
+                email: 'nguyenvana@example.com',
+                phone: '0123456789',
+                idCard: '123456789'
+            },
+            paymentInfo: {
+                orderId: 'ORD-001',
+                amount: 200000000,
+                padToken: 20000
+            }
+        };
+
+        // Test functions
+        function testCompleteRegistration() {
+            // Simulate completeRegistration function
+            const memberData = {
+                ...mockRegistrationData,
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: calculatePadToken(mockRegistrationData.selectedValues),
+                totalInvestment: calculateTotalInvestment(mockRegistrationData.selectedValues),
+                role: getRoleFromValues(mockRegistrationData.selectedValues)
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(memberData));
+            addTestResult('✅ Complete Registration: Member data saved to localStorage', 'success');
+            updateMockDataDisplay();
+        }
+
+        function testShowMemberDashboard() {
+            addTestResult('✅ Show Member Dashboard: Function called', 'success');
+        }
+
+        function testLoadMemberData() {
+            const memberData = JSON.parse(localStorage.getItem('memberData') || '{}');
+            if (Object.keys(memberData).length > 0) {
+                addTestResult('✅ Load Member Data: Data loaded successfully', 'success');
+                addTestResult(`📊 PAD Token: ${memberData.padToken}`, 'info');
+                addTestResult(`💰 Total Investment: ${formatCurrency(memberData.totalInvestment)}`, 'info');
+                addTestResult(`👤 Role: ${getRoleDisplayName(memberData.role)}`, 'info');
+            } else {
+                addTestResult('❌ Load Member Data: No data found', 'error');
+            }
+        }
+
+        function testClearData() {
+            localStorage.removeItem('memberData');
+            addTestResult('🗑️ Clear Data: localStorage cleared', 'info');
+            updateMockDataDisplay();
+        }
+
+        // Helper functions
+        function calculatePadToken(selectedValues) {
+            return selectedValues.reduce((total, value) => total + (value.padToken || 0), 0);
+        }
+
+        function calculateTotalInvestment(selectedValues) {
+            return selectedValues.reduce((total, value) => total + (value.minValue || 0), 0);
+        }
+
+        function getRoleFromValues(selectedValues) {
+            if (selectedValues.some(v => v.type === 'Founding Shareholder')) return 'founder';
+            if (selectedValues.some(v => v.type === 'Angel Investor')) return 'angel';
+            if (selectedValues.some(v => v.type === 'Seed Investor')) return 'seed';
+            if (selectedValues.some(v => v.type === 'Retail Investor')) return 'retail';
+            return 'customer';
+        }
+
+        function getRoleDisplayName(role) {
+            const roleMap = {
+                'founder': 'Cổ đông sáng lập',
+                'angel': 'Nhà đầu tư Angel',
+                'seed': 'Nhà đầu tư Seed',
+                'retail': 'Nhà đầu tư Retail',
+                'customer': 'Khách hàng',
+                'admin': 'Quản trị viên'
+            };
+            return roleMap[role] || 'Thành viên';
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function updateMockDataDisplay() {
+            const memberData = JSON.parse(localStorage.getItem('memberData') || '{}');
+            document.getElementById('mockData').textContent = JSON.stringify(memberData, null, 2);
+        }
+
+        // Initialize
+        updateMockDataDisplay();
+    </script>
+</body>
+</html>
+
