@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Backend Updates - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-6xl mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Backend Updates - Phúc An Dương</h1>
+        
+        <!-- Test Buttons -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Test Backend Endpoints</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <button onclick="testRegistrationWithRedirect()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-user-plus mr-2"></i>Test Registration + Redirect
+                </button>
+                <button onclick="testRegistrationWithoutRedirect()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-user-check mr-2"></i>Test Registration Direct
+                </button>
+                <button onclick="testBuyCard()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                    <i class="fas fa-shopping-cart mr-2"></i>Test Buy Card
+                </button>
+                <button onclick="testGetRegisterInfo()" class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700">
+                    <i class="fas fa-info-circle mr-2"></i>Test Get Register Info
+                </button>
+                <button onclick="testGetHomeStats()" class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700">
+                    <i class="fas fa-chart-bar mr-2"></i>Test Home Stats
+                </button>
+                <button onclick="clearResults()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-trash mr-2"></i>Clear Results
+                </button>
+            </div>
+        </div>
+
+        <!-- Test Data Input -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Test Data</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="test-email" value="test@example.com" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
+                    <input type="tel" id="test-phone" value="0123456789" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                    <input type="text" id="test-name" value="Nguyễn Văn Test" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Card Type</label>
+                    <select id="test-card-type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="Standard">Standard</option>
+                        <option value="Silver">Silver</option>
+                        <option value="Gold">Gold</option>
+                        <option value="Platinum">Platinum</option>
+                        <option value="Diamond">Diamond</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Roles (comma separated)</label>
+                    <input type="text" id="test-roles" value="Cổ đông,Angel" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Investment Amount (VNĐ)</label>
+                    <input type="number" id="test-investment" value="100000000" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Test Results</h2>
+            <div id="test-results" class="space-y-4">
+                <p class="text-gray-500">Chưa có kết quả test...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentUserId = null;
+
+        // Test functions
+        async function testRegistrationWithRedirect() {
+            const testData = getTestData();
+            testData.redirectToCardSelection = true;
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Registration with Redirect', response.ok ? 'success' : 'error', result);
+                
+                if (result.success && result.data.user) {
+                    currentUserId = result.data.user.id;
+                }
+            } catch (error) {
+                logTestResult('Registration with Redirect', 'error', { error: error.message });
+            }
+        }
+
+        async function testRegistrationWithoutRedirect() {
+            const testData = getTestData();
+            testData.redirectToCardSelection = false;
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Registration without Redirect', response.ok ? 'success' : 'error', result);
+                
+                if (result.success && result.data.user) {
+                    currentUserId = result.data.user.id;
+                }
+            } catch (error) {
+                logTestResult('Registration without Redirect', 'error', { error: error.message });
+            }
+        }
+
+        async function testBuyCard() {
+            if (!currentUserId) {
+                logTestResult('Buy Card', 'error', { message: 'No user ID available. Please register first.' });
+                return;
+            }
+
+            const cardType = document.getElementById('test-card-type').value;
+            const cardPrices = {
+                "Standard": 2000000,
+                "Silver": 8000000,
+                "Gold": 18000000,
+                "Platinum": 38000000,
+                "Diamond": 100000000
+            };
+            const cardSessions = {
+                "Standard": 12,
+                "Silver": 15,
+                "Gold": 18,
+                "Platinum": 20,
+                "Diamond": 24
+            };
+
+            const buyData = {
+                userId: currentUserId,
+                cardType: cardType,
+                price: cardPrices[cardType],
+                sessions: cardSessions[cardType],
+                paymentMethod: 'bank_transfer'
+            };
+
+            try {
+                const response = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(buyData)
+                });
+
+                const result = await response.json();
+                logTestResult('Buy Card', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Buy Card', 'error', { error: error.message });
+            }
+        }
+
+        async function testGetRegisterInfo() {
+            try {
+                const response = await fetch('/api/register/info');
+                const result = await response.json();
+                logTestResult('Get Register Info', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Get Register Info', 'error', { error: error.message });
+            }
+        }
+
+        async function testGetHomeStats() {
+            try {
+                const response = await fetch('/');
+                const result = await response.json();
+                logTestResult('Get Home Stats', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Get Home Stats', 'error', { error: error.message });
+            }
+        }
+
+        function getTestData() {
+            return {
+                email: document.getElementById('test-email').value,
+                phone: document.getElementById('test-phone').value,
+                name: document.getElementById('test-name').value,
+                cardType: document.getElementById('test-card-type').value,
+                roles: document.getElementById('test-roles').value.split(',').map(r => r.trim()).filter(r => r),
+                investmentAmount: parseInt(document.getElementById('test-investment').value) || 0,
+                referralCode: 'TEST123'
+            };
+        }
+
+        function logTestResult(testName, status, data) {
+            const testResults = document.getElementById('test-results');
+            const statusClass = status === 'success' ? 'text-green-600' : 'text-red-600';
+            const statusIcon = status === 'success' ? 'fa-check-circle' : 'fa-times-circle';
+            
+            const resultHtml = `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <i class="fas ${statusIcon} ${statusClass} mr-2"></i>
+                        <span class="font-semibold">${testName}</span>
+                        <span class="ml-auto text-sm ${statusClass}">${status.toUpperCase()}</span>
+                    </div>
+                    <pre class="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-64">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            
+            testResults.innerHTML = resultHtml + testResults.innerHTML;
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').innerHTML = '<p class="text-gray-500">Chưa có kết quả test...</p>';
+            currentUserId = null;
+        }
+
+        // Auto-test on page load
+        window.addEventListener('load', () => {
+            logTestResult('Page loaded', 'success', 'Test interface ready');
+        });
+    </script>
+</body>
+</html>
+

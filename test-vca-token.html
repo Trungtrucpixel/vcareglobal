@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test VCA Token System - Vcare Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">🪙 Test VCA Token System - Vcare Global</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- VCA Token Calculator -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">💰 VCA Token Calculator</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Số tiền đầu tư (VNĐ)</label>
+                        <input type="number" id="investmentAmount" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Nhập số tiền đầu tư">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">VCA Token nhận được</label>
+                        <div id="vcaTokenResult" class="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md text-lg font-bold text-blue-600">
+                            0 VCA
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 text-sm text-gray-600">
+                    <p><strong>Công thức:</strong> 100 VCA = 1,000,000 VNĐ</p>
+                    <p><strong>Ví dụ:</strong> 10,000,000 VNĐ = 1,000 VCA</p>
+                </div>
+            </div>
+
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🧪 Test Results</h2>
+                <div id="testResults" class="space-y-2">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🎮 Test Controls</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button onclick="testVcaCalculation()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        🧮 Test VCA Calculation
+                    </button>
+                    <button onclick="testVcaDisplay()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        📊 Test VCA Display
+                    </button>
+                    <button onclick="testVcaIntegration()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        🔗 Test VCA Integration
+                    </button>
+                </div>
+            </div>
+
+            <!-- VCA Token Examples -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">💡 VCA Token Examples</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">Standard Card</h3>
+                        <p class="text-sm text-blue-700">2,000,000 VNĐ = 200 VCA</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">Silver Card</h3>
+                        <p class="text-sm text-green-700">8,000,000 VNĐ = 800 VCA</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-yellow-800 mb-2">Gold Card</h3>
+                        <p class="text-sm text-yellow-700">18,000,000 VNĐ = 1,800 VCA</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-800 mb-2">Platinum Card</h3>
+                        <p class="text-sm text-purple-700">38,000,000 VNĐ = 3,800 VCA</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-red-800 mb-2">Diamond Card</h3>
+                        <p class="text-sm text-red-700">100,000,000 VNĐ = 10,000 VCA</p>
+                    </div>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-gray-800 mb-2">Custom Amount</h3>
+                        <p class="text-sm text-gray-700">Nhập số tiền để tính VCA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // VCA Token calculation function
+        function calculateVcaToken(amount) {
+            return Math.floor(amount / 1000000 * 100); // 100 VCA = 1M VND
+        }
+
+        // Update VCA Token display
+        function updateVcaDisplay() {
+            const amount = document.getElementById('investmentAmount').value;
+            if (amount) {
+                const vcaToken = calculateVcaToken(parseInt(amount));
+                document.getElementById('vcaTokenResult').textContent = `${vcaToken.toLocaleString('vi-VN')} VCA`;
+            } else {
+                document.getElementById('vcaTokenResult').textContent = '0 VCA';
+            }
+        }
+
+        // Test VCA calculation
+        function testVcaCalculation() {
+            addTestResult('🧮 Testing VCA Calculation...', 'info');
+            
+            const testCases = [
+                { amount: 2000000, expected: 200, description: 'Standard Card (2M VNĐ)' },
+                { amount: 8000000, expected: 800, description: 'Silver Card (8M VNĐ)' },
+                { amount: 18000000, expected: 1800, description: 'Gold Card (18M VNĐ)' },
+                { amount: 38000000, expected: 3800, description: 'Platinum Card (38M VNĐ)' },
+                { amount: 100000000, expected: 10000, description: 'Diamond Card (100M VNĐ)' }
+            ];
+            
+            let passCount = 0;
+            testCases.forEach(testCase => {
+                const result = calculateVcaToken(testCase.amount);
+                if (result === testCase.expected) {
+                    addTestResult(`✅ ${testCase.description}: ${testCase.amount.toLocaleString('vi-VN')} VNĐ = ${result} VCA`, 'success');
+                    passCount++;
+                } else {
+                    addTestResult(`❌ ${testCase.description}: Expected ${testCase.expected} VCA, got ${result} VCA`, 'error');
+                }
+            });
+            
+            addTestResult(`📊 VCA Calculation Test: ${passCount}/${testCases.length} passed`, passCount === testCases.length ? 'success' : 'warning');
+        }
+
+        // Test VCA display
+        function testVcaDisplay() {
+            addTestResult('📊 Testing VCA Display...', 'info');
+            
+            try {
+                // Test if VCA is displayed in the main app
+                fetch('http://localhost:3000')
+                    .then(response => response.text())
+                    .then(html => {
+                        const vcaCount = (html.match(/VCA/g) || []).length;
+                        if (vcaCount > 0) {
+                            addTestResult(`✅ VCA references found: ${vcaCount}`, 'success');
+                        } else {
+                            addTestResult('❌ No VCA references found', 'error');
+                        }
+                        
+                        // Check for VCA Token specific references
+                        const vcaTokenCount = (html.match(/VCA Token/g) || []).length;
+                        if (vcaTokenCount > 0) {
+                            addTestResult(`✅ VCA Token references found: ${vcaTokenCount}`, 'success');
+                        } else {
+                            addTestResult('❌ No VCA Token references found', 'error');
+                        }
+                        
+                        // Check for calculation formula
+                        if (html.includes('100 VCA = 1M VND') || html.includes('100 VCA = 1M VNĐ')) {
+                            addTestResult('✅ VCA calculation formula found', 'success');
+                        } else {
+                            addTestResult('❌ VCA calculation formula not found', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        addTestResult(`❌ VCA display test failed: ${error.message}`, 'error');
+                    });
+            } catch (error) {
+                addTestResult(`❌ VCA display test failed: ${error.message}`, 'error');
+            }
+        }
+
+        // Test VCA integration
+        function testVcaIntegration() {
+            addTestResult('🔗 Testing VCA Integration...', 'info');
+            
+            try {
+                fetch('http://localhost:3000')
+                    .then(response => response.text())
+                    .then(html => {
+                        // Check for VCA in member dashboard
+                        if (html.includes('memberPadToken') || html.includes('VCA Token')) {
+                            addTestResult('✅ VCA Token in member dashboard found', 'success');
+                        } else {
+                            addTestResult('❌ VCA Token in member dashboard not found', 'error');
+                        }
+                        
+                        // Check for VCA in admin dashboard
+                        if (html.includes('admin') && html.includes('VCA')) {
+                            addTestResult('✅ VCA references in admin dashboard found', 'success');
+                        } else {
+                            addTestResult('❌ VCA references in admin dashboard not found', 'error');
+                        }
+                        
+                        // Check for VCA in registration flow
+                        if (html.includes('registrationData') && html.includes('VCA')) {
+                            addTestResult('✅ VCA in registration flow found', 'success');
+                        } else {
+                            addTestResult('❌ VCA in registration flow not found', 'error');
+                        }
+                        
+                        // Check for VCA in contract
+                        if (html.includes('contract') && html.includes('VCA')) {
+                            addTestResult('✅ VCA in contract found', 'success');
+                        } else {
+                            addTestResult('❌ VCA in contract not found', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        addTestResult(`❌ VCA integration test failed: ${error.message}`, 'error');
+                    });
+            } catch (error) {
+                addTestResult(`❌ VCA integration test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Initialize
+        document.getElementById('investmentAmount').addEventListener('input', updateVcaDisplay);
+    </script>
+</body>
+</html>
+
+

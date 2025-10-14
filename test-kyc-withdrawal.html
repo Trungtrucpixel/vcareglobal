@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test KYC & Withdrawal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">🧪 Test KYC & Withdrawal Functions</h1>
+        
+        <!-- VGB Digital Share Section -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">💰 VGB Digital Share</h2>
+            
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-600">1,800</div>
+                    <div class="text-sm text-yellow-700">VGB Digital Share hiện tại</div>
+                </div>
+            </div>
+            
+            <div class="space-y-3 mb-6">
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Tỷ lệ quy đổi:</span>
+                    <span class="font-semibold">100 VGB = 1M VNĐ</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Giá trị tương đương:</span>
+                    <span class="font-semibold">18.000.000 ₫</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Maxout limit:</span>
+                    <span class="font-semibold">37.800.000 ₫</span>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="space-y-3">
+                <button onclick="testWithdrawVgb()" class="w-full bg-yellow-600 text-white py-3 px-4 rounded-lg hover:bg-yellow-700 font-medium">
+                    💸 Rút VGB Digital Share
+                </button>
+                <button onclick="testViewVgbHistory()" class="w-full bg-gray-600 text-white py-3 px-4 rounded-lg hover:bg-gray-700 font-medium">
+                    📊 Lịch sử VGB Digital Share
+                </button>
+                <button onclick="testShowWithdrawalHistory()" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 font-medium">
+                    💰 Lịch sử rút tiền
+                </button>
+                <button onclick="testShowKyc()" class="w-full bg-purple-600 text-white py-3 px-4 rounded-lg hover:bg-purple-700 font-medium">
+                    🏦 Xác thực KYC
+                </button>
+            </div>
+        </div>
+        
+        <!-- Status Display -->
+        <div id="status" class="bg-white rounded-lg shadow-md p-6">
+            <h3 class="text-lg font-semibold mb-4">📊 Test Status</h3>
+            <div id="statusContent" class="text-gray-600">
+                Click any button above to test functionality...
+            </div>
+        </div>
+    </div>
+
+    <!-- Simple Withdraw Modal -->
+    <div id="testWithdrawModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">💰 Test Withdrawal</h2>
+                    <button onclick="closeTestWithdrawModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Số tiền muốn rút (VNĐ)</label>
+                            <input type="number" id="testWithdrawAmount" placeholder="Nhập số tiền..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Lý do rút tiền</label>
+                            <textarea id="testWithdrawReason" placeholder="Nhập lý do..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 h-20"></textarea>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex space-x-3">
+                        <button onclick="closeTestWithdrawModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                            Hủy
+                        </button>
+                        <button onclick="submitTestWithdraw()" class="flex-1 bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">
+                            Gửi yêu cầu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simple KYC Modal -->
+    <div id="testKycModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">🏦 Test KYC Verification</h2>
+                    <button onclick="closeTestKycModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">📝 Thông tin cá nhân</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Họ và tên</label>
+                                    <input type="text" id="testKycName" placeholder="Nhập họ tên..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Ngày sinh</label>
+                                    <input type="date" id="testKycBirth" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">🏦 Thông tin ngân hàng</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tên ngân hàng</label>
+                                    <input type="text" id="testKycBank" placeholder="VD: Vietcombank..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Số tài khoản</label>
+                                    <input type="text" id="testKycAccount" placeholder="Nhập số tài khoản..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex space-x-3">
+                        <button onclick="closeTestKycModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                            Hủy
+                        </button>
+                        <button onclick="submitTestKyc()" class="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700">
+                            Gửi xác thực
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus(message) {
+            document.getElementById('statusContent').innerHTML = `<div class="text-green-600">✅ ${message}</div>`;
+        }
+
+        function updateError(message) {
+            document.getElementById('statusContent').innerHTML = `<div class="text-red-600">❌ ${message}</div>`;
+        }
+
+        // Test functions
+        function testWithdrawVgb() {
+            updateStatus('Withdraw VGB button clicked - Opening modal...');
+            document.getElementById('testWithdrawModal').classList.remove('hidden');
+        }
+
+        function testViewVgbHistory() {
+            updateStatus('View VGB History button clicked');
+            alert('📊 VGB History functionality test - Modal would open here');
+        }
+
+        function testShowWithdrawalHistory() {
+            updateStatus('Withdrawal History button clicked');
+            alert('💰 Withdrawal History functionality test - Modal would open here');
+        }
+
+        function testShowKyc() {
+            updateStatus('KYC Verification button clicked - Opening modal...');
+            document.getElementById('testKycModal').classList.remove('hidden');
+        }
+
+        // Modal functions
+        function closeTestWithdrawModal() {
+            document.getElementById('testWithdrawModal').classList.add('hidden');
+        }
+
+        function closeTestKycModal() {
+            document.getElementById('testKycModal').classList.add('hidden');
+        }
+
+        function submitTestWithdraw() {
+            const amount = document.getElementById('testWithdrawAmount').value;
+            const reason = document.getElementById('testWithdrawReason').value;
+            
+            if (!amount || !reason) {
+                updateError('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            updateStatus(`Withdrawal request submitted: ${parseInt(amount).toLocaleString('vi-VN')} VNĐ - ${reason}`);
+            closeTestWithdrawModal();
+        }
+
+        function submitTestKyc() {
+            const name = document.getElementById('testKycName').value;
+            const birth = document.getElementById('testKycBirth').value;
+            const bank = document.getElementById('testKycBank').value;
+            const account = document.getElementById('testKycAccount').value;
+            
+            if (!name || !birth || !bank || !account) {
+                updateError('Vui lòng điền đầy đủ thông tin');
+                return;
+            }
+            
+            updateStatus(`KYC submitted for: ${name} - Bank: ${bank} - Account: ${account}`);
+            closeTestKycModal();
+        }
+    </script>
+</body>
+</html>

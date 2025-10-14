@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Logout Fix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Logout Fix</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Buttons -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Logout Functions</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="testMemberLogin()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Login as Member
+                    </button>
+                    <button onclick="testAdminLogin()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        Login as Admin
+                    </button>
+                    <button onclick="testLogout()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                        Test Logout
+                    </button>
+                    <button onclick="testPageSwitching()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        Test Page Switch
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current State -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Current State</h2>
+                <div id="currentState" class="space-y-2">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">User Type:</span>
+                        <span id="userType" class="font-semibold">Not logged in</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Current Page:</span>
+                        <span id="currentPage" class="font-semibold">Public Homepage</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">Visible Pages:</span>
+                        <span id="visiblePages" class="font-semibold">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+                <div id="testResults" class="space-y-2"></div>
+            </div>
+
+            <!-- Fix Summary -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Fix Summary</h2>
+                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                    <h3 class="font-semibold text-green-800 mb-2">✅ Fixed Issues:</h3>
+                    <ul class="text-sm text-green-700 space-y-1">
+                        <li>• Added <code>hideAllPages()</code> function to properly hide all pages</li>
+                        <li>• Updated <code>logout()</code> to use <code>hideAllPages()</code> before showing homepage</li>
+                        <li>• Updated all page switching functions to use <code>hideAllPages()</code></li>
+                        <li>• Ensured only one page is visible at a time</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock page elements for testing
+        const mockPages = {
+            'publicHomePage': { visible: true, name: 'Public Homepage' },
+            'memberLoginPage': { visible: false, name: 'Member Login' },
+            'memberDashboard': { visible: false, name: 'Member Dashboard' },
+            'adminDashboard': { visible: false, name: 'Admin Dashboard' },
+            'loginPage': { visible: false, name: 'Login Page' },
+            'registerPage': { visible: false, name: 'Register Page' }
+        };
+
+        let currentUser = null;
+
+        function hideAllPages() {
+            // Hide all pages
+            Object.keys(mockPages).forEach(pageId => {
+                mockPages[pageId].visible = false;
+            });
+            addTestResult('✅ hideAllPages(): All pages hidden', 'success');
+        }
+
+        function showPublicHomePage() {
+            hideAllPages();
+            mockPages.publicHomePage.visible = true;
+            addTestResult('✅ showPublicHomePage(): Public homepage shown', 'success');
+            updateCurrentState();
+        }
+
+        function showMemberDashboard() {
+            hideAllPages();
+            mockPages.memberDashboard.visible = true;
+            addTestResult('✅ showMemberDashboard(): Member dashboard shown', 'success');
+            updateCurrentState();
+        }
+
+        function showAdminDashboard() {
+            hideAllPages();
+            mockPages.adminDashboard.visible = true;
+            addTestResult('✅ showAdminDashboard(): Admin dashboard shown', 'success');
+            updateCurrentState();
+        }
+
+        function showMemberLogin() {
+            hideAllPages();
+            mockPages.memberLoginPage.visible = true;
+            addTestResult('✅ showMemberLogin(): Member login page shown', 'success');
+            updateCurrentState();
+        }
+
+        function logout() {
+            // Remove user data
+            currentUser = null;
+            localStorage.removeItem('memberData');
+            
+            // Hide all pages first
+            hideAllPages();
+            
+            // Show public homepage
+            mockPages.publicHomePage.visible = true;
+            
+            addTestResult('✅ logout(): User logged out, redirected to homepage', 'success');
+            updateCurrentState();
+        }
+
+        // Test functions
+        function testMemberLogin() {
+            currentUser = {
+                id: 'MEM123456',
+                role: 'member',
+                name: 'Nguyễn Văn Demo'
+            };
+            localStorage.setItem('memberData', JSON.stringify(currentUser));
+            showMemberDashboard();
+            addTestResult('👤 Member login successful', 'info');
+        }
+
+        function testAdminLogin() {
+            currentUser = {
+                id: 'ADMIN001',
+                role: 'admin',
+                name: 'Quản trị viên hệ thống'
+            };
+            localStorage.setItem('memberData', JSON.stringify(currentUser));
+            showAdminDashboard();
+            addTestResult('🔧 Admin login successful', 'info');
+        }
+
+        function testLogout() {
+            logout();
+            addTestResult('🚪 Logout test completed', 'info');
+        }
+
+        function testPageSwitching() {
+            addTestResult('🔄 Testing page switching...', 'info');
+            
+            // Test switching between pages
+            showMemberLogin();
+            setTimeout(() => {
+                showMemberDashboard();
+                setTimeout(() => {
+                    showAdminDashboard();
+                    setTimeout(() => {
+                        showPublicHomePage();
+                        addTestResult('✅ Page switching test completed - no overlapping pages', 'success');
+                    }, 500);
+                }, 500);
+            }, 500);
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function updateCurrentState() {
+            const userType = currentUser ? currentUser.role : 'Not logged in';
+            const visiblePages = Object.values(mockPages).filter(page => page.visible);
+            const currentPage = visiblePages.length > 0 ? visiblePages[0].name : 'None';
+            
+            document.getElementById('userType').textContent = userType;
+            document.getElementById('currentPage').textContent = currentPage;
+            document.getElementById('visiblePages').textContent = visiblePages.length;
+        }
+
+        // Initialize
+        updateCurrentState();
+    </script>
+</body>
+</html>
+

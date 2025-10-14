@@ -1,0 +1,78 @@
+VCare Global - Complete System Backup Manifest
+==============================================
+Backup Date: Sat Oct 11 23:57:59 +07 2025
+Backup Name: vcare-global-complete-backup-20251011-235753
+System: Darwin x86_64
+Hostname: 192.168.2.7
+User: trankimanhtuan
+
+Backup Files:
+=============
+-rw-r--r--@ 1 trankimanhtuan  staff   3.6M Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-attached-assets.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff   112K Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-client-code.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    45M Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-complete-system.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    29B Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-config-files.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    17K Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-core-files.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    29B Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-deployment-files.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    29B Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-documentation.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    50M Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-git-repository.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff   824B Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-public-assets.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    57K Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-server-code.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff   7.6K Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-shared-schema.tar.gz
+-rw-r--r--@ 1 trankimanhtuan  staff    29B Oct 11 23:57 ./backups/vcare-global-complete-backup-20251011-235753-test-files.tar.gz
+
+File Count:
+===========
+Total backup files: 12
+
+Total Size:
+===========
+Total backup size: 4.0K
+
+System Information:
+===================
+Node.js Version: v22.20.0
+NPM Version: 10.9.3
+Git Version: git version 2.24.3 (Apple Git-128)
+
+Project Information:
+===================
+Project Name: rest-express
+Project Version: 1.0.0
+Node Version: 
+
+Backup Contents:
+===============
+1. Core System Files - Main HTML files
+2. Server Code - Backend TypeScript code
+3. Client Code - Frontend React components
+4. Configuration Files - Package.json, configs
+5. Environment Files - .env and deployment scripts
+6. Documentation - README and guides
+7. Shared Schema - Database schema and types
+8. Public Assets - Static files and favicon
+9. Attached Assets - Images and resources
+10. Test Files - Development test files
+11. Git Repository - Complete version history
+12. Complete System - Everything except node_modules
+
+Restoration Instructions:
+========================
+1. Extract the complete system backup:
+   tar -xzf vcare-global-complete-backup-20251011-235753-complete-system.tar.gz
+
+2. Install dependencies:
+   npm install
+
+3. Set up environment variables:
+   cp .env.production.example .env
+   # Edit .env with your configuration
+
+4. Start the development server:
+   npm run dev
+
+5. Or start the production server:
+   npm run build
+   npm start
+
+Backup completed successfully! 🎉

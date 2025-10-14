@@ -198,8 +198,8 @@ const KpiPerformance = () => {
                 <div className="text-2xl font-bold text-orange-600" data-testid="text-pad-token-earned">
                   {calculateKpiMutation.data.padTokenEarned}
                 </div>
-                <div className="text-sm text-gray-600">PAD Token</div>
-                <div className="text-xs text-gray-500">1 KPI = 10 PAD</div>
+                <div className="text-sm text-gray-600">VCA Token</div>
+                <div className="text-xs text-gray-500">1 KPI = 10 VCA</div>
               </div>
               <div className="text-center flex items-center justify-center">
                 <Badge 
@@ -511,9 +511,9 @@ const LaborPoolDisplay = () => {
                 <div className="flex items-center gap-2">
                   <DollarSign className="h-5 w-5 text-orange-500" />
                   <div>
-                    <p className="text-sm font-medium text-gray-600">Tổng PAD Token</p>
+                    <p className="text-sm font-medium text-gray-600">Tổng VCA Token</p>
                     <p className="text-2xl font-bold" data-testid="text-labor-pool-pad">
-                      {laborPool?.totalPadTokenFromKpi.toLocaleString() || 0} PAD
+                      {laborPool?.totalPadTokenFromKpi.toLocaleString() || 0} VCA
                     </p>
                   </div>
                 </div>
@@ -561,7 +561,7 @@ const LaborPoolDisplay = () => {
                 <TableRow>
                   <TableHead className="whitespace-nowrap">Nhân viên</TableHead>
                   <TableHead className="whitespace-nowrap">Vị trí</TableHead>
-                  <TableHead className="whitespace-nowrap">PAD Token</TableHead>
+                  <TableHead className="whitespace-nowrap">VCA Token</TableHead>
                   <TableHead className="whitespace-nowrap">Cổ phần</TableHead>
                   <TableHead className="whitespace-nowrap">Giá trị (VNĐ)</TableHead>
                 </TableRow>
@@ -576,7 +576,7 @@ const LaborPoolDisplay = () => {
                       {staff.position}
                     </TableCell>
                     <TableCell className="whitespace-nowrap" data-testid={`text-labor-pad-${staff.id}`}>
-                      {staff.padToken.toLocaleString()} PAD
+                      {staff.padToken.toLocaleString()} VCA
                     </TableCell>
                     <TableCell className="whitespace-nowrap" data-testid={`text-labor-shares-${staff.id}`}>
                       {staff.shares.toLocaleString()}
@@ -700,7 +700,7 @@ const CTVPoolDisplay = () => {
                   <TableHead className="whitespace-nowrap">Tổng hoa hồng</TableHead>
                   <TableHead className="whitespace-nowrap">Đã trả</TableHead>
                   <TableHead className="whitespace-nowrap">Chưa trả</TableHead>
-                  <TableHead className="whitespace-nowrap">PAD Token</TableHead>
+                  <TableHead className="whitespace-nowrap">VCA Token</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -722,7 +722,7 @@ const CTVPoolDisplay = () => {
                       {formatCurrency(summary.pending)}
                     </TableCell>
                     <TableCell className="whitespace-nowrap" data-testid={`text-ctv-pad-${referrerId}`}>
-                      {summary.padToken.toLocaleString()} PAD
+                      {summary.padToken.toLocaleString()} VCA
                     </TableCell>
                   </TableRow>
                 ))}

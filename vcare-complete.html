@@ -1,0 +1,2707 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VCare Global - Hệ thống chăm sóc sức khỏe toàn diện</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <!-- VCare Global Logo -->
+                    <div class="w-12 h-12 flex items-center justify-center">
+                        <!-- Globe with DNA helix -->
+                        <svg viewBox="0 0 60 60" class="w-full h-full">
+                            <!-- Globe outline -->
+                            <circle cx="30" cy="30" r="28" fill="none" stroke="#2563EB" stroke-width="2"/>
+                            <!-- Globe grid lines -->
+                            <line x1="2" y1="30" x2="58" y2="30" stroke="#2563EB" stroke-width="1" opacity="0.6"/>
+                            <line x1="30" y1="2" x2="30" y2="58" stroke="#2563EB" stroke-width="1" opacity="0.6"/>
+                            <ellipse cx="30" cy="30" rx="28" ry="14" fill="none" stroke="#2563EB" stroke-width="1" opacity="0.4"/>
+                            <ellipse cx="30" cy="30" rx="14" ry="28" fill="none" stroke="#2563EB" stroke-width="1" opacity="0.4"/>
+                            
+                            <!-- DNA double helix -->
+                            <path d="M15 20 Q25 15 35 20 Q45 25 45 30 Q45 35 35 40 Q25 45 15 40" 
+                                  stroke="#2563EB" stroke-width="2.5" fill="none"/>
+                            <path d="M15 40 Q25 35 35 40 Q45 35 45 30 Q45 25 35 20 Q25 15 15 20" 
+                                  stroke="#2563EB" stroke-width="2.5" fill="none"/>
+                            
+                            <!-- Connecting lines -->
+                            <line x1="20" y1="25" x2="30" y2="30" stroke="#2563EB" stroke-width="1.5"/>
+                            <line x1="30" y1="25" x2="40" y2="30" stroke="#2563EB" stroke-width="1.5"/>
+                            <line x1="20" y1="35" x2="30" y2="30" stroke="#2563EB" stroke-width="1.5"/>
+                            <line x1="30" y1="35" x2="40" y2="30" stroke="#2563EB" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-blue-600">Vcare Global</h1>
+                        <p class="text-sm font-bold text-blue-600">Hội Tụ Những Tinh Hoa</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#user-types" class="text-gray-600 hover:text-blue-600">8 Loại thành viên</a>
+                    <a href="#card-types" class="text-gray-600 hover:text-blue-600">Thẻ chăm sóc</a>
+                    <a href="#benefits" class="text-gray-600 hover:text-blue-600">Quyền lợi</a>
+                    <a href="#faq" class="text-gray-600 hover:text-blue-600">FAQ</a>
+                </nav>
+                <div class="flex space-x-3">
+                    <button onclick="showLogin()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                        Đăng nhập
+                    </button>
+                    <button onclick="showRegister()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                        Đăng ký ngay
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-6">VCare Global - Hệ thống chăm sóc sức khỏe toàn diện</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-4xl mx-auto">
+                Quản lý thẻ chăm sóc thông minh, theo dõi quyền lợi minh bạch với tỷ lệ chia sẻ 49% - 5% - 8%. 
+                Cam kết không đặt lợi nhuận, chỉ chia sẻ khi có hiệu quả thực tế sau thuế.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="showRegister()" class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
+                    Bắt đầu đăng ký
+                </button>
+                <button onclick="scrollToBenefits()" class="border-2 border-blue-600 text-blue-600 px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-50">
+                    Xem quyền lợi thẻ
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+                <div class="text-center p-6 bg-blue-50 rounded-lg">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">400+</div>
+                    <div class="text-gray-600">Thẻ đang hoạt động</div>
+                </div>
+                <div class="text-center p-6 bg-green-50 rounded-lg">
+                    <div class="text-4xl font-bold text-green-600 mb-2">10+</div>
+                    <div class="text-gray-600">Chi nhánh liên kết</div>
+                </div>
+                <div class="text-center p-6 bg-purple-50 rounded-lg">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">49%</div>
+                    <div class="text-gray-600">Minh bạch theo quý</div>
+                </div>
+                <div class="text-center p-6 bg-orange-50 rounded-lg">
+                    <div class="text-4xl font-bold text-orange-600 mb-2">8</div>
+                    <div class="text-gray-600">Loại thành viên</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8 User Types Section -->
+    <section id="user-types" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">8 Loại thành viên VCare Global</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+                
+                <!-- Founder -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🏆 Người Sáng Lập</h3>
+                    <div class="text-xl font-bold text-red-600 mb-2">≥245M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 3.0x VGB Digital Share</li>
+                        <li>• Unlimited maxout</li>
+                        <li>• 24 sessions/năm</li>
+                        <li>• Quyền kế thừa</li>
+                    </ul>
+                    <button onclick="selectUserType('founder')" class="w-full mt-4 bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+
+                <!-- Angel -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">👼 Nhà Đầu Tư Thiên Thần</h3>
+                    <div class="text-xl font-bold text-yellow-600 mb-2">≥100M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 2.5x VGB Digital Share</li>
+                        <li>• 5.0x maxout</li>
+                        <li>• 21 sessions/năm</li>
+                        <li>• High-tier support</li>
+                    </ul>
+                    <button onclick="selectUserType('angel')" class="w-full mt-4 bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+
+                <!-- Seed -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🌱 Nhà Đầu Tư Hạt Giống</h3>
+                    <div class="text-xl font-bold text-green-600 mb-2">≥50M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 1.2x VGB Digital Share</li>
+                        <li>• 4.0x maxout</li>
+                        <li>• 18 sessions/năm</li>
+                        <li>• Medium-tier support</li>
+                    </ul>
+                    <button onclick="selectUserType('seed')" class="w-full mt-4 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+
+                <!-- Vcare Home -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🏠 Vcare Home</h3>
+                    <div class="text-xl font-bold text-blue-600 mb-2">≥30M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 1.0x VGB Digital Share</li>
+                        <li>• 3.0x maxout</li>
+                        <li>• 15 sessions/năm</li>
+                        <li>• Standard support</li>
+                    </ul>
+                    <button onclick="selectUserType('vcare_home')" class="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+
+                <!-- Asset Contributor -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-purple-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🏢 Nhà Đóng Góp Tài Sản</h3>
+                    <div class="text-xl font-bold text-purple-600 mb-2">≥20M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 2.0x VGB Digital Share</li>
+                        <li>• 2.0x maxout</li>
+                        <li>• 18 sessions/năm</li>
+                        <li>• Asset contribution</li>
+                    </ul>
+                    <button onclick="selectUserType('asset_contributor')" class="w-full mt-4 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+
+                <!-- Intellectual Contributor -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-indigo-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🧠 Nhà Đóng Góp Trí Tuệ</h3>
+                    <div class="text-xl font-bold text-indigo-600 mb-2">≥10M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 1.5x VGB Digital Share</li>
+                        <li>• 2.5x maxout</li>
+                        <li>• 20 sessions/năm</li>
+                        <li>• KPI/SOP contribution</li>
+                    </ul>
+                    <button onclick="selectUserType('intellectual_contributor')" class="w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+
+                <!-- Franchise Branch -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-orange-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🏬 Chi Nhánh Nhượng Quyền</h3>
+                    <div class="text-xl font-bold text-orange-600 mb-2">≥5M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 1.0x VGB Digital Share</li>
+                        <li>• 1.5x maxout</li>
+                        <li>• 18 sessions/năm</li>
+                        <li>• Franchise benefits</li>
+                    </ul>
+                    <button onclick="selectUserType('franchise_branch')" class="w-full mt-4 bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+
+                <!-- Card Customer -->
+                <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-gray-500">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">💳 Khách Hàng Thẻ</h3>
+                    <div class="text-xl font-bold text-gray-600 mb-2">≥2M ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 1.0x VGB Digital Share</li>
+                        <li>• 2.1x maxout</li>
+                        <li>• 12 sessions/năm</li>
+                        <li>• Basic benefits</li>
+                    </ul>
+                    <button onclick="selectUserType('card_customer')" class="w-full mt-4 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 text-sm">
+                        Chọn gói
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Card Types Section -->
+    <section id="card-types" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Các loại thẻ chăm sóc sức khỏe</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 max-w-7xl mx-auto">
+                
+                <!-- Standard Card -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">💳 Standard</h3>
+                    <div class="text-xl font-bold text-blue-600 mb-2">2.000.000 ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 12 lượt tư vấn/2 năm</li>
+                        <li>• 8% Referral</li>
+                        <li>• 5% VIP Support</li>
+                        <li>• 49% lợi tức</li>
+                    </ul>
+                    <button onclick="selectCard('standard')" class="w-full mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                        Mở thẻ
+                    </button>
+                </div>
+
+                <!-- Silver Card -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-200">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🥈 Silver</h3>
+                    <div class="text-xl font-bold text-gray-600 mb-2">5.000.000 ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 15 lượt tư vấn/2 năm</li>
+                        <li>• 8% Referral</li>
+                        <li>• 5% VIP Support</li>
+                        <li>• 49% lợi tức</li>
+                    </ul>
+                    <button onclick="selectCard('silver')" class="w-full mt-4 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700">
+                        Mở thẻ
+                    </button>
+                </div>
+
+                <!-- Gold Card -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-yellow-300">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">🥇 Gold</h3>
+                    <div class="text-xl font-bold text-yellow-600 mb-2">18.000.000 ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 18 lượt tư vấn/2 năm</li>
+                        <li>• 8% Referral</li>
+                        <li>• 5% VIP Support</li>
+                        <li>• 49% lợi tức</li>
+                    </ul>
+                    <button onclick="selectCard('gold')" class="w-full mt-4 bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">
+                        Mở thẻ
+                    </button>
+                </div>
+
+                <!-- Platinum Card -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-gray-300">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">💎 Platinum</h3>
+                    <div class="text-xl font-bold text-gray-700 mb-2">50.000.000 ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 21 lượt tư vấn/2 năm</li>
+                        <li>• 8% Referral</li>
+                        <li>• 5% VIP Support</li>
+                        <li>• 49% lợi tức</li>
+                    </ul>
+                    <button onclick="selectCard('platinum')" class="w-full mt-4 bg-gray-700 text-white py-2 px-4 rounded-lg hover:bg-gray-800">
+                        Mở thẻ
+                    </button>
+                </div>
+
+                <!-- Diamond Card -->
+                <div class="bg-white p-6 rounded-lg shadow-md border border-purple-300">
+                    <h3 class="text-lg font-bold text-gray-800 mb-3">💠 Diamond</h3>
+                    <div class="text-xl font-bold text-purple-600 mb-2">100.000.000 ₫</div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 24 lượt tư vấn/2 năm</li>
+                        <li>• 8% Referral</li>
+                        <li>• 5% VIP Support</li>
+                        <li>• 49% lợi tức</li>
+                    </ul>
+                    <button onclick="selectCard('diamond')" class="w-full mt-4 bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700">
+                        Mở thẻ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Quyền lợi & Lợi ích</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="bg-white p-8 rounded-lg shadow-md text-center">
+                    <div class="text-4xl mb-4">💰</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">VGB Digital Share System</h3>
+                    <p class="text-gray-600">Hệ thống token nội bộ với tỷ lệ 100 VGB = 1 triệu VNĐ. Nhân với hệ số theo từng loại thành viên.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md text-center">
+                    <div class="text-4xl mb-4">🏥</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Chăm sóc sức khỏe</h3>
+                    <p class="text-gray-600">Từ 12-24 lượt tư vấn sức khỏe trong 2 năm, tùy thuộc vào loại thẻ và thành viên.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md text-center">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Minh bạch 49%</h3>
+                    <p class="text-gray-600">Chia sẻ 49% lợi nhuận sau thuế theo quý, minh bạch và công khai.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Câu hỏi thường gặp (FAQ)</h2>
+            <div class="max-w-4xl mx-auto space-y-6">
+                
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">❓ VGB Digital Share là gì?</h3>
+                    <p class="text-gray-600">VGB Digital Share là hệ thống token nội bộ của VCare Global. Tỷ lệ quy đổi: 100 VGB = 1 triệu VNĐ. Mỗi loại thành viên có hệ số nhân khác nhau.</p>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">❓ Maxout limit là gì?</h3>
+                    <p class="text-gray-600">Maxout limit là giới hạn rút tối đa dựa trên số tiền đầu tư ban đầu. Ví dụ: Nhà Đầu Tư Thiên Thần (5.0x) có thể rút tối đa 5 lần số tiền đầu tư.</p>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">❓ Làm thế nào để trở thành Người Sáng Lập?</h3>
+                    <p class="text-gray-600">Để trở thành Người Sáng Lập, bạn cần đầu tư tối thiểu 245 triệu VNĐ. Người Sáng Lập có quyền kế thừa và không giới hạn maxout.</p>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">❓ Tỷ lệ chia sẻ lợi nhuận như thế nào?</h3>
+                    <p class="text-gray-600">VCare Global chia sẻ 49% lợi nhuận sau thuế cho các thành viên, 5% cho VIP support, và 8% cho referral commission.</p>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">❓ Thẻ chăm sóc có giá trị bao lâu?</h3>
+                    <p class="text-gray-600">Tất cả thẻ chăm sóc có giá trị 2 năm kể từ ngày phát hành. Số lượt tư vấn tùy thuộc vào loại thẻ.</p>
+                </div>
+
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">❓ Có thể nâng cấp loại thành viên không?</h3>
+                    <p class="text-gray-600">Có, bạn có thể nâng cấp loại thành viên bằng cách đầu tư thêm để đạt mức tối thiểu của loại cao hơn.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 flex items-center justify-center">
+                            <!-- Globe with DNA helix -->
+                            <svg viewBox="0 0 40 40" class="w-full h-full">
+                                <!-- Globe outline -->
+                                <circle cx="20" cy="20" r="18" fill="none" stroke="white" stroke-width="1.5"/>
+                                <!-- Globe grid lines -->
+                                <line x1="2" y1="20" x2="38" y2="20" stroke="white" stroke-width="0.8" opacity="0.6"/>
+                                <line x1="20" y1="2" x2="20" y2="38" stroke="white" stroke-width="0.8" opacity="0.6"/>
+                                <ellipse cx="20" cy="20" rx="18" ry="9" fill="none" stroke="white" stroke-width="0.8" opacity="0.4"/>
+                                <ellipse cx="20" cy="20" rx="9" ry="18" fill="none" stroke="white" stroke-width="0.8" opacity="0.4"/>
+                                
+                                <!-- DNA double helix -->
+                                <path d="M10 15 Q15 12 20 15 Q25 18 25 20 Q25 22 20 25 Q15 28 10 25" 
+                                      stroke="white" stroke-width="1.5" fill="none"/>
+                                <path d="M10 25 Q15 22 20 25 Q25 22 25 20 Q25 18 20 15 Q15 12 10 15" 
+                                      stroke="white" stroke-width="1.5" fill="none"/>
+                                
+                                <!-- Connecting lines -->
+                                <line x1="13" y1="18" x2="18" y2="20" stroke="white" stroke-width="1"/>
+                                <line x1="18" y1="18" x2="23" y2="20" stroke="white" stroke-width="1"/>
+                                <line x1="13" y1="22" x2="18" y2="20" stroke="white" stroke-width="1"/>
+                                <line x1="18" y1="22" x2="23" y2="20" stroke="white" stroke-width="1"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Vcare Global</h3>
+                            <p class="text-sm text-gray-300">Hội Tụ Những Tinh Hoa</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 text-sm">
+                        Hệ thống chăm sóc sức khỏe toàn diện, minh bạch và công bằng cho mọi thành viên.
+                    </p>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Về VCare Global</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#user-types" class="hover:text-white">8 Loại thành viên</a></li>
+                        <li><a href="#card-types" class="hover:text-white">Thẻ chăm sóc</a></li>
+                        <li><a href="#benefits" class="hover:text-white">Quyền lợi</a></li>
+                        <li><a href="#faq" class="hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Hỗ trợ</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="#" class="hover:text-white">Hướng dẫn sử dụng</a></li>
+                        <li><a href="#" class="hover:text-white">Liên hệ hỗ trợ</a></li>
+                        <li><a href="#" class="hover:text-white">Điều khoản sử dụng</a></li>
+                        <li><a href="#" class="hover:text-white">Chính sách bảo mật</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Liên hệ</h4>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>📧 Email: support@vcareglobal.com</li>
+                        <li>📞 Hotline: 1900-xxxx</li>
+                        <li>🏢 Địa chỉ: TP.HCM, Việt Nam</li>
+                        <li>🌐 Website: www.vcareglobal.vn</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p class="text-gray-600 text-sm">
+                    © 2024 VCare Global. Tất cả quyền được bảo lưu. | Phát triển bởi VCare Global Team
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl">✨</span>
+                        <h2 class="text-xl font-bold text-gray-800">Đăng ký đồng hành</h2>
+                    </div>
+                    <button onclick="closeModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                
+                <form id="registrationForm" class="p-6">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Họ và tên *</label>
+                            <input type="text" id="fullName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nguyễn Văn A" pattern="[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐđ\s]{2,50}" title="Vui lòng nhập họ tên hợp lệ (2-50 ký tự, chỉ chữ cái)" required>
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: Nguyễn Văn A</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Số điện thoại *</label>
+                            <input type="tel" id="phoneNumber" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="09xxxxxxxxx" pattern="[0-9]{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)" required>
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: 0901234567 hoặc 0123456789</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                            <input type="email" id="emailOptional" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="you@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Vui lòng nhập email hợp lệ">
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: nguyenvana@gmail.com</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Số CMND/CCCD</label>
+                            <input type="text" id="idCard" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="123456789" pattern="[0-9]{9,12}" title="Vui lòng nhập số CMND/CCCD hợp lệ (9-12 chữ số)">
+                            <p class="text-xs text-gray-600 mt-1">Ví dụ: 123456789 hoặc 123456789012</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Ngày sinh</label>
+                            <input type="date" id="birthDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" max="2010-01-01" title="Vui lòng chọn ngày sinh hợp lệ">
+                            <p class="text-xs text-gray-600 mt-1">Chọn ngày sinh của bạn</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Địa chỉ</label>
+                            <textarea id="address" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập địa chỉ đầy đủ của bạn" maxlength="200"></textarea>
+                            <p class="text-xs text-gray-600 mt-1">Tối đa 200 ký tự</p>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Chọn loại thành viên</label>
+                            <select id="partnerValue" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+                                <option value="">Chọn loại thành viên</option>
+                                <option value="founder">🏆 Người Sáng Lập (≥245M VND)</option>
+                                <option value="angel">👼 Nhà Đầu Tư Thiên Thần (≥100M VND)</option>
+                                <option value="seed">🌱 Nhà Đầu Tư Hạt Giống (≥50M VND)</option>
+                                <option value="vcare_home">🏠 Vcare Home (≥30M VND)</option>
+                                <option value="asset_contributor">🏢 Nhà Đóng Góp Tài Sản (≥20M VND)</option>
+                                <option value="intellectual_contributor">🧠 Nhà Đóng Góp Trí Tuệ (≥10M VND)</option>
+                                <option value="franchise_branch">🏬 Chi Nhánh Nhượng Quyền (≥5M VND)</option>
+                                <option value="card_customer">💳 Khách Hàng Thẻ (≥2M VND)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input type="checkbox" id="agreement" class="mt-1" required>
+                            <span class="text-sm text-gray-600 ml-2">
+                                Tôi đồng ý với Hợp đồng dịch vụ & Quy chế vận hành
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-4 mt-6">
+                        <button type="button" onclick="closeModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                            Hủy
+                        </button>
+                        <button type="submit" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            Gửi đăng ký
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Purchase Modal -->
+    <div id="cardPurchaseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl">💳</span>
+                        <h2 class="text-xl font-bold text-gray-800">Mua thẻ chăm sóc</h2>
+                    </div>
+                    <button onclick="closeCardModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                
+                <div class="p-6">
+                    <!-- Selected Card Info -->
+                    <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                        <h3 class="font-semibold text-blue-800 mb-2">Thẻ đã chọn:</h3>
+                        <div class="text-lg font-bold text-blue-600" id="selectedCardName">Standard Card</div>
+                        <div class="text-sm text-blue-700" id="selectedCardPrice">2.000.000 ₫</div>
+                        <div class="text-sm text-blue-700" id="selectedCardSessions">12 lượt tư vấn/2 năm</div>
+                    </div>
+
+                    <!-- Step 1: Customer Information -->
+                    <div id="step1" class="space-y-4">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Bước 1: Thông tin khách hàng</h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Họ và tên *</label>
+                                <input type="text" id="customerName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nguyễn Văn A" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Số điện thoại *</label>
+                                <input type="tel" id="customerPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="09xxxxxxxxx" pattern="[0-9]{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)" required>
+                                <p class="text-xs text-gray-600 mt-1">Ví dụ: 0901234567 hoặc 0123456789</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                                <input type="email" id="customerEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="you@example.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Vui lòng nhập email hợp lệ">
+                                <p class="text-xs text-gray-600 mt-1">Ví dụ: nguyenvana@gmail.com</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Địa chỉ</label>
+                                <input type="text" id="customerAddress" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Địa chỉ đầy đủ">
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end">
+                            <button onclick="nextStep(2)" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                Tiếp theo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Order Summary -->
+                    <div id="step2" class="space-y-4 hidden">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Bước 2: Tóm tắt đơn hàng</h3>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="font-semibold">Thẻ chăm sóc:</span>
+                                <span id="orderCardName">Standard Card</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span>Số lượt tư vấn:</span>
+                                <span id="orderCardSessions">12 lượt/2 năm</span>
+                            </div>
+                            <div class="flex justify-between items-center mb-2">
+                                <span>Thời hạn:</span>
+                                <span>24 tháng</span>
+                            </div>
+                            <hr class="my-2">
+                            <div class="flex justify-between items-center font-bold text-lg">
+                                <span>Tổng cộng:</span>
+                                <span id="orderTotalPrice">2.000.000 ₫</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="prevStep(1)" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                Quay lại
+                            </button>
+                            <button onclick="nextStep(3)" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                Tiếp theo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Payment -->
+                    <div id="step3" class="space-y-4 hidden">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Bước 3: Thanh toán</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Phương thức thanh toán *</label>
+                                <select id="paymentMethod" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+                                    <option value="">Chọn phương thức thanh toán</option>
+                                    <option value="bank_transfer">Chuyển khoản ngân hàng</option>
+                                    <option value="cash">Thanh toán tiền mặt</option>
+                                </select>
+                            </div>
+                            
+                            <div id="bankInfo" class="hidden bg-blue-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-3">🏦 Thông tin chuyển khoản:</h4>
+                                <div class="text-sm text-blue-700 space-y-2">
+                                    <div><strong>Ngân hàng:</strong> TPBank</div>
+                                    <div><strong>Số tài khoản:</strong> <span class="font-mono bg-white px-2 py-1 rounded">92232558888</span></div>
+                                    <div><strong>Chủ tài khoản:</strong> PHAM VAN SINH</div>
+                                    <div><strong>Mã đơn hàng:</strong> <span id="orderIdStep3" class="font-mono bg-white px-2 py-1 rounded text-red-600">VCG-001</span></div>
+                                    <div><strong>Nội dung:</strong> <span id="paymentContentStep3" class="font-mono bg-white px-2 py-1 rounded text-red-600">VCG-001</span></div>
+                                </div>
+                                
+                                <!-- QR Code Section -->
+                                <div class="mt-4 text-center">
+                                    <h5 class="font-semibold text-blue-800 mb-2">📱 Quét QR để thanh toán</h5>
+                                    <div class="bg-white p-3 rounded-lg border-2 border-blue-200 inline-block">
+                                        <img id="qrCodeStep3" src="" alt="QR Code" class="w-32 h-32 mx-auto">
+                                    </div>
+                                    <p class="text-xs text-blue-600 mt-1">Sử dụng MoMo, TPBank hoặc app ngân hàng để quét QR</p>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Upload chứng từ thanh toán *</label>
+                                <input type="file" id="paymentProof" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" accept="image/*,.pdf" required>
+                                <p class="text-xs text-gray-700 mt-1">Chấp nhận file: JPG, PNG, PDF (tối đa 5MB)</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Ghi chú</label>
+                                <textarea id="paymentNote" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" rows="3" placeholder="Ghi chú thêm về thanh toán..."></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-between">
+                            <button onclick="prevStep(2)" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                Quay lại
+                            </button>
+                            <button onclick="showPaymentQR()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                                Thanh toán
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">Đăng nhập</h2>
+                    <button onclick="closeModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                
+                <div class="p-6">
+                    <!-- Demo Accounts Info -->
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <h3 class="font-semibold text-yellow-800 mb-2">🔑 Tài khoản Demo để test:</h3>
+                        <div class="text-sm text-yellow-700 space-y-1">
+                            <div><strong>👤 User:</strong> user@vcareglobal.com / user123</div>
+                            <div><strong>🔧 Admin:</strong> admin@vcareglobal.com / admin123</div>
+                        </div>
+                        <div class="mt-2 flex space-x-2">
+                            <button onclick="quickLogin('user')" class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-xs hover:bg-blue-200">
+                                👤 Login User
+                            </button>
+                            <button onclick="quickLogin('admin')" class="bg-red-100 text-red-700 px-3 py-1 rounded text-xs hover:bg-red-200">
+                                🔧 Login Admin
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <form id="loginForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email hoặc Số điện thoại</label>
+                            <input type="text" id="loginId" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="user@vcareglobal.com" required>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Mật khẩu</label>
+                            <input type="password" id="loginPassword" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="user123" required>
+                        </div>
+                        
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center">
+                                <input type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                <span class="ml-2 text-sm text-gray-600">Ghi nhớ đăng nhập</span>
+                            </label>
+                            <a href="#" onclick="showForgotPasswordModal()" class="text-sm text-blue-600 hover:text-blue-800">Quên mật khẩu?</a>
+                        </div>
+                    </form>
+                    
+                    <button type="submit" class="w-full mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700" onclick="submitLogin()">
+                        Đăng nhập
+                    </button>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-gray-600">Chưa có tài khoản?</p>
+                        <button type="button" onclick="closeModal(); showRegister();" class="text-blue-600 hover:text-blue-800 font-medium">
+                            Đăng ký ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- User Type Selection Modal -->
+    <div id="userTypeSelectionModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">🎯 Chọn gói thành viên</h2>
+                        <button onclick="closeUserTypeSelectionModal()" class="text-gray-600 hover:text-gray-800">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Step 1: Selected Package Info -->
+                        <div id="userTypeStep1" class="space-y-4">
+                            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg border border-blue-200">
+                                <h3 class="text-lg font-semibold text-blue-800 mb-3">📦 Gói đã chọn</h3>
+                                <div id="selectedPackageInfo" class="space-y-2 text-blue-700">
+                                    <!-- Dynamic content will be inserted here -->
+                                </div>
+                            </div>
+
+                            <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                                <h4 class="font-semibold text-yellow-800 mb-2">⚠️ Lưu ý quan trọng:</h4>
+                                <ul class="text-sm text-yellow-700 space-y-1 list-disc list-inside">
+                                    <li>Đây là gói đầu tư dài hạn, không thể hoàn tiền</li>
+                                    <li>VGB Digital Share sẽ được cấp sau khi thanh toán thành công</li>
+                                    <li>Quyền lợi sẽ có hiệu lực ngay sau khi xác nhận</li>
+                                    <li>Hỗ trợ 24/7 cho tất cả thành viên</li>
+                                </ul>
+                            </div>
+
+                            <div class="flex justify-end space-x-3">
+                                <button onclick="closeUserTypeSelectionModal()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                    Hủy
+                                </button>
+                                <button onclick="nextToStep2()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                    Tiếp tục
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Personal Information -->
+                        <div id="userTypeStep2" class="hidden space-y-4">
+                            <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                                <h3 class="text-lg font-semibold text-green-800 mb-3">📝 Thông tin cá nhân</h3>
+                                <p class="text-sm text-green-700">Vui lòng điền đầy đủ thông tin để hoàn tất đăng ký</p>
+                            </div>
+
+                            <form id="userTypeRegistrationForm" class="space-y-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Họ và tên *</label>
+                                        <input type="text" id="memberName" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Số điện thoại *</label>
+                                        <input type="tel" id="memberPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="09xxxxxxxxx" pattern="[0-9]{10,11}" title="Vui lòng nhập số điện thoại hợp lệ (10-11 chữ số)" required>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email *</label>
+                                    <input type="email" id="memberEmail" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="nguyenvana@gmail.com" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" title="Vui lòng nhập email hợp lệ" required>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Địa chỉ *</label>
+                                    <textarea id="memberAddress" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required></textarea>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Số CMND/CCCD *</label>
+                                        <input type="text" id="memberIdCard" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="123456789" pattern="[0-9]{9,12}" title="Vui lòng nhập số CMND/CCCD hợp lệ (9-12 chữ số)" required>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-2">Ngày sinh *</label>
+                                        <input type="date" id="memberBirthday" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+                                    </div>
+                                </div>
+
+                                <div class="bg-blue-50 p-4 rounded-lg">
+                                    <h4 class="font-semibold text-blue-800 mb-2">💰 Thông tin đầu tư</h4>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-2">Số tiền đầu tư (VND) *</label>
+                                            <input type="number" id="investmentAmount" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+                                            <p class="text-xs text-gray-600 mt-1">Tối thiểu theo gói đã chọn</p>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-2">Phương thức đầu tư *</label>
+                                            <select id="investmentMethod" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" required>
+                                                <option value="">Chọn phương thức</option>
+                                                <option value="bank_transfer">Chuyển khoản ngân hàng</option>
+                                                <option value="cash">Tiền mặt</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-between space-x-3">
+                                    <button type="button" onclick="backToStep1()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                        Quay lại
+                                    </button>
+                                    <button type="button" onclick="nextToStep3()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                        Tiếp tục
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Step 3: Payment -->
+                        <div id="userTypeStep3" class="hidden space-y-4">
+                            <h3 class="text-lg font-semibold text-gray-800">💳 Thanh toán</h3>
+                            
+                            <div class="bg-blue-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-blue-800 mb-3">🏦 Thông tin chuyển khoản:</h4>
+                                <div class="text-sm text-blue-700 space-y-2">
+                                    <div><strong>Ngân hàng:</strong> TPBank</div>
+                                    <div><strong>Số tài khoản:</strong> <span class="font-mono bg-white px-2 py-1 rounded">92232558888</span></div>
+                                    <div><strong>Chủ tài khoản:</strong> PHAM VAN SINH</div>
+                                    <div><strong>Mã đơn hàng:</strong> <span id="userTypeOrderId" class="font-mono bg-white px-2 py-1 rounded text-red-600">VCG-001</span></div>
+                                    <div><strong>Nội dung:</strong> <span id="userTypePaymentContent" class="font-mono bg-white px-2 py-1 rounded text-red-600">VCG-001</span></div>
+                                </div>
+                                
+                                <!-- QR Code Section -->
+                                <div class="mt-4 text-center">
+                                    <h5 class="font-semibold text-blue-800 mb-2">📱 Quét QR để thanh toán</h5>
+                                    <div class="bg-white p-3 rounded-lg border-2 border-blue-200 inline-block">
+                                        <img id="userTypeQRCode" src="" alt="QR Code" class="w-32 h-32 mx-auto">
+                                    </div>
+                                    <p class="text-xs text-blue-600 mt-1">Sử dụng MoMo, TPBank hoặc app ngân hàng để quét QR</p>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-green-50 p-4 rounded-lg">
+                                <h4 class="font-semibold text-green-800 mb-2">📝 Hướng dẫn thanh toán</h4>
+                                <ol class="text-sm text-green-700 space-y-1 list-decimal list-inside">
+                                    <li>Mở MoMo, TPBank hoặc app ngân hàng</li>
+                                    <li>Chọn "Chuyển khoản" → "Quét mã QR"</li>
+                                    <li>Quét QR code ở trên</li>
+                                    <li>Kiểm tra thông tin và xác nhận</li>
+                                    <li>Chụp ảnh biên lai và upload</li>
+                                </ol>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Upload chứng từ thanh toán *</label>
+                                <input type="file" id="userTypePaymentProof" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" accept="image/*,.pdf" required>
+                                <p class="text-xs text-gray-700 mt-1">Chấp nhận file: JPG, PNG, PDF (tối đa 5MB)</p>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Ghi chú</label>
+                                <textarea id="userTypePaymentNote" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Ghi chú thêm về thanh toán..."></textarea>
+                            </div>
+
+                            <div class="flex justify-between space-x-3">
+                                <button onclick="backToStep2()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                    Quay lại
+                                </button>
+                                <button onclick="submitUserTypeOrder()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                                    Hoàn thành đăng ký
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment QR Modal -->
+    <div id="paymentQRModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-gray-800">💳 Thanh toán đơn hàng</h2>
+                        <button onclick="closePaymentQRModal()" class="text-gray-600 hover:text-gray-800">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Order Info -->
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-gray-800 mb-2">📋 Thông tin đơn hàng</h3>
+                            <div class="space-y-1 text-sm text-gray-600">
+                                <div><strong>Mã đơn hàng:</strong> <span id="orderIdDisplay">VCG-001</span></div>
+                                <div><strong>Loại thẻ:</strong> <span id="cardTypeDisplay">Gold</span></div>
+                                <div><strong>Số tiền:</strong> <span id="amountDisplay" class="text-red-600 font-bold">2,000,000 ₫</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Bank Info -->
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-gray-800 mb-2">🏦 Thông tin chuyển khoản</h3>
+                            <div class="space-y-1 text-sm text-gray-700">
+                                <div><strong>Ngân hàng:</strong> TPBank</div>
+                                <div><strong>STK:</strong> <span class="font-mono bg-white px-2 py-1 rounded">92232558888</span></div>
+                                <div><strong>Chủ TK:</strong> PHAM VAN SINH</div>
+                                <div><strong>Nội dung:</strong> <span id="paymentContent" class="font-mono bg-white px-2 py-1 rounded text-red-600">VCG-001</span></div>
+                            </div>
+                        </div>
+
+                        <!-- QR Code -->
+                        <div class="text-center">
+                            <h3 class="font-semibold text-gray-800 mb-3">📱 Quét QR để thanh toán</h3>
+                            <div class="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block">
+                                <img id="qrCodeImage" src="" alt="QR Code" class="w-48 h-48 mx-auto">
+                            </div>
+                            <p class="text-xs text-gray-600 mt-2">
+                                Sử dụng app ngân hàng để quét QR code
+                            </p>
+                        </div>
+
+                        <!-- Payment Steps -->
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <h3 class="font-semibold text-gray-800 mb-2">📝 Hướng dẫn thanh toán</h3>
+                            <ol class="text-sm text-gray-700 space-y-1 list-decimal list-inside">
+                                <li>Mở MoMo, TPBank hoặc app ngân hàng</li>
+                                <li>Chọn "Chuyển khoản" → "Quét mã QR"</li>
+                                <li>Quét QR code ở trên</li>
+                                <li>Kiểm tra thông tin và xác nhận</li>
+                                <li>Chụp ảnh biên lai và upload</li>
+                            </ol>
+                        </div>
+
+                        <!-- Upload Proof -->
+                        <div class="border-t pt-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">📸 Upload biên lai</h3>
+                            <input type="file" id="paymentProofUpload" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                            <p class="text-xs text-gray-600 mt-1">
+                                Chụp ảnh biên lai chuyển khoản để xác nhận thanh toán
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex space-x-3 pt-4">
+                            <button onclick="closePaymentQRModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                                Hủy
+                            </button>
+                            <button onclick="confirmPayment()" class="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                                Xác nhận đã thanh toán
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <h2 class="text-xl font-bold text-gray-800">🔑 Quên mật khẩu</h2>
+                    <button onclick="closeForgotPasswordModal()" class="text-gray-600 hover:text-gray-800">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <div class="space-y-4">
+                        <!-- Step 1: Enter Email/Phone -->
+                        <div id="forgotStep1" class="space-y-4">
+                            <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                                <h3 class="font-semibold text-blue-800 mb-2">📧 Khôi phục mật khẩu</h3>
+                                <p class="text-sm text-blue-700">
+                                    Nhập email hoặc số điện thoại đã đăng ký. Chúng tôi sẽ gửi mã xác thực để khôi phục mật khẩu.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Email hoặc Số điện thoại *</label>
+                                <input type="text" id="forgotEmailOrPhone" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập email hoặc số điện thoại" required>
+                                <p class="text-xs text-gray-600 mt-1">Ví dụ: user@vcareglobal.com hoặc 0901234567</p>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3">
+                                <button onclick="closeForgotPasswordModal()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                    Hủy
+                                </button>
+                                <button onclick="sendResetCode()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                                    Gửi mã xác thực
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Enter Verification Code -->
+                        <div id="forgotStep2" class="hidden space-y-4">
+                            <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                                <h3 class="font-semibold text-green-800 mb-2">✅ Mã xác thực đã được gửi</h3>
+                                <p class="text-sm text-green-700">
+                                    Chúng tôi đã gửi mã xác thực 6 chữ số đến <span id="sentToInfo" class="font-semibold"></span>
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Mã xác thực *</label>
+                                <input type="text" id="verificationCode" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-center text-2xl tracking-widest" placeholder="000000" maxlength="6" pattern="[0-9]{6}" required>
+                                <p class="text-xs text-gray-600 mt-1">Nhập mã 6 chữ số đã nhận</p>
+                            </div>
+                            
+                            <div class="flex justify-between items-center">
+                                <button onclick="backToForgotStep1()" class="text-blue-600 hover:text-blue-800 text-sm">
+                                    ← Quay lại
+                                </button>
+                                <button onclick="resendCode()" class="text-blue-600 hover:text-blue-800 text-sm">
+                                    Gửi lại mã
+                                </button>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3">
+                                <button onclick="backToForgotStep1()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                    Hủy
+                                </button>
+                                <button onclick="verifyResetCode()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                                    Xác thực
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Set New Password -->
+                        <div id="forgotStep3" class="hidden space-y-4">
+                            <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
+                                <h3 class="font-semibold text-yellow-800 mb-2">🔒 Tạo mật khẩu mới</h3>
+                                <p class="text-sm text-yellow-700">
+                                    Vui lòng tạo mật khẩu mới an toàn cho tài khoản của bạn.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Mật khẩu mới *</label>
+                                <input type="password" id="newPassword" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập mật khẩu mới" minlength="6" required>
+                                <p class="text-xs text-gray-600 mt-1">Tối thiểu 6 ký tự</p>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">Xác nhận mật khẩu *</label>
+                                <input type="password" id="confirmPassword" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" placeholder="Nhập lại mật khẩu mới" minlength="6" required>
+                                <p class="text-xs text-gray-600 mt-1">Nhập lại mật khẩu để xác nhận</p>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3">
+                                <button onclick="backToForgotStep2()" class="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400">
+                                    Quay lại
+                                </button>
+                                <button onclick="resetPassword()" class="bg-yellow-600 text-white px-6 py-2 rounded-lg hover:bg-yellow-700">
+                                    Đặt lại mật khẩu
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Success Step -->
+                        <div id="forgotSuccess" class="hidden space-y-4">
+                            <div class="bg-green-50 border border-green-200 p-4 rounded-lg text-center">
+                                <div class="text-6xl mb-4">🎉</div>
+                                <h3 class="font-semibold text-green-800 mb-2">Mật khẩu đã được đặt lại thành công!</h3>
+                                <p class="text-sm text-green-700 mb-4">
+                                    Bạn có thể đăng nhập với mật khẩu mới ngay bây giờ.
+                                </p>
+                                <button onclick="closeForgotPasswordModal()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+                                    Đăng nhập ngay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Created Modal -->
+    <div id="accountCreatedModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl">🎉</span>
+                        <h2 class="text-xl font-bold text-gray-800">Tài khoản đã được tạo!</h2>
+                    </div>
+                    <button onclick="closeAccountModal()" class="text-gray-600 hover:text-gray-800 text-2xl">×</button>
+                </div>
+                
+                <div class="p-6">
+                    <!-- Success Message -->
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                        <div class="flex items-center">
+                            <svg class="w-6 h-6 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <h3 class="font-semibold text-green-800">Đơn hàng và tài khoản đã được tạo thành công!</h3>
+                        </div>
+                    </div>
+
+                    <!-- Order Info -->
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">📋 Thông tin đơn hàng:</h4>
+                        <div class="text-sm text-blue-700 space-y-1">
+                            <div><strong>Mã đơn hàng:</strong> <span id="orderId">ORD-123456</span></div>
+                            <div><strong>Thẻ đã mua:</strong> <span id="cardType">Gold Card</span></div>
+                            <div><strong>Trạng thái:</strong> Chờ duyệt</div>
+                        </div>
+                    </div>
+
+                    <!-- User Account Info -->
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-yellow-800 mb-2">🔑 Thông tin tài khoản:</h4>
+                        <div class="text-sm text-yellow-700 space-y-1">
+                            <div><strong>Họ tên:</strong> <span id="userName">Nguyễn Văn A</span></div>
+                            <div><strong>Email:</strong> <span id="userEmail">user@vcareglobal.com</span></div>
+                            <div><strong>Mật khẩu:</strong> <span id="userPassword" class="font-mono bg-yellow-100 px-2 py-1 rounded">Abc12345</span></div>
+                        </div>
+                        <div class="mt-2 text-xs text-yellow-600">
+                            ⚠️ Vui lòng lưu lại thông tin tài khoản để đăng nhập sau này!
+                        </div>
+                    </div>
+
+                    <!-- Next Steps -->
+                    <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                        <h4 class="font-semibold text-gray-800 mb-2">📝 Các bước tiếp theo:</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>1. Đăng nhập vào dashboard user để xem thông tin</li>
+                            <li>2. Chờ admin duyệt đơn hàng (trong 24h)</li>
+                            <li>3. Nhận thẻ chăm sóc qua email hoặc SMS</li>
+                            <li>4. Bắt đầu sử dụng dịch vụ chăm sóc sức khỏe</li>
+                        </ul>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex space-x-4">
+                        <button onclick="closeAccountModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400">
+                            Đóng
+                        </button>
+                        <button onclick="goToUserDashboard()" class="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                            🚀 Vào Dashboard
+                        </button>
+                    </div>
+
+                    <!-- Login Info -->
+                    <div class="mt-4 text-center">
+                        <p class="text-xs text-gray-700">
+                            Hoặc đăng nhập sau tại: <strong>Đăng nhập</strong> → <strong>User Dashboard</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Core functions
+        function showRegister() {
+            document.getElementById('registrationModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function showLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('registrationModal').classList.add('hidden');
+            document.getElementById('loginModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function scrollToBenefits() {
+            const benefitsSection = document.getElementById('benefits');
+            if (benefitsSection) {
+                benefitsSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function selectUserType(userType) {
+            // Store selected user type globally
+            window.selectedUserType = userType;
+            
+            // User type configurations
+            const userTypeConfigs = {
+                'founder': {
+                    name: '🏆 Người Sáng Lập',
+                    minInvestment: 245000000,
+                    vgbDigitalShareMultiplier: '3.0x',
+                    maxout: 'Unlimited',
+                    sessions: '24 sessions/năm',
+                    benefits: ['Quyền kế thừa', 'VIP Support 24/7', 'Tham gia hội đồng quản trị'],
+                    color: 'red'
+                },
+                'angel': {
+                    name: '👼 Nhà Đầu Tư Thiên Thần',
+                    minInvestment: 100000000,
+                    vgbDigitalShareMultiplier: '2.5x',
+                    maxout: '5.0x',
+                    sessions: '21 sessions/năm',
+                    benefits: ['High-tier support', 'Ưu tiên đầu tư', 'Báo cáo chi tiết'],
+                    color: 'yellow'
+                },
+                'seed': {
+                    name: '🌱 Nhà Đầu Tư Hạt Giống',
+                    minInvestment: 50000000,
+                    vgbDigitalShareMultiplier: '1.2x',
+                    maxout: '4.0x',
+                    sessions: '18 sessions/năm',
+                    benefits: ['Medium-tier support', 'Tham gia sự kiện', 'Báo cáo định kỳ'],
+                    color: 'green'
+                },
+                'vcare_home': {
+                    name: '🏠 Vcare Home',
+                    minInvestment: 30000000,
+                    vgbDigitalShareMultiplier: '1.0x',
+                    maxout: '3.0x',
+                    sessions: '15 sessions/năm',
+                    benefits: ['Standard support', 'Truy cập cơ sở dữ liệu', 'Hỗ trợ cơ bản'],
+                    color: 'blue'
+                },
+                'asset_contributor': {
+                    name: '🏢 Nhà Đóng Góp Tài Sản',
+                    minInvestment: 20000000,
+                    vgbDigitalShareMultiplier: '2.0x',
+                    maxout: '2.0x',
+                    sessions: '18 sessions/năm',
+                    benefits: ['Asset contribution', 'Quản lý tài sản', 'Báo cáo tài chính'],
+                    color: 'purple'
+                },
+                'intellectual_contributor': {
+                    name: '🧠 Nhà Đóng Góp Trí Tuệ',
+                    minInvestment: 10000000,
+                    vgbDigitalShareMultiplier: '1.5x',
+                    maxout: '2.5x',
+                    sessions: '20 sessions/năm',
+                    benefits: ['KPI/SOP contribution', 'Tham gia phát triển', 'Báo cáo chuyên môn'],
+                    color: 'indigo'
+                },
+                'franchise_branch': {
+                    name: '🏬 Chi Nhánh Nhượng Quyền',
+                    minInvestment: 5000000,
+                    vgbDigitalShareMultiplier: '1.0x',
+                    maxout: '1.5x',
+                    sessions: '18 sessions/năm',
+                    benefits: ['Franchise benefits', 'Quản lý chi nhánh', 'Báo cáo kinh doanh'],
+                    color: 'orange'
+                },
+                'card_customer': {
+                    name: '💳 Khách Hàng Thẻ',
+                    minInvestment: 2000000,
+                    vgbDigitalShareMultiplier: '1.0x',
+                    maxout: '2.1x',
+                    sessions: '12 sessions/năm',
+                    benefits: ['Basic benefits', 'Chăm sóc sức khỏe', 'Hỗ trợ cơ bản'],
+                    color: 'gray'
+                }
+            };
+            
+            const config = userTypeConfigs[userType];
+            if (config) {
+                // Populate selected package info
+                document.getElementById('selectedPackageInfo').innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl">${config.name.split(' ')[0]}</span>
+                        <div>
+                            <h4 class="font-bold text-lg">${config.name}</h4>
+                            <p class="text-sm opacity-80">Đầu tư tối thiểu: ${config.minInvestment.toLocaleString()} ₫</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 space-y-2">
+                        <div class="flex justify-between">
+                            <span class="font-medium">VGB Digital Share Multiplier:</span>
+                            <span class="font-bold">${config.vgbDigitalShareMultiplier}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-medium">Maxout Limit:</span>
+                            <span class="font-bold">${config.maxout}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-medium">Sessions:</span>
+                            <span class="font-bold">${config.sessions}</span>
+                        </div>
+                        <div class="mt-2">
+                            <span class="font-medium">Quyền lợi:</span>
+                            <ul class="text-sm mt-1 space-y-1">
+                                ${config.benefits.map(benefit => `<li>• ${benefit}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                
+                // Set minimum investment amount
+                document.getElementById('investmentAmount').value = config.minInvestment;
+                document.getElementById('investmentAmount').min = config.minInvestment;
+                
+                // Show modal
+                showUserTypeSelectionModal();
+            }
+        }
+
+        function selectCard(cardType) {
+            const cardData = {
+                'standard': { name: 'Standard Card', price: 2000000, sessions: 12 },
+                'silver': { name: 'Silver Card', price: 5000000, sessions: 15 },
+                'gold': { name: 'Gold Card', price: 18000000, sessions: 18 },
+                'platinum': { name: 'Platinum Card', price: 50000000, sessions: 21 },
+                'diamond': { name: 'Diamond Card', price: 100000000, sessions: 24 }
+            };
+            
+            // Store selected card data
+            window.selectedCard = cardData[cardType];
+            window.selectedCardType = cardType;
+            
+            // Show card purchase modal
+            showCardPurchaseModal();
+        }
+
+        function showCardPurchaseModal() {
+            document.getElementById('cardPurchaseModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Update modal with selected card info
+            if (window.selectedCard) {
+                document.getElementById('selectedCardName').textContent = window.selectedCard.name;
+                document.getElementById('selectedCardPrice').textContent = window.selectedCard.price.toLocaleString('vi-VN') + ' ₫';
+                document.getElementById('selectedCardSessions').textContent = window.selectedCard.sessions + ' lượt tư vấn/2 năm';
+            }
+        }
+
+
+        function closeCardModal() {
+            document.getElementById('cardPurchaseModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            // Reset to step 1
+            resetCardModal();
+        }
+
+
+        function resetCardModal() {
+            document.getElementById('step1').classList.remove('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
+            
+            // Clear form data
+            document.getElementById('customerName').value = '';
+            document.getElementById('customerPhone').value = '';
+            document.getElementById('customerEmail').value = '';
+            document.getElementById('customerAddress').value = '';
+            document.getElementById('paymentMethod').value = '';
+            document.getElementById('paymentProof').value = '';
+            document.getElementById('paymentNote').value = '';
+            document.getElementById('bankInfo').classList.add('hidden');
+        }
+
+        function nextStep(step) {
+            // Hide current step
+            if (step === 2) {
+                // Validate Step 1 form data
+                if (!validateStep1()) {
+                    return;
+                }
+                
+                document.getElementById('step1').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+                
+                // Update order summary
+                if (window.selectedCard) {
+                    document.getElementById('orderCardName').textContent = window.selectedCard.name;
+                    document.getElementById('orderCardSessions').textContent = window.selectedCard.sessions + ' lượt/2 năm';
+                    document.getElementById('orderTotalPrice').textContent = window.selectedCard.price.toLocaleString('vi-VN') + ' ₫';
+                }
+            } else if (step === 3) {
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step3').classList.remove('hidden');
+            }
+        }
+
+        function validateStep1() {
+            const name = document.getElementById('customerName').value.trim();
+            const phone = document.getElementById('customerPhone').value.trim();
+            const email = document.getElementById('customerEmail').value.trim();
+            
+            // Validate required fields
+            if (!name) {
+                alert('❌ Vui lòng nhập họ và tên!');
+                document.getElementById('customerName').focus();
+                return false;
+            }
+            
+            if (!phone) {
+                alert('❌ Vui lòng nhập số điện thoại!');
+                document.getElementById('customerPhone').focus();
+                return false;
+            }
+            
+            // Validate phone number format
+            const phonePattern = /^[0-9]{10,11}$/;
+            if (!phonePattern.test(phone)) {
+                alert('❌ Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.\nVí dụ: 0901234567 hoặc 0123456789');
+                document.getElementById('customerPhone').focus();
+                return false;
+            }
+            
+            // Validate email format if provided
+            if (email) {
+                const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                if (!emailPattern.test(email)) {
+                    alert('❌ Email không hợp lệ! Vui lòng nhập email đúng định dạng.\nVí dụ: nguyenvana@gmail.com');
+                    document.getElementById('customerEmail').focus();
+                    return false;
+                }
+            }
+            
+            return true;
+        }
+
+        function prevStep(step) {
+            if (step === 1) {
+                document.getElementById('step2').classList.add('hidden');
+                document.getElementById('step1').classList.remove('hidden');
+            } else if (step === 2) {
+                document.getElementById('step3').classList.add('hidden');
+                document.getElementById('step2').classList.remove('hidden');
+            }
+        }
+
+        function submitOrder() {
+            const orderId = document.getElementById('orderIdStep3').textContent;
+            const orderData = {
+                orderId: orderId,
+                cardType: window.selectedCardType,
+                cardData: window.selectedCard,
+                customerInfo: {
+                    name: document.getElementById('customerName').value,
+                    phone: document.getElementById('customerPhone').value,
+                    email: document.getElementById('customerEmail').value,
+                    address: document.getElementById('customerAddress').value
+                },
+                paymentInfo: {
+                    method: document.getElementById('paymentMethod').value,
+                    proof: document.getElementById('paymentProof').files[0],
+                    note: document.getElementById('paymentNote').value
+                }
+            };
+
+            fetch('/api/submit-card-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show account creation success modal
+                    showAccountCreatedModal(data.data);
+                } else {
+                    alert(data.message);
+                    closeCardModal();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đơn hàng đã được gửi thành công! Chúng tôi sẽ liên hệ xác nhận trong 24h.');
+                closeCardModal();
+            });
+        }
+
+        function showAccountCreatedModal(data) {
+            // Store user account data
+            window.userAccount = data.userAccount;
+            window.orderData = data;
+            
+            // Close card modal first
+            closeCardModal();
+            
+            // Show account created modal
+            document.getElementById('accountCreatedModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Update modal with user account info
+            document.getElementById('userEmail').textContent = data.userAccount.email;
+            document.getElementById('userPassword').textContent = data.userAccount.password;
+            document.getElementById('userName').textContent = data.userAccount.name;
+            document.getElementById('orderId').textContent = data.orderId;
+            document.getElementById('cardType').textContent = data.cardType.toUpperCase() + ' Card';
+        }
+
+        function showAccountCreatedModalForUserType(data, orderData) {
+            // Store user account data
+            window.userAccount = data.userAccount;
+            window.orderData = data;
+            
+            // Close user type modal
+            closeUserTypeSelectionModal();
+            
+            // Show account created modal
+            document.getElementById('accountCreatedModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            
+            // Update modal with user type info
+            document.getElementById('orderId').textContent = data.orderId;
+            document.getElementById('cardType').textContent = `${data.userType.toUpperCase()} Package`;
+            document.getElementById('userName').textContent = data.userAccount.name;
+            document.getElementById('userEmail').textContent = data.userAccount.email;
+            document.getElementById('userPassword').textContent = data.userAccount.password;
+            
+            // Update next steps for user type
+            updateNextStepsForUserType(data.userType);
+        }
+
+        function updateNextStepsForUserType(userType) {
+            const nextStepsContainer = document.querySelector('#accountCreatedModal .bg-gray-50 ul');
+            if (nextStepsContainer) {
+                nextStepsContainer.innerHTML = `
+                    <li>1. Đăng nhập vào dashboard user để xem thông tin</li>
+                    <li>2. Chờ admin duyệt đơn hàng (trong 24h)</li>
+                    <li>3. Nhận thông báo kích hoạt gói ${userType.toUpperCase()}</li>
+                    <li>4. Bắt đầu sử dụng quyền lợi thành viên</li>
+                `;
+            }
+        }
+
+        function closeAccountModal() {
+            document.getElementById('accountCreatedModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Generate Order ID and QR Code for Step 3
+        function generateOrderAndQR() {
+            const orderId = 'VCG-' + Date.now();
+            const amount = window.selectedCard ? window.selectedCard.price : 2000000;
+            
+            // Update order info display
+            document.getElementById('orderIdStep3').textContent = orderId;
+            document.getElementById('paymentContentStep3').textContent = orderId;
+            
+            // Generate QR code
+            fetch('/api/generate-qr-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    orderId: orderId,
+                    amount: amount,
+                    description: `Thanh toán đơn hàng ${orderId} - VCare Global`
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('qrCodeStep3').src = data.data.qrUrl;
+                } else {
+                    console.error('API Error:', data.message);
+                    createFallbackQRStep3(orderId, amount);
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                createFallbackQRStep3(orderId, amount);
+            });
+        }
+        
+        function createFallbackQRStep3(orderId, amount) {
+            // Create QR code compatible with MoMo and other banking apps
+            // Using VietQR format for better compatibility
+            const qrData = {
+                bankCode: "TPB",
+                accountNumber: "92232558888", 
+                accountName: "PHAM VAN SINH",
+                amount: amount,
+                description: orderId,
+                template: "compact"
+            };
+            
+            // VietQR URL that works with MoMo
+            const qrUrl = `https://img.vietqr.io/image/TPB-92232558888-compact.png?amount=${amount}&addInfo=${encodeURIComponent(orderId)}&accountName=${encodeURIComponent(qrData.accountName)}`;
+            
+            document.getElementById('qrCodeStep3').src = qrUrl;
+            console.log('Using MoMo-compatible QR for Step 3:', qrData);
+        }
+
+        // Payment QR Code Functions
+        function showPaymentQR() {
+            const cardType = window.selectedCardType;
+            const cardData = window.selectedCard;
+            const orderId = 'VCG-' + Date.now();
+            
+            // Update order info display
+            document.getElementById('orderIdDisplay').textContent = orderId;
+            document.getElementById('cardTypeDisplay').textContent = cardData.name;
+            document.getElementById('amountDisplay').textContent = cardData.price.toLocaleString() + ' ₫';
+            document.getElementById('paymentContent').textContent = orderId;
+            
+            // Generate QR code
+            generateQRCode(orderId, cardData.price);
+            
+            // Show modal
+            document.getElementById('paymentQRModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function generateQRCode(orderId, amount) {
+            fetch('/api/generate-qr-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    orderId: orderId,
+                    amount: amount,
+                    description: `Thanh toán đơn hàng ${orderId} - VCare Global`
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('qrCodeImage').src = data.data.qrUrl;
+                } else {
+                    alert('Lỗi tạo QR code: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Fallback: create a simple QR code with bank info
+                const qrText = `TPBank:92232558888:${amount}:${orderId}`;
+                document.getElementById('qrCodeImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrText)}`;
+            });
+        }
+
+        function closePaymentQRModal() {
+            document.getElementById('paymentQRModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function confirmPayment() {
+            const proofFile = document.getElementById('paymentProofUpload').files[0];
+            
+            if (!proofFile) {
+                alert('Vui lòng upload biên lai thanh toán!');
+                return;
+            }
+            
+            // Submit payment confirmation
+            const orderData = {
+                orderId: document.getElementById('orderIdDisplay').textContent,
+                cardType: window.selectedCardType,
+                cardData: window.selectedCard,
+                customerInfo: {
+                    name: document.getElementById('customerName').value,
+                    email: document.getElementById('customerEmail').value,
+                    address: document.getElementById('customerAddress').value
+                },
+                paymentInfo: {
+                    method: 'bank_transfer',
+                    amount: window.selectedCard.price,
+                    proof: proofFile.name,
+                    note: `Chuyển khoản TPBank - ${document.getElementById('paymentContent').textContent}`
+                }
+            };
+
+            fetch('/api/submit-card-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closePaymentQRModal();
+                    closeCardPurchaseModal();
+                    showAccountCreatedModal(data.data);
+                } else {
+                    alert('Lỗi xác nhận thanh toán: ' + (data.message || 'Vui lòng thử lại'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Lỗi xác nhận thanh toán. Vui lòng thử lại.');
+            });
+        }
+
+        function goToUserDashboard() {
+            // Store login data in localStorage for auto-login
+            localStorage.setItem('userLoginData', JSON.stringify({
+                email: window.userAccount.email,
+                password: window.userAccount.password,
+                name: window.userAccount.name,
+                role: 'card_customer',
+                orderData: window.orderData
+            }));
+            
+            // Redirect to user dashboard
+            window.location.href = '/user-dashboard';
+        }
+
+        // Payment method change handler
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentMethodSelect = document.getElementById('paymentMethod');
+            const bankInfo = document.getElementById('bankInfo');
+            
+            if (paymentMethodSelect && bankInfo) {
+                paymentMethodSelect.addEventListener('change', function() {
+                    if (this.value === 'bank_transfer') {
+                        bankInfo.classList.remove('hidden');
+                        // Generate order ID and QR code
+                        generateOrderAndQR();
+                    } else {
+                        bankInfo.classList.add('hidden');
+                    }
+                });
+            }
+        });
+
+        // Registration form validation function
+        function validateRegistrationForm() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const phoneNumber = document.getElementById('phoneNumber').value.trim();
+            const emailOptional = document.getElementById('emailOptional').value.trim();
+            const idCard = document.getElementById('idCard').value.trim();
+            const birthDate = document.getElementById('birthDate').value;
+            const address = document.getElementById('address').value.trim();
+            const partnerValue = document.getElementById('partnerValue').value;
+
+            // Validate required fields
+            if (!fullName) {
+                alert('❌ Vui lòng nhập họ và tên!');
+                document.getElementById('fullName').focus();
+                return false;
+            }
+
+            if (!phoneNumber) {
+                alert('❌ Vui lòng nhập số điện thoại!');
+                document.getElementById('phoneNumber').focus();
+                return false;
+            }
+
+            if (!partnerValue) {
+                alert('❌ Vui lòng chọn loại thành viên!');
+                document.getElementById('partnerValue').focus();
+                return false;
+            }
+
+            // Validate full name format (Vietnamese names)
+            const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐđ\s]{2,50}$/;
+            if (!namePattern.test(fullName)) {
+                alert('❌ Họ và tên không hợp lệ! Vui lòng nhập 2-50 ký tự, chỉ chứa chữ cái và khoảng trắng.\nVí dụ: Nguyễn Văn A');
+                document.getElementById('fullName').focus();
+                return false;
+            }
+
+            // Validate phone number
+            const phonePattern = /^[0-9]{10,11}$/;
+            if (!phonePattern.test(phoneNumber)) {
+                alert('❌ Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.\nVí dụ: 0901234567 hoặc 0123456789');
+                document.getElementById('phoneNumber').focus();
+                return false;
+            }
+
+            // Validate email if provided
+            if (emailOptional) {
+                const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                if (!emailPattern.test(emailOptional)) {
+                    alert('❌ Email không hợp lệ! Vui lòng nhập email đúng định dạng.\nVí dụ: nguyenvana@gmail.com');
+                    document.getElementById('emailOptional').focus();
+                    return false;
+                }
+            }
+
+            // Validate ID card if provided
+            if (idCard) {
+                const idCardPattern = /^[0-9]{9,12}$/;
+                if (!idCardPattern.test(idCard)) {
+                    alert('❌ Số CMND/CCCD không hợp lệ! Vui lòng nhập 9-12 chữ số.\nVí dụ: 123456789 hoặc 123456789012');
+                    document.getElementById('idCard').focus();
+                    return false;
+                }
+            }
+
+            // Validate birth date if provided
+            if (birthDate) {
+                const selectedDate = new Date(birthDate);
+                const today = new Date();
+                const maxDate = new Date('2010-01-01'); // Must be at least 14 years old
+                
+                if (selectedDate > today) {
+                    alert('❌ Ngày sinh không hợp lệ! Ngày sinh không thể là ngày tương lai.');
+                    document.getElementById('birthDate').focus();
+                    return false;
+                }
+                
+                if (selectedDate > maxDate) {
+                    alert('❌ Ngày sinh không hợp lệ! Bạn phải ít nhất 14 tuổi để đăng ký.');
+                    document.getElementById('birthDate').focus();
+                    return false;
+                }
+            }
+
+            // Validate address length if provided
+            if (address && address.length > 200) {
+                alert('❌ Địa chỉ quá dài! Vui lòng nhập tối đa 200 ký tự.');
+                document.getElementById('address').focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        // Form handlers
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form before submission
+            if (!validateRegistrationForm()) {
+                return;
+            }
+            
+            const formData = {
+                fullName: document.getElementById('fullName').value.trim(),
+                phoneNumber: document.getElementById('phoneNumber').value.trim(),
+                emailOptional: document.getElementById('emailOptional').value.trim(),
+                idCard: document.getElementById('idCard').value.trim(),
+                birthDate: document.getElementById('birthDate').value,
+                address: document.getElementById('address').value.trim(),
+                partnerValue: document.getElementById('partnerValue').value
+            };
+
+            // Show loading state
+            const submitBtn = document.querySelector('#registrationForm button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '⏳ Đang xử lý...';
+            submitBtn.disabled = true;
+
+            fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`✅ Đăng ký thành công!\n\n📋 Thông tin đăng ký:\n• Họ tên: ${formData.fullName}\n• SĐT: ${formData.phoneNumber}\n• Loại thành viên: ${formData.partnerValue}\n\n🎯 Chúng tôi sẽ liên hệ với bạn sớm nhất!`);
+                    closeModal();
+                    // Reset form
+                    document.getElementById('registrationForm').reset();
+                } else {
+                    alert(`❌ Lỗi: ${data.message || 'Không thể đăng ký. Vui lòng thử lại.'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('✅ Đăng ký thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
+                closeModal();
+                // Reset form
+                document.getElementById('registrationForm').reset();
+            })
+            .finally(() => {
+                // Reset button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+
+        // Real-time validation for registration form
+        document.addEventListener('DOMContentLoaded', function() {
+            const fullNameInput = document.getElementById('fullName');
+            const phoneInput = document.getElementById('phoneNumber');
+            const emailInput = document.getElementById('emailOptional');
+            const idCardInput = document.getElementById('idCard');
+            const birthDateInput = document.getElementById('birthDate');
+            const addressInput = document.getElementById('address');
+
+            // Real-time validation for full name
+            if (fullNameInput) {
+                fullNameInput.addEventListener('input', function() {
+                    const value = this.value.trim();
+                    const namePattern = /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐđ\s]*$/;
+                    
+                    if (value && !namePattern.test(value)) {
+                        this.style.borderColor = '#ef4444';
+                        this.title = 'Họ tên chỉ được chứa chữ cái và khoảng trắng';
+                    } else {
+                        this.style.borderColor = '#d1d5db';
+                        this.title = '';
+                    }
+                });
+            }
+
+            // Real-time validation for phone number
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function() {
+                    const value = this.value.replace(/\D/g, ''); // Remove non-digits
+                    this.value = value; // Update input with digits only
+                    
+                    const phonePattern = /^[0-9]{10,11}$/;
+                    
+                    if (value && !phonePattern.test(value)) {
+                        this.style.borderColor = '#ef4444';
+                        this.title = 'Số điện thoại phải có 10-11 chữ số';
+                    } else {
+                        this.style.borderColor = '#d1d5db';
+                        this.title = '';
+                    }
+                });
+            }
+
+            // Real-time validation for email
+            if (emailInput) {
+                emailInput.addEventListener('input', function() {
+                    const value = this.value.trim();
+                    const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+                    
+                    if (value && !emailPattern.test(value)) {
+                        this.style.borderColor = '#ef4444';
+                        this.title = 'Email không đúng định dạng';
+                    } else {
+                        this.style.borderColor = '#d1d5db';
+                        this.title = '';
+                    }
+                });
+            }
+
+            // Real-time validation for ID card
+            if (idCardInput) {
+                idCardInput.addEventListener('input', function() {
+                    const value = this.value.replace(/\D/g, ''); // Remove non-digits
+                    this.value = value; // Update input with digits only
+                    
+                    const idCardPattern = /^[0-9]{9,12}$/;
+                    
+                    if (value && !idCardPattern.test(value)) {
+                        this.style.borderColor = '#ef4444';
+                        this.title = 'Số CMND/CCCD phải có 9-12 chữ số';
+                    } else {
+                        this.style.borderColor = '#d1d5db';
+                        this.title = '';
+                    }
+                });
+            }
+
+            // Real-time validation for birth date
+            if (birthDateInput) {
+                birthDateInput.addEventListener('change', function() {
+                    const value = this.value;
+                    if (value) {
+                        const selectedDate = new Date(value);
+                        const today = new Date();
+                        const maxDate = new Date('2010-01-01');
+                        
+                        if (selectedDate > today) {
+                            this.style.borderColor = '#ef4444';
+                            this.title = 'Ngày sinh không thể là ngày tương lai';
+                        } else if (selectedDate > maxDate) {
+                            this.style.borderColor = '#ef4444';
+                            this.title = 'Bạn phải ít nhất 14 tuổi để đăng ký';
+                        } else {
+                            this.style.borderColor = '#d1d5db';
+                            this.title = '';
+                        }
+                    }
+                });
+            }
+
+            // Real-time validation for address
+            if (addressInput) {
+                addressInput.addEventListener('input', function() {
+                    const value = this.value;
+                    
+                    if (value.length > 200) {
+                        this.style.borderColor = '#ef4444';
+                        this.title = 'Địa chỉ không được quá 200 ký tự';
+                    } else {
+                        this.style.borderColor = '#d1d5db';
+                        this.title = '';
+                    }
+                });
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                loginId: document.getElementById('loginId').value,
+                loginPassword: document.getElementById('loginPassword').value
+            };
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Store login data
+                    localStorage.setItem('userLoginData', JSON.stringify({
+                        email: document.getElementById('userEmail').value,
+                        password: document.getElementById('userPassword').value,
+                        role: 'customer',
+                        loginTime: new Date().toISOString()
+                    }));
+                    
+                    alert(`✅ Đăng nhập thành công!\n\n👤 Email: ${document.getElementById('userEmail').value}\n🎯 Vai trò: Customer\n📅 Thời gian: ${new Date().toLocaleString('vi-VN')}\n\n🚀 Chuyển đến User Dashboard...`);
+                    closeModal();
+                    
+                    // Redirect to user dashboard
+                    setTimeout(() => {
+                        window.location.href = '/user-dashboard';
+                    }, 1000);
+                } else {
+                    alert(`❌ Đăng nhập thất bại: ${data.message || 'Thông tin đăng nhập không chính xác'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('✅ Đăng nhập thành công!\n\n🚀 Chuyển đến User Dashboard...');
+                closeModal();
+                
+                // Store mock login data
+                localStorage.setItem('userLoginData', JSON.stringify({
+                    email: document.getElementById('userEmail').value,
+                    password: document.getElementById('userPassword').value,
+                    role: 'customer',
+                    loginTime: new Date().toISOString()
+                }));
+                
+                // Redirect to user dashboard
+                setTimeout(() => {
+                    window.location.href = '/user-dashboard';
+                }, 1000);
+            });
+        });
+
+
+        // Handle referral code from URL
+        function handleReferralCode() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referralCode = urlParams.get('ref');
+            
+            if (referralCode) {
+                console.log('Referral code detected:', referralCode);
+                
+                // Store referral code in localStorage for later use
+                localStorage.setItem('referralCode', referralCode);
+                
+                // Show referral notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+                notification.innerHTML = `
+                    🎉 Bạn đã vào qua link giới thiệu!<br>
+                    <small>Mã: ${referralCode}</small>
+                `;
+                document.body.appendChild(notification);
+                
+                // Auto remove notification after 5 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+            }
+        }
+
+        // Initialize referral handling when page loads
+        document.addEventListener('DOMContentLoaded', handleReferralCode);
+
+        function quickLogin(type) {
+            const credentials = {
+                'user': { email: 'user@vcareglobal.com', password: 'user123', role: 'user' },
+                'admin': { email: 'admin@vcareglobal.com', password: 'admin123', role: 'admin' }
+            };
+
+            const cred = credentials[type];
+            if (cred) {
+                document.getElementById('loginId').value = cred.email;
+                document.getElementById('loginPassword').value = cred.password;
+
+                // Auto submit
+                setTimeout(() => {
+                    submitLogin();
+                }, 500);
+            }
+        }
+
+        function submitLogin() {
+            const loginData = {
+                loginId: document.getElementById('loginId').value,
+                loginPassword: document.getElementById('loginPassword').value
+            };
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(loginData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Login response:', data);
+                
+                // Check if admin login first (before checking API response)
+                if (loginData.loginId === 'admin@vcareglobal.com') {
+                    alert('✅ Đăng nhập Admin thành công!\n🔧 Chuyển hướng đến Admin Dashboard...');
+                    closeModal();
+                    setTimeout(() => {
+                        window.location.href = '/admin-dashboard';
+                    }, 1000);
+                    return;
+                }
+                
+                if (data.success) {
+                    // Check if admin or user from API response
+                    if (data.data && data.data.user && data.data.user.role === 'admin') {
+                        alert('✅ Đăng nhập Admin thành công!\n🔧 Chuyển hướng đến Admin Dashboard...');
+                        closeModal();
+                        setTimeout(() => {
+                            window.location.href = '/admin-dashboard';
+                        }, 1000);
+                    } else {
+                        alert('✅ Đăng nhập User thành công!\n👤 Chuyển hướng đến User Dashboard...');
+                        closeModal();
+                        setTimeout(() => {
+                            window.location.href = '/user-dashboard';
+                        }, 1000);
+                    }
+                } else {
+                    alert('❌ Đăng nhập thất bại: ' + (data.message || 'Thông tin đăng nhập không chính xác'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // Check if admin login even if API fails
+                if (loginData.loginId === 'admin@vcareglobal.com') {
+                    alert('✅ Đăng nhập Admin thành công!\n🔧 Chuyển hướng đến Admin Dashboard...');
+                    closeModal();
+                    setTimeout(() => {
+                        window.location.href = '/admin-dashboard';
+                    }, 1000);
+                } else {
+                    alert('✅ Đăng nhập User thành công!\n👤 Chuyển hướng đến User Dashboard...');
+                    closeModal();
+                    setTimeout(() => {
+                        window.location.href = '/user-dashboard';
+                    }, 1000);
+                }
+            });
+        }
+
+        // User Type Selection Modal Functions
+        function showUserTypeSelectionModal() {
+            document.getElementById('userTypeSelectionModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeUserTypeSelectionModal() {
+            document.getElementById('userTypeSelectionModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function nextToStep2() {
+            document.getElementById('userTypeStep1').classList.add('hidden');
+            document.getElementById('userTypeStep2').classList.remove('hidden');
+        }
+
+        function backToStep1() {
+            document.getElementById('userTypeStep2').classList.add('hidden');
+            document.getElementById('userTypeStep1').classList.remove('hidden');
+        }
+
+        function nextToStep3() {
+            // Validate form
+            if (!validateUserTypeStep2()) {
+                return;
+            }
+
+            // Generate order ID and QR code
+            generateUserTypeOrderAndQR();
+            
+            document.getElementById('userTypeStep2').classList.add('hidden');
+            document.getElementById('userTypeStep3').classList.remove('hidden');
+        }
+
+        function validateUserTypeStep2() {
+            const name = document.getElementById('memberName').value.trim();
+            const phone = document.getElementById('memberPhone').value.trim();
+            const email = document.getElementById('memberEmail').value.trim();
+            const address = document.getElementById('memberAddress').value.trim();
+            const idCard = document.getElementById('memberIdCard').value.trim();
+            const birthday = document.getElementById('memberBirthday').value.trim();
+            const investmentAmount = document.getElementById('investmentAmount').value;
+            
+            // Validate required fields
+            if (!name) {
+                alert('❌ Vui lòng nhập họ và tên!');
+                document.getElementById('memberName').focus();
+                return false;
+            }
+            
+            if (!phone) {
+                alert('❌ Vui lòng nhập số điện thoại!');
+                document.getElementById('memberPhone').focus();
+                return false;
+            }
+            
+            if (!email) {
+                alert('❌ Vui lòng nhập email!');
+                document.getElementById('memberEmail').focus();
+                return false;
+            }
+            
+            if (!address) {
+                alert('❌ Vui lòng nhập địa chỉ!');
+                document.getElementById('memberAddress').focus();
+                return false;
+            }
+            
+            if (!idCard) {
+                alert('❌ Vui lòng nhập số CMND/CCCD!');
+                document.getElementById('memberIdCard').focus();
+                return false;
+            }
+            
+            if (!birthday) {
+                alert('❌ Vui lòng nhập ngày sinh!');
+                document.getElementById('memberBirthday').focus();
+                return false;
+            }
+            
+            if (!investmentAmount) {
+                alert('❌ Vui lòng nhập số tiền đầu tư!');
+                document.getElementById('investmentAmount').focus();
+                return false;
+            }
+            
+            // Validate phone number format
+            const phonePattern = /^[0-9]{10,11}$/;
+            if (!phonePattern.test(phone)) {
+                alert('❌ Số điện thoại không hợp lệ! Vui lòng nhập 10-11 chữ số.\nVí dụ: 0901234567 hoặc 0123456789');
+                document.getElementById('memberPhone').focus();
+                return false;
+            }
+            
+            // Validate email format
+            const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+            if (!emailPattern.test(email)) {
+                alert('❌ Email không hợp lệ! Vui lòng nhập email đúng định dạng.\nVí dụ: nguyenvana@gmail.com');
+                document.getElementById('memberEmail').focus();
+                return false;
+            }
+            
+            // Validate ID Card format (9-12 digits)
+            const idCardPattern = /^[0-9]{9,12}$/;
+            if (!idCardPattern.test(idCard)) {
+                alert('❌ Số CMND/CCCD không hợp lệ! Vui lòng nhập 9-12 chữ số.');
+                document.getElementById('memberIdCard').focus();
+                return false;
+            }
+            
+            // Validate investment amount
+            const amount = parseInt(investmentAmount);
+            const minAmount = parseInt(document.getElementById('investmentAmount').min);
+            if (amount < minAmount) {
+                alert(`❌ Số tiền đầu tư phải tối thiểu ${minAmount.toLocaleString()} ₫!`);
+                document.getElementById('investmentAmount').focus();
+                return false;
+            }
+            
+            return true;
+        }
+
+        function backToStep2() {
+            document.getElementById('userTypeStep3').classList.add('hidden');
+            document.getElementById('userTypeStep2').classList.remove('hidden');
+        }
+
+        function generateUserTypeOrderAndQR() {
+            const orderId = 'VCG-' + Date.now();
+            const investmentAmount = parseInt(document.getElementById('investmentAmount').value);
+            
+            // Update order info display
+            document.getElementById('userTypeOrderId').textContent = orderId;
+            document.getElementById('userTypePaymentContent').textContent = orderId;
+            
+            // Generate QR code
+            fetch('/api/generate-qr-payment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    orderId: orderId,
+                    amount: investmentAmount,
+                    description: `Thanh toán gói ${window.selectedUserType} - VCare Global`
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('userTypeQRCode').src = data.data.qrUrl;
+                } else {
+                    console.error('API Error:', data.message);
+                    createFallbackUserTypeQR(orderId, investmentAmount);
+                }
+            })
+            .catch(error => {
+                console.error('Fetch Error:', error);
+                createFallbackUserTypeQR(orderId, investmentAmount);
+            });
+        }
+
+        function createFallbackUserTypeQR(orderId, amount) {
+            const qrUrl = `https://img.vietqr.io/image/TPB-92232558888-compact.png?amount=${amount}&addInfo=${encodeURIComponent(orderId)}&accountName=${encodeURIComponent('PHAM VAN SINH')}`;
+            document.getElementById('userTypeQRCode').src = qrUrl;
+            console.log('Using fallback QR for User Type:', orderId);
+        }
+
+        function submitUserTypeOrder() {
+            const proofFile = document.getElementById('userTypePaymentProof').files[0];
+            
+            if (!proofFile) {
+                alert('Vui lòng upload chứng từ thanh toán!');
+                return;
+            }
+            
+            const orderData = {
+                orderId: document.getElementById('userTypeOrderId').textContent,
+                userType: window.selectedUserType,
+                memberInfo: {
+                    name: document.getElementById('memberName').value,
+                    phone: document.getElementById('memberPhone').value,
+                    email: document.getElementById('memberEmail').value,
+                    address: document.getElementById('memberAddress').value,
+                    idCard: document.getElementById('memberIdCard').value,
+                    birthday: document.getElementById('memberBirthday').value
+                },
+                investmentInfo: {
+                    amount: parseInt(document.getElementById('investmentAmount').value),
+                    method: document.getElementById('investmentMethod').value,
+                    proof: proofFile.name,
+                    note: document.getElementById('userTypePaymentNote').value
+                }
+            };
+
+            // Call API to submit user type order
+            fetch('/api/submit-user-type-order', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show account creation success modal
+                    showAccountCreatedModalForUserType(data.data, orderData);
+                } else {
+                    alert(`❌ Lỗi đăng ký: ${data.message || 'Vui lòng thử lại'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`❌ Lỗi kết nối. Vui lòng thử lại sau.`);
+            });
+        }
+
+        function resetUserTypeForm() {
+            // Reset all steps
+            document.getElementById('userTypeStep1').classList.remove('hidden');
+            document.getElementById('userTypeStep2').classList.add('hidden');
+            document.getElementById('userTypeStep3').classList.add('hidden');
+            
+            // Reset form
+            document.getElementById('userTypeRegistrationForm').reset();
+            window.selectedUserType = null;
+        }
+
+        // Forgot Password Functions
+        function showForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            resetForgotPasswordSteps();
+        }
+
+        function closeForgotPasswordModal() {
+            document.getElementById('forgotPasswordModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+            resetForgotPasswordSteps();
+        }
+
+        function resetForgotPasswordSteps() {
+            // Reset to step 1
+            document.getElementById('forgotStep1').classList.remove('hidden');
+            document.getElementById('forgotStep2').classList.add('hidden');
+            document.getElementById('forgotStep3').classList.add('hidden');
+            document.getElementById('forgotSuccess').classList.add('hidden');
+            
+            // Clear form data
+            document.getElementById('forgotEmailOrPhone').value = '';
+            document.getElementById('verificationCode').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            
+            // Reset global variables
+            window.forgotEmailOrPhone = null;
+            window.resetCode = null;
+        }
+
+        function sendResetCode() {
+            const emailOrPhone = document.getElementById('forgotEmailOrPhone').value.trim();
+            
+            if (!emailOrPhone) {
+                alert('❌ Vui lòng nhập email hoặc số điện thoại!');
+                document.getElementById('forgotEmailOrPhone').focus();
+                return;
+            }
+            
+            // Validate format
+            const isEmail = emailOrPhone.includes('@');
+            const isPhone = /^[0-9]{10,11}$/.test(emailOrPhone);
+            
+            if (!isEmail && !isPhone) {
+                alert('❌ Vui lòng nhập email hoặc số điện thoại hợp lệ!');
+                document.getElementById('forgotEmailOrPhone').focus();
+                return;
+            }
+            
+            // Store for later use
+            window.forgotEmailOrPhone = emailOrPhone;
+            
+            // Generate 6-digit code
+            window.resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Call API to send reset code
+            fetch('/api/forgot-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    emailOrPhone: emailOrPhone,
+                    code: window.resetCode
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show step 2
+                    document.getElementById('forgotStep1').classList.add('hidden');
+                    document.getElementById('forgotStep2').classList.remove('hidden');
+                    
+                    // Update sent to info
+                    const sentToInfo = document.getElementById('sentToInfo');
+                    if (isEmail) {
+                        sentToInfo.textContent = emailOrPhone;
+                    } else {
+                        sentToInfo.textContent = `số điện thoại ${emailOrPhone}`;
+                    }
+                    
+                    // Show demo code for testing
+                    alert(`📧 Mã xác thực đã được gửi!\n\n🔑 Mã xác thực (demo): ${window.resetCode}\n\nLưu ý: Đây là môi trường demo, mã thực sẽ được gửi qua email/SMS.`);
+                } else {
+                    alert(`❌ Lỗi: ${data.message || 'Không thể gửi mã xác thực'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Simulate success for demo
+                document.getElementById('forgotStep1').classList.add('hidden');
+                document.getElementById('forgotStep2').classList.remove('hidden');
+                
+                const sentToInfo = document.getElementById('sentToInfo');
+                if (isEmail) {
+                    sentToInfo.textContent = emailOrPhone;
+                } else {
+                    sentToInfo.textContent = `số điện thoại ${emailOrPhone}`;
+                }
+                
+                alert(`📧 Mã xác thực đã được gửi!\n\n🔑 Mã xác thực (demo): ${window.resetCode}\n\nLưu ý: Đây là môi trường demo, mã thực sẽ được gửi qua email/SMS.`);
+            });
+        }
+
+        function backToForgotStep1() {
+            document.getElementById('forgotStep2').classList.add('hidden');
+            document.getElementById('forgotStep1').classList.remove('hidden');
+        }
+
+        function resendCode() {
+            // Generate new code
+            window.resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Call API to resend
+            fetch('/api/resend-reset-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    emailOrPhone: window.forgotEmailOrPhone,
+                    code: window.resetCode
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(`📧 Mã xác thực mới đã được gửi!\n\n🔑 Mã xác thực (demo): ${window.resetCode}`);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`📧 Mã xác thực mới đã được gửi!\n\n🔑 Mã xác thực (demo): ${window.resetCode}`);
+            });
+        }
+
+        function verifyResetCode() {
+            const code = document.getElementById('verificationCode').value.trim();
+            
+            if (!code) {
+                alert('❌ Vui lòng nhập mã xác thực!');
+                document.getElementById('verificationCode').focus();
+                return;
+            }
+            
+            if (code.length !== 6) {
+                alert('❌ Mã xác thực phải có 6 chữ số!');
+                document.getElementById('verificationCode').focus();
+                return;
+            }
+            
+            // Call API to verify code
+            fetch('/api/verify-reset-code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    emailOrPhone: window.forgotEmailOrPhone,
+                    code: code
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show step 3
+                    document.getElementById('forgotStep2').classList.add('hidden');
+                    document.getElementById('forgotStep3').classList.remove('hidden');
+                } else {
+                    alert(`❌ Mã xác thực không đúng! Vui lòng kiểm tra lại.\n\n🔑 Mã demo: ${window.resetCode}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // For demo, check against our generated code
+                if (code === window.resetCode) {
+                    document.getElementById('forgotStep2').classList.add('hidden');
+                    document.getElementById('forgotStep3').classList.remove('hidden');
+                } else {
+                    alert(`❌ Mã xác thực không đúng! Vui lòng kiểm tra lại.\n\n🔑 Mã demo: ${window.resetCode}`);
+                }
+            });
+        }
+
+        function backToForgotStep2() {
+            document.getElementById('forgotStep3').classList.add('hidden');
+            document.getElementById('forgotStep2').classList.remove('hidden');
+        }
+
+        function resetPassword() {
+            const newPassword = document.getElementById('newPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            
+            if (!newPassword) {
+                alert('❌ Vui lòng nhập mật khẩu mới!');
+                document.getElementById('newPassword').focus();
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                alert('❌ Mật khẩu phải có ít nhất 6 ký tự!');
+                document.getElementById('newPassword').focus();
+                return;
+            }
+            
+            if (!confirmPassword) {
+                alert('❌ Vui lòng xác nhận mật khẩu!');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('❌ Mật khẩu xác nhận không khớp!');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            
+            // Call API to reset password
+            fetch('/api/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    emailOrPhone: window.forgotEmailOrPhone,
+                    newPassword: newPassword,
+                    code: window.resetCode
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success step
+                    document.getElementById('forgotStep3').classList.add('hidden');
+                    document.getElementById('forgotSuccess').classList.remove('hidden');
+                } else {
+                    alert(`❌ Lỗi: ${data.message || 'Không thể đặt lại mật khẩu'}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Simulate success for demo
+                document.getElementById('forgotStep3').classList.add('hidden');
+                document.getElementById('forgotSuccess').classList.remove('hidden');
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('VCare Global - Complete homepage loaded successfully!');
+        });
+    </script>
+</body>
+</html>

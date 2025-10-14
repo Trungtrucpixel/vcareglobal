@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test System Integration - Vcare Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">🔗 Test System Integration - Vcare Global</h1>
+        
+        <div class="max-w-6xl mx-auto space-y-6">
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">📊 Integration Test Results</h2>
+                <div id="testResults" class="space-y-2">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🎮 Test Controls</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <button onclick="testNavigationFlow()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        🔗 Test Navigation Flow
+                    </button>
+                    <button onclick="testAdminManagement()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        🔧 Test Admin Management
+                    </button>
+                    <button onclick="testPaymentFormulas()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        💰 Test Payment Formulas
+                    </button>
+                    <button onclick="testUserRoles()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        👥 Test User Roles
+                    </button>
+                    <button onclick="testDataConsistency()" class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700">
+                        📊 Test Data Consistency
+                    </button>
+                    <button onclick="testSessionManagement()" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                        🔄 Test Session Management
+                    </button>
+                    <button onclick="runAllTests()" class="bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-900">
+                        🚀 Run All Tests
+                    </button>
+                    <button onclick="clearResults()" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500">
+                        🗑️ Clear Results
+                    </button>
+                </div>
+            </div>
+
+            <!-- System Analysis -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🔍 System Analysis</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Navigation Functions</h3>
+                        <div id="navigationAnalysis" class="text-sm text-gray-600">
+                            <div>Analyzing navigation...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Admin Functions</h3>
+                        <div id="adminAnalysis" class="text-sm text-gray-600">
+                            <div>Analyzing admin functions...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">Payment Formulas</h3>
+                        <div id="paymentAnalysis" class="text-sm text-gray-600">
+                            <div>Analyzing payment formulas...</div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-2">User Role Access</h3>
+                        <div id="roleAnalysis" class="text-sm text-gray-600">
+                            <div>Analyzing user roles...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Instructions -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">📋 Integration Test Instructions</h2>
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">1. Navigation Flow Test</h3>
+                        <ul class="text-sm text-blue-700 space-y-1">
+                            <li>• Homepage → Registration → Member Dashboard</li>
+                            <li>• Homepage → Login → Admin Dashboard</li>
+                            <li>• Member Dashboard → Care Cards Page</li>
+                            <li>• Admin Dashboard → All Management Tabs</li>
+                            <li>• Session persistence across page refreshes</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-red-800 mb-2">2. Admin Management Test</h3>
+                        <ul class="text-sm text-red-700 space-y-1">
+                            <li>• Admin can view all members</li>
+                            <li>• Admin can manage transactions</li>
+                            <li>• Admin can manage cards</li>
+                            <li>• Admin can generate reports</li>
+                            <li>• Admin can access system settings</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">3. Payment Formulas Test</h3>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• VCA Token calculation (100 VCA = 1M VNĐ)</li>
+                            <li>• Benefit percentages (49% - 5% - 8%)</li>
+                            <li>• Card pricing tiers (2M → 100M VNĐ)</li>
+                            <li>• Investment return calculations</li>
+                            <li>• Referral commission rates</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-800 mb-2">4. User Role Test</h3>
+                        <ul class="text-sm text-purple-700 space-y-1">
+                            <li>• Member sees only member data</li>
+                            <li>• Admin sees all system data</li>
+                            <li>• Role-based page access</li>
+                            <li>• Role-based function permissions</li>
+                            <li>• Data isolation between roles</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        async function testNavigationFlow() {
+            addTestResult('🔗 Testing Navigation Flow...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check navigation functions
+                const navFunctions = [
+                    'showMemberLogin', 'showMemberDashboard', 'showAdminDashboard', 
+                    'showCareCardsPage', 'openRegistrationModal', 'logout'
+                ];
+                
+                let navScore = 0;
+                navFunctions.forEach(func => {
+                    if (html.includes(func)) {
+                        navScore++;
+                        addTestResult(`✅ ${func} function found`, 'success');
+                    } else {
+                        addTestResult(`❌ ${func} function missing`, 'error');
+                    }
+                });
+                
+                addTestResult(`📊 Navigation Score: ${navScore}/${navFunctions.length}`, navScore === navFunctions.length ? 'success' : 'warning');
+                
+            } catch (error) {
+                addTestResult(`❌ Navigation test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testAdminManagement() {
+            addTestResult('🔧 Testing Admin Management...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check admin functions
+                const adminFunctions = [
+                    'showAdminTab', 'loadAdminData', 'loadAdminMembers', 
+                    'loadAdminTransactions', 'loadAdminCards', 'loadAdminStats'
+                ];
+                
+                let adminScore = 0;
+                adminFunctions.forEach(func => {
+                    if (html.includes(func)) {
+                        adminScore++;
+                        addTestResult(`✅ ${func} function found`, 'success');
+                    } else {
+                        addTestResult(`❌ ${func} function missing`, 'error');
+                    }
+                });
+                
+                // Check admin tabs
+                const adminTabs = ['members', 'transactions', 'cards', 'reports', 'settings'];
+                let tabScore = 0;
+                adminTabs.forEach(tab => {
+                    if (html.includes(`data-tab="${tab}"`)) {
+                        tabScore++;
+                        addTestResult(`✅ Admin tab "${tab}" found`, 'success');
+                    } else {
+                        addTestResult(`❌ Admin tab "${tab}" missing`, 'error');
+                    }
+                });
+                
+                addTestResult(`📊 Admin Functions Score: ${adminScore}/${adminFunctions.length}`, adminScore === adminFunctions.length ? 'success' : 'warning');
+                addTestResult(`📊 Admin Tabs Score: ${tabScore}/${adminTabs.length}`, tabScore === adminTabs.length ? 'success' : 'warning');
+                
+            } catch (error) {
+                addTestResult(`❌ Admin management test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testPaymentFormulas() {
+            addTestResult('💰 Testing Payment Formulas...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check VCA Token references
+                const padTokenCount = (html.match(/VCA|pad/g) || []).length;
+                addTestResult(`✅ VCA Token references: ${padTokenCount}`, padTokenCount > 0 ? 'success' : 'error');
+                
+                // Check benefit percentages
+                const benefitPercentages = ['49%', '5%', '8%'];
+                let benefitScore = 0;
+                benefitPercentages.forEach(percent => {
+                    if (html.includes(percent)) {
+                        benefitScore++;
+                        addTestResult(`✅ Benefit ${percent} found`, 'success');
+                    } else {
+                        addTestResult(`❌ Benefit ${percent} missing`, 'error');
+                    }
+                });
+                
+                // Check card pricing
+                const cardPrices = ['2.000.000', '8.000.000', '18.000.000', '38.000.000', '100.000.000'];
+                let priceScore = 0;
+                cardPrices.forEach(price => {
+                    if (html.includes(price)) {
+                        priceScore++;
+                        addTestResult(`✅ Card price ${price}₫ found`, 'success');
+                    } else {
+                        addTestResult(`❌ Card price ${price}₫ missing`, 'error');
+                    }
+                });
+                
+                // Check calculation functions
+                const calcFunctions = ['calculatePadToken', 'calculateTotalInvestment', 'calculateShares'];
+                let calcScore = 0;
+                calcFunctions.forEach(func => {
+                    if (html.includes(func)) {
+                        calcScore++;
+                        addTestResult(`✅ Calculation function ${func} found`, 'success');
+                    } else {
+                        addTestResult(`❌ Calculation function ${func} missing`, 'error');
+                    }
+                });
+                
+                addTestResult(`📊 Benefit Percentages Score: ${benefitScore}/${benefitPercentages.length}`, benefitScore === benefitPercentages.length ? 'success' : 'warning');
+                addTestResult(`📊 Card Prices Score: ${priceScore}/${cardPrices.length}`, priceScore === cardPrices.length ? 'success' : 'warning');
+                addTestResult(`📊 Calculation Functions Score: ${calcScore}/${calcFunctions.length}`, calcScore === calcFunctions.length ? 'success' : 'warning');
+                
+            } catch (error) {
+                addTestResult(`❌ Payment formulas test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testUserRoles() {
+            addTestResult('👥 Testing User Roles...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check role-based access
+                const roleChecks = [
+                    { role: 'admin', elements: ['adminDashboard', 'showAdminTab', 'loadAdminData'] },
+                    { role: 'member', elements: ['memberDashboard', 'showCareCardsPage', 'loadMemberData'] }
+                ];
+                
+                roleChecks.forEach(roleCheck => {
+                    let roleScore = 0;
+                    roleCheck.elements.forEach(element => {
+                        if (html.includes(element)) {
+                            roleScore++;
+                            addTestResult(`✅ ${roleCheck.role} element ${element} found`, 'success');
+                        } else {
+                            addTestResult(`❌ ${roleCheck.role} element ${element} missing`, 'error');
+                        }
+                    });
+                    addTestResult(`📊 ${roleCheck.role} role score: ${roleScore}/${roleCheck.elements.length}`, roleScore === roleCheck.elements.length ? 'success' : 'warning');
+                });
+                
+                // Check role-based redirection
+                if (html.includes('userData.role === \'admin\'')) {
+                    addTestResult('✅ Admin role redirection logic found', 'success');
+                } else {
+                    addTestResult('❌ Admin role redirection logic missing', 'error');
+                }
+                
+                if (html.includes('userData.role === \'member\'')) {
+                    addTestResult('✅ Member role redirection logic found', 'success');
+                } else {
+                    addTestResult('❌ Member role redirection logic missing', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ User roles test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testDataConsistency() {
+            addTestResult('📊 Testing Data Consistency...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check localStorage usage
+                const localStorageCount = (html.match(/localStorage/g) || []).length;
+                addTestResult(`✅ localStorage usage: ${localStorageCount} references`, localStorageCount > 0 ? 'success' : 'error');
+                
+                // Check session management
+                const sessionElements = ['currentPage', 'memberData', 'currentUser'];
+                let sessionScore = 0;
+                sessionElements.forEach(element => {
+                    if (html.includes(element)) {
+                        sessionScore++;
+                        addTestResult(`✅ Session element ${element} found`, 'success');
+                    } else {
+                        addTestResult(`❌ Session element ${element} missing`, 'error');
+                    }
+                });
+                
+                // Check data loading functions
+                const dataFunctions = ['loadMemberData', 'loadAdminData', 'loadCareCardsData'];
+                let dataScore = 0;
+                dataFunctions.forEach(func => {
+                    if (html.includes(func)) {
+                        dataScore++;
+                        addTestResult(`✅ Data function ${func} found`, 'success');
+                    } else {
+                        addTestResult(`❌ Data function ${func} missing`, 'error');
+                    }
+                });
+                
+                addTestResult(`📊 Session Management Score: ${sessionScore}/${sessionElements.length}`, sessionScore === sessionElements.length ? 'success' : 'warning');
+                addTestResult(`📊 Data Functions Score: ${dataScore}/${dataFunctions.length}`, dataScore === dataFunctions.length ? 'success' : 'warning');
+                
+            } catch (error) {
+                addTestResult(`❌ Data consistency test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testSessionManagement() {
+            addTestResult('🔄 Testing Session Management...', 'info');
+            
+            // Test localStorage operations
+            const testData = {
+                memberData: JSON.stringify({
+                    id: 'TEST123',
+                    role: 'member',
+                    personalInfo: { fullName: 'Test User' }
+                }),
+                currentPage: 'memberDashboard'
+            };
+            
+            // Save test data
+            Object.keys(testData).forEach(key => {
+                localStorage.setItem(key, testData[key]);
+            });
+            
+            addTestResult('✅ Test data saved to localStorage', 'success');
+            
+            // Verify data retrieval
+            const retrievedMemberData = localStorage.getItem('memberData');
+            const retrievedCurrentPage = localStorage.getItem('currentPage');
+            
+            if (retrievedMemberData && retrievedCurrentPage) {
+                addTestResult('✅ Data retrieval successful', 'success');
+                
+                const parsedData = JSON.parse(retrievedMemberData);
+                if (parsedData.role === 'member') {
+                    addTestResult('✅ Role-based data structure correct', 'success');
+                } else {
+                    addTestResult('❌ Role-based data structure incorrect', 'error');
+                }
+            } else {
+                addTestResult('❌ Data retrieval failed', 'error');
+            }
+            
+            // Clean up test data
+            Object.keys(testData).forEach(key => {
+                localStorage.removeItem(key);
+            });
+            
+            addTestResult('✅ Test data cleaned up', 'success');
+        }
+
+        async function runAllTests() {
+            addTestResult('🚀 Running All Integration Tests...', 'info');
+            
+            await testNavigationFlow();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testAdminManagement();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testPaymentFormulas();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testUserRoles();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testDataConsistency();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testSessionManagement();
+            
+            addTestResult('🎉 All integration tests completed!', 'success');
+        }
+
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Analyze system on load
+        async function analyzeSystem() {
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Navigation analysis
+                const navFunctions = ['showMemberLogin', 'showMemberDashboard', 'showAdminDashboard', 'showCareCardsPage'];
+                const navFound = navFunctions.filter(func => html.includes(func)).length;
+                document.getElementById('navigationAnalysis').innerHTML = `
+                    <div class="text-green-600">✅ Navigation functions: ${navFound}/${navFunctions.length}</div>
+                    <div class="text-sm text-gray-500">Found: ${navFunctions.filter(func => html.includes(func)).join(', ')}</div>
+                `;
+                
+                // Admin analysis
+                const adminFunctions = ['showAdminTab', 'loadAdminData', 'loadAdminMembers'];
+                const adminFound = adminFunctions.filter(func => html.includes(func)).length;
+                document.getElementById('adminAnalysis').innerHTML = `
+                    <div class="text-green-600">✅ Admin functions: ${adminFound}/${adminFunctions.length}</div>
+                    <div class="text-sm text-gray-500">Found: ${adminFunctions.filter(func => html.includes(func)).join(', ')}</div>
+                `;
+                
+                // Payment analysis
+                const paymentElements = ['VCA', '49%', '5%', '8%', 'calculatePadToken'];
+                const paymentFound = paymentElements.filter(elem => html.includes(elem)).length;
+                document.getElementById('paymentAnalysis').innerHTML = `
+                    <div class="text-green-600">✅ Payment elements: ${paymentFound}/${paymentElements.length}</div>
+                    <div class="text-sm text-gray-500">Found: ${paymentElements.filter(elem => html.includes(elem)).join(', ')}</div>
+                `;
+                
+                // Role analysis
+                const roleElements = ['adminDashboard', 'memberDashboard', 'userData.role'];
+                const roleFound = roleElements.filter(elem => html.includes(elem)).length;
+                document.getElementById('roleAnalysis').innerHTML = `
+                    <div class="text-green-600">✅ Role elements: ${roleFound}/${roleElements.length}</div>
+                    <div class="text-sm text-gray-500">Found: ${roleElements.filter(elem => html.includes(elem)).join(', ')}</div>
+                `;
+                
+            } catch (error) {
+                document.getElementById('navigationAnalysis').innerHTML = '<div class="text-red-600">❌ Analysis failed</div>';
+            }
+        }
+
+        // Initialize on load
+        analyzeSystem();
+    </script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Mobile Header</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <!-- User Header - Mobile Responsive -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <!-- Mobile Header -->
+            <div class="md:hidden">
+                <!-- Top Row: Logo + Menu Button -->
+                <div class="flex justify-between items-center mb-3">
+                    <div class="flex items-center space-x-3">
+                        <!-- VCare Global Logo -->
+                        <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
+                            <svg viewBox="0 0 48 48" class="w-full h-full">
+                                <circle cx="24" cy="24" r="22" fill="none" stroke="#2563EB" stroke-width="1.8"/>
+                                <line x1="2" y1="24" x2="46" y2="24" stroke="#2563EB" stroke-width="0.8" opacity="0.6"/>
+                                <line x1="24" y1="2" x2="24" y2="46" stroke="#2563EB" stroke-width="0.8" opacity="0.6"/>
+                                <ellipse cx="24" cy="24" rx="22" ry="11" fill="none" stroke="#2563EB" stroke-width="0.8" opacity="0.4"/>
+                                <ellipse cx="24" cy="24" rx="11" ry="22" fill="none" stroke="#2563EB" stroke-width="0.8" opacity="0.4"/>
+                                <path d="M12 16 Q18 13 24 16 Q30 19 30 24 Q30 29 24 32 Q18 35 12 32" 
+                                      stroke="#2563EB" stroke-width="2" fill="none"/>
+                                <path d="M12 32 Q18 29 24 32 Q30 29 30 24 Q30 19 24 16 Q18 13 12 16" 
+                                      stroke="#2563EB" stroke-width="2" fill="none"/>
+                                <line x1="16" y1="20" x2="22" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                                <line x1="22" y1="20" x2="28" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                                <line x1="16" y1="28" x2="22" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                                <line x1="22" y1="28" x2="28" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h1 class="text-lg font-bold">Vcare Global</h1>
+                            <p class="text-xs text-blue-200">Hội Tụ Những Tinh Hoa</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="p-2 rounded-lg bg-blue-700 hover:bg-blue-800">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- User Info Row -->
+                <div class="flex justify-between items-center mb-3">
+                    <div>
+                        <p class="text-sm font-medium">Xin chào, User</p>
+                        <p class="text-xs text-blue-200">user@vcareglobal.com</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <a href="/" class="bg-white text-blue-600 px-3 py-1 rounded text-xs font-medium">
+                            Trang chủ
+                        </a>
+                        <button onclick="logout()" class="bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium hover:bg-blue-800">
+                            Đăng xuất
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Dropdown (Hidden by default) -->
+                <div id="mobileMenu" class="hidden bg-blue-700 rounded-lg p-4 mt-2">
+                    <div class="space-y-2">
+                        <a href="#dashboard" onclick="toggleMobileMenu();" class="block py-2 px-3 rounded text-sm hover:bg-blue-800">
+                            📊 Dashboard
+                        </a>
+                        <a href="#care-cards" onclick="toggleMobileMenu();" class="block py-2 px-3 rounded text-sm hover:bg-blue-800">
+                            💳 Thẻ chăm sóc
+                        </a>
+                        <a href="#referrals" onclick="toggleMobileMenu();" class="block py-2 px-3 rounded text-sm hover:bg-blue-800">
+                            👥 Referral
+                        </a>
+                        <a href="#appointments" onclick="toggleMobileMenu();" class="block py-2 px-3 rounded text-sm hover:bg-blue-800">
+                            📅 Đặt lịch hẹn
+                        </a>
+                        <a href="#support" onclick="toggleMobileMenu();" class="block py-2 px-3 rounded text-sm hover:bg-blue-800">
+                            🆘 Hỗ trợ
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desktop Header -->
+            <div class="hidden md:flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <!-- VCare Global Logo -->
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                        <svg viewBox="0 0 48 48" class="w-full h-full">
+                            <circle cx="24" cy="24" r="22" fill="none" stroke="#2563EB" stroke-width="1.8"/>
+                            <line x1="2" y1="24" x2="46" y2="24" stroke="#2563EB" stroke-width="0.8" opacity="0.6"/>
+                            <line x1="24" y1="2" x2="24" y2="46" stroke="#2563EB" stroke-width="0.8" opacity="0.6"/>
+                            <ellipse cx="24" cy="24" rx="22" ry="11" fill="none" stroke="#2563EB" stroke-width="0.8" opacity="0.4"/>
+                            <ellipse cx="24" cy="24" rx="11" ry="22" fill="none" stroke="#2563EB" stroke-width="0.8" opacity="0.4"/>
+                            <path d="M12 16 Q18 13 24 16 Q30 19 30 24 Q30 29 24 32 Q18 35 12 32" 
+                                  stroke="#2563EB" stroke-width="2" fill="none"/>
+                            <path d="M12 32 Q18 29 24 32 Q30 29 30 24 Q30 19 24 16 Q18 13 12 16" 
+                                  stroke="#2563EB" stroke-width="2" fill="none"/>
+                            <line x1="16" y1="20" x2="22" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                            <line x1="22" y1="20" x2="28" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                            <line x1="16" y1="28" x2="22" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                            <line x1="22" y1="28" x2="28" y2="24" stroke="#2563EB" stroke-width="1.2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold">Vcare Global</h1>
+                        <p class="text-sm text-blue-100">Xin chào, User</p>
+                        <p class="text-xs text-blue-200">Hội Tụ Những Tinh Hoa</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm">Tài khoản: <strong>user@vcareglobal.com</strong></span>
+                    <a href="/" class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 text-sm">
+                        Về trang chủ
+                    </a>
+                    <button onclick="logout()" class="bg-blue-700 text-white px-4 py-2 rounded-lg hover:bg-blue-800 text-sm">
+                        Đăng xuất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="container mx-auto px-4 py-4">
+        <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold mb-4">📱 Test Mobile Header</h2>
+            <p class="text-gray-600 mb-4">Header này đã được tối ưu cho mobile với:</p>
+            <ul class="list-disc list-inside space-y-2 text-gray-600">
+                <li>Responsive design cho mobile và desktop</li>
+                <li>Mobile menu dropdown với hamburger button</li>
+                <li>Layout tối ưu cho màn hình nhỏ</li>
+                <li>Button size phù hợp cho touch</li>
+                <li>Typography responsive</li>
+            </ul>
+            
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h3 class="font-semibold text-blue-800 mb-2">🧪 Test Instructions:</h3>
+                <ol class="list-decimal list-inside space-y-1 text-blue-700 text-sm">
+                    <li>Mở Developer Tools (F12)</li>
+                    <li>Chuyển sang Device Mode (Ctrl+Shift+M)</li>
+                    <li>Chọn iPhone hoặc device mobile</li>
+                    <li>Kiểm tra header layout và mobile menu</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function logout() {
+            alert('Logout function called!');
+        }
+
+        // Mobile menu toggle function
+        function toggleMobileMenu() {
+            console.log('toggleMobileMenu called'); // Debug log
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            
+            console.log('mobileMenu:', mobileMenu); // Debug log
+            console.log('mobileMenuBtn:', mobileMenuBtn); // Debug log
+            
+            if (!mobileMenu || !mobileMenuBtn) {
+                console.error('Mobile menu elements not found!');
+                return;
+            }
+            
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+                console.log('Menu opened'); // Debug log
+                // Change hamburger to X
+                mobileMenuBtn.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                `;
+            } else {
+                mobileMenu.classList.add('hidden');
+                console.log('Menu closed'); // Debug log
+                // Change X back to hamburger
+                mobileMenuBtn.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                `;
+            }
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (!mobileMenu || !mobileMenuBtn) return;
+            
+            if (!mobileMenu.classList.contains('hidden') && 
+                !mobileMenu.contains(event.target) && 
+                !mobileMenuBtn.contains(event.target)) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Initialize mobile menu on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing mobile menu');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuBtn) {
+                console.log('Mobile menu button found');
+                // Add click event listener as backup
+                mobileMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Button clicked via addEventListener');
+                    toggleMobileMenu();
+                });
+            } else {
+                console.error('Mobile menu button not found!');
+            }
+            
+            if (mobileMenu) {
+                console.log('Mobile menu found');
+            } else {
+                console.error('Mobile menu not found!');
+            }
+        });
+    </script>
+</body>
+</html>

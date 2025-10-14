@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Login System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Login System</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Buttons -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Functions</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="testRegistration()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Test Registration
+                    </button>
+                    <button onclick="testLogin()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        Test Login
+                    </button>
+                    <button onclick="testDemoLogin()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
+                        Test Demo Login
+                    </button>
+                    <button onclick="testClearData()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+                        Clear Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Current Data -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Current Data</h2>
+                <pre id="currentData" class="bg-gray-100 p-4 rounded text-sm overflow-auto"></pre>
+            </div>
+
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">Test Results</h2>
+                <div id="testResults" class="space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test functions
+        function testRegistration() {
+            // Simulate registration process
+            const mockRegistrationData = {
+                selectedValues: [
+                    {
+                        type: 'Founding Shareholder',
+                        minValue: 100000000,
+                        padToken: 10000,
+                        shares: 1000
+                    }
+                ],
+                personalInfo: {
+                    fullName: 'Nguyễn Văn Test',
+                    email: 'test@phucanduong.com',
+                    phone: '0123456789',
+                    idCard: '123456789'
+                },
+                paymentInfo: {
+                    orderId: 'ORD-TEST-001',
+                    amount: 100000000,
+                    padToken: 10000
+                }
+            };
+
+            // Generate password and member ID
+            const generatedPassword = generatePassword();
+            const memberId = generateMemberId();
+            
+            const memberData = {
+                ...mockRegistrationData,
+                id: memberId,
+                password: generatedPassword,
+                joinDate: new Date().toISOString(),
+                status: 'active',
+                padToken: calculatePadToken(mockRegistrationData.selectedValues),
+                totalInvestment: calculateTotalInvestment(mockRegistrationData.selectedValues),
+                role: getRoleFromValues(mockRegistrationData.selectedValues)
+            };
+            
+            localStorage.setItem('memberData', JSON.stringify(memberData));
+            addTestResult('✅ Registration: New member created with credentials', 'success');
+            addTestResult(`📧 Email: ${memberData.personalInfo.email}`, 'info');
+            addTestResult(`🆔 Member ID: ${memberData.id}`, 'info');
+            addTestResult(`🔑 Password: ${memberData.password}`, 'info');
+            updateCurrentData();
+        }
+
+        function testLogin() {
+            const memberData = JSON.parse(localStorage.getItem('memberData') || '{}');
+            if (Object.keys(memberData).length === 0) {
+                addTestResult('❌ Login: No member data found. Please register first.', 'error');
+                return;
+            }
+
+            // Test login with stored credentials
+            const loginId = memberData.id;
+            const password = memberData.password;
+            
+            const isValidLogin = (
+                loginId === memberData.id && password === memberData.password
+            );
+            
+            if (isValidLogin) {
+                addTestResult('✅ Login: Successful login with stored credentials', 'success');
+                addTestResult(`👤 Logged in as: ${memberData.personalInfo.fullName}`, 'info');
+                addTestResult(`💰 PAD Token: ${memberData.padToken}`, 'info');
+            } else {
+                addTestResult('❌ Login: Invalid credentials', 'error');
+            }
+        }
+
+        function testDemoLogin() {
+            const demoCredentials = {
+                id: 'MEM123456',
+                email: 'demo@phucanduong.com',
+                password: 'demo123'
+            };
+            
+            // Simulate demo login
+            addTestResult('✅ Demo Login: Using demo credentials', 'success');
+            addTestResult(`🆔 Demo ID: ${demoCredentials.id}`, 'info');
+            addTestResult(`📧 Demo Email: ${demoCredentials.email}`, 'info');
+            addTestResult(`🔑 Demo Password: ${demoCredentials.password}`, 'info');
+        }
+
+        function testClearData() {
+            localStorage.removeItem('memberData');
+            addTestResult('🗑️ Clear Data: All data cleared', 'info');
+            updateCurrentData();
+        }
+
+        // Helper functions
+        function generatePassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let password = '';
+            for (let i = 0; i < 8; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return password;
+        }
+
+        function generateMemberId() {
+            return 'MEM' + Date.now().toString().slice(-6);
+        }
+
+        function calculatePadToken(selectedValues) {
+            return selectedValues.reduce((total, value) => total + (value.padToken || 0), 0);
+        }
+
+        function calculateTotalInvestment(selectedValues) {
+            return selectedValues.reduce((total, value) => total + (value.minValue || 0), 0);
+        }
+
+        function getRoleFromValues(selectedValues) {
+            if (selectedValues.some(v => v.type === 'Founding Shareholder')) return 'founder';
+            if (selectedValues.some(v => v.type === 'Angel Investor')) return 'angel';
+            if (selectedValues.some(v => v.type === 'Seed Investor')) return 'seed';
+            if (selectedValues.some(v => v.type === 'Retail Investor')) return 'retail';
+            return 'customer';
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        function updateCurrentData() {
+            const memberData = JSON.parse(localStorage.getItem('memberData') || '{}');
+            document.getElementById('currentData').textContent = JSON.stringify(memberData, null, 2);
+        }
+
+        // Initialize
+        updateCurrentData();
+    </script>
+</body>
+</html>
+

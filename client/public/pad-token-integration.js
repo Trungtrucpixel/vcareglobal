@@ -1,11 +1,11 @@
-// PAD Token Integration JavaScript
-// Tích hợp PAD Token vào các luồng góp vốn, mua thẻ, và KPI
+// VCA Token Integration JavaScript
+// Tích hợp VCA Token vào các luồng góp vốn, mua thẻ, và KPI
 
 class PadTokenIntegration {
     constructor() {
         this.apiBase = '/api';
-        this.padTokenRate = 100; // 100 PAD = 1 triệu VNĐ
-        this.padTokenValue = 10000; // 1 PAD = 10,000 VNĐ
+        this.padTokenRate = 100; // 100 VCA = 1 triệu VNĐ
+        this.padTokenValue = 10000; // 1 VCA = 10,000 VNĐ
         this.init();
     }
 
@@ -36,30 +36,30 @@ class PadTokenIntegration {
             }
         });
 
-        // Real-time PAD Token updates
+        // Real-time VCA Token updates
         this.setupRealTimeUpdates();
     }
 
-    // Calculate PAD Token from VNĐ amount
+    // Calculate VCA Token from VNĐ amount
     calculatePadTokenFromAmount(amount) {
         return (amount / 1000000) * this.padTokenRate;
     }
 
-    // Calculate VNĐ amount from PAD Token
+    // Calculate VNĐ amount from VCA Token
     calculateAmountFromPadToken(padToken) {
         return padToken * this.padTokenValue;
     }
 
-    // Format PAD Token display
+    // Format VCA Token display
     formatPadToken(padToken) {
         return {
             amount: padToken.toLocaleString(),
             value: this.calculateAmountFromPadToken(padToken).toLocaleString('vi-VN'),
-            display: `${padToken.toLocaleString()} PAD (${this.calculateAmountFromPadToken(padToken).toLocaleString('vi-VN')} VNĐ)`
+            display: `${padToken.toLocaleString()} VCA (${this.calculateAmountFromPadToken(padToken).toLocaleString('vi-VN')} VNĐ)`
         };
     }
 
-    // Load user's current PAD Token
+    // Load user's current VCA Token
     async loadUserPadToken() {
         try {
             const response = await fetch(`${this.apiBase}/user`);
@@ -69,11 +69,11 @@ class PadTokenIntegration {
                 this.updatePadTokenCalculations();
             }
         } catch (error) {
-            console.error('Error loading PAD Token:', error);
+            console.error('Error loading VCA Token:', error);
         }
     }
 
-    // Update PAD Token display across the app
+    // Update VCA Token display across the app
     updatePadTokenDisplay(padToken) {
         const elements = document.querySelectorAll('[data-pad-token-amount]');
         elements.forEach(element => {
@@ -91,7 +91,7 @@ class PadTokenIntegration {
         });
     }
 
-    // Update PAD Token calculations in forms
+    // Update VCA Token calculations in forms
     updatePadTokenCalculations() {
         // Investment amount input
         const investmentInputs = document.querySelectorAll('[data-investment-amount]');
@@ -114,7 +114,7 @@ class PadTokenIntegration {
         });
     }
 
-    // Update PAD Token preview in forms
+    // Update VCA Token preview in forms
     updatePadTokenPreview(input, padToken) {
         let previewElement = input.parentNode.querySelector('[data-pad-token-preview]');
         if (!previewElement) {
@@ -135,7 +135,7 @@ class PadTokenIntegration {
 
         if (padToken > 0) {
             previewElement.innerHTML = `
-                <strong>PAD Token sẽ nhận được:</strong> ${this.formatPadToken(padToken).display}
+                <strong>VCA Token sẽ nhận được:</strong> ${this.formatPadToken(padToken).display}
             `;
             previewElement.style.display = 'block';
         } else {
@@ -177,13 +177,13 @@ class PadTokenIntegration {
         const kpiPoints = parseFloat(formData.get('kpiPoints'));
         
         if (kpiPoints > 0) {
-            // 1 KPI point = 10 PAD Token
+            // 1 KPI point = 10 VCA Token
             const padToken = kpiPoints * 10;
             this.showPadTokenNotification(padToken, 'KPI');
         }
     }
 
-    // Show PAD Token notification
+    // Show VCA Token notification
     showPadTokenNotification(padToken, action) {
         const notification = document.createElement('div');
         notification.className = 'pad-token-notification';
@@ -225,14 +225,14 @@ class PadTokenIntegration {
         }, 5000);
     }
 
-    // Setup real-time PAD Token updates
+    // Setup real-time VCA Token updates
     setupRealTimeUpdates() {
-        // Poll for PAD Token updates every 30 seconds
+        // Poll for VCA Token updates every 30 seconds
         setInterval(() => {
             this.loadUserPadToken();
         }, 30000);
 
-        // Listen for PAD Token updates from other tabs
+        // Listen for VCA Token updates from other tabs
         window.addEventListener('storage', (e) => {
             if (e.key === 'padTokenUpdate') {
                 const padToken = JSON.parse(e.newValue);
@@ -241,7 +241,7 @@ class PadTokenIntegration {
         });
     }
 
-    // Update PAD Token after transaction
+    // Update VCA Token after transaction
     async updatePadTokenAfterTransaction(transactionType, amount) {
         try {
             const response = await fetch(`${this.apiBase}/user`);
@@ -253,11 +253,11 @@ class PadTokenIntegration {
                 localStorage.setItem('padTokenUpdate', JSON.stringify(user.padToken || 0));
             }
         } catch (error) {
-            console.error('Error updating PAD Token:', error);
+            console.error('Error updating VCA Token:', error);
         }
     }
 
-    // Get PAD Token history
+    // Get VCA Token history
     async getPadTokenHistory() {
         try {
             const response = await fetch(`${this.apiBase}/pad-token/history`);
@@ -265,12 +265,12 @@ class PadTokenIntegration {
                 return await response.json();
             }
         } catch (error) {
-            console.error('Error loading PAD Token history:', error);
+            console.error('Error loading VCA Token history:', error);
         }
         return [];
     }
 
-    // Display PAD Token history
+    // Display VCA Token history
     async displayPadTokenHistory() {
         const history = await this.getPadTokenHistory();
         const historyContainer = document.getElementById('padTokenHistory');
@@ -298,7 +298,7 @@ class PadTokenIntegration {
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="color: ${record.changeAmount > 0 ? '#059669' : '#dc2626'}; font-weight: 600;">
-                        ${record.changeAmount > 0 ? '+' : ''}${this.formatPadToken(Math.abs(record.changeAmount)).amount} PAD
+                        ${record.changeAmount > 0 ? '+' : ''}${this.formatPadToken(Math.abs(record.changeAmount)).amount} VCA
                     </span>
                     <span style="color: #6b7280; font-size: 0.9rem;">
                         ${record.reason || 'Không có lý do'}
@@ -343,7 +343,7 @@ class PadTokenIntegration {
                 border-radius: 12px;
                 border: 1px solid #0ea5e9;
             ">
-                <h3 style="margin-bottom: 1rem; color: #0369a1;">Dự báo ROI PAD Token</h3>
+                <h3 style="margin-bottom: 1rem; color: #0369a1;">Dự báo ROI VCA Token</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                     <div class="roi-item">
                         <div style="font-size: 0.9rem; color: #6b7280; margin-bottom: 0.25rem;">6 tháng</div>

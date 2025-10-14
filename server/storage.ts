@@ -160,9 +160,20 @@ export interface IStorage {
   approveAssetContribution(contributionId: string, approvedBy: string): Promise<AssetContribution | undefined>;
   rejectAssetContribution(contributionId: string, approvedBy: string, reason: string): Promise<AssetContribution | undefined>;
   
-  // PAD Token operations
-  getPadTokenHistory(userId?: string): Promise<Array<{date: string; amount: string; type: string; description: string}>>;
+  // VGB Digital Share operations
+  getVgbDigitalShareHistory(userId?: string): Promise<Array<{date: string; amount: string; type: string; description: string}>>;
   calculateRoiProjection(userId: string, periods: number[]): Promise<Array<{period: string; projectedReturn: number; totalValue: number}>>;
+  
+  // Withdrawal operations
+  createWithdrawalRequest(withdrawal: any): Promise<any>;
+  getWithdrawalHistory(userId: string): Promise<any[]>;
+  getWithdrawalById(withdrawalId: string): Promise<any | undefined>;
+  updateWithdrawalStatus(withdrawalId: string, status: string, updatedBy?: string): Promise<any | undefined>;
+  
+  // KYC operations
+  createKycRecord(kyc: any): Promise<any>;
+  getKycByUserId(userId: string): Promise<any | undefined>;
+  updateKycStatus(kycId: string, status: string, updatedBy?: string): Promise<any | undefined>;
   
   // Admin operations
   getAllUsers(): Promise<User[]>;
@@ -576,7 +587,7 @@ export class MemStorage implements IStorage {
       shareMultiplier: '1.0',
       maxShares: null,
       description: 'Founder tier - unlimited shares for investments ≥245M VND',
-      benefits: 'Unlimited shares, highest profit sharing percentage, voting rights',
+      benefits: 'Unlimited shares, highest profit sharing percentage, voting rights, inheritance rights',
     });
 
     await this.createBusinessTierConfig({
@@ -613,6 +624,51 @@ export class MemStorage implements IStorage {
       maxShares: null,
       description: 'Staff - 50 points = 50 shares per quarter',
       benefits: 'Performance-based shares, quarterly rewards, internal access',
+    });
+
+    await this.createBusinessTierConfig({
+      tierName: 'seed',
+      minInvestmentAmount: '50000000',
+      shareMultiplier: '1.0',
+      maxShares: null,
+      description: 'Seed tier - 1M VND = 1 share with 4x payout maxout',
+      benefits: '4x investment payout cap, maxout protection, seed investor benefits',
+    });
+
+    await this.createBusinessTierConfig({
+      tierName: 'vcare_home',
+      minInvestmentAmount: '30000000',
+      shareMultiplier: '1.0',
+      maxShares: null,
+      description: 'Vcare Home tier - 1M VND = 1 share with 3x payout maxout',
+      benefits: '3x investment payout cap, Vcare Home benefits',
+    });
+
+    await this.createBusinessTierConfig({
+      tierName: 'asset_contributor',
+      minInvestmentAmount: '50000000',
+      shareMultiplier: '1.0',
+      maxShares: null,
+      description: 'Asset Contributor - contributes assets instead of cash',
+      benefits: '2x asset value payout cap, asset-based benefits',
+    });
+
+    await this.createBusinessTierConfig({
+      tierName: 'intellectual_contributor',
+      minInvestmentAmount: '0',
+      shareMultiplier: '1.0',
+      maxShares: null,
+      description: 'Intellectual Contributor - contributes knowledge/KPI',
+      benefits: '2.5x contribution payout cap, intellectual property benefits',
+    });
+
+    await this.createBusinessTierConfig({
+      tierName: 'franchise_branch',
+      minInvestmentAmount: '200000000',
+      shareMultiplier: '1.0',
+      maxShares: '200',
+      description: 'Franchise Branch - operates franchise location',
+      benefits: '200 base shares, 1.5x maxout, franchise management benefits',
     });
 
     await this.createBusinessTierConfig({
@@ -2135,13 +2191,13 @@ export class MemStorage implements IStorage {
 
     this.assetContributions.set(contributionId, updatedContribution);
 
-    // Cập nhật PAD Token cho user
+    // Cập nhật VCA Digital Share cho user
     const user = await this.getUser(contribution.userId);
     if (user) {
-      const currentPadToken = parseFloat(user.padToken || '0');
-      const newPadToken = currentPadToken + parseFloat(contribution.padTokenAmount);
+      const currentPadToken = parseFloat(user.vcaDigitalShare || '0');
+      const newPadToken = currentPadToken + parseFloat(contribution.vcaDigitalShareAmount);
       await this.updateUser(contribution.userId, {
-        padToken: newPadToken.toString(),
+        vcaDigitalShare: newPadToken.toString(),
       });
 
       // Tạo transaction record
@@ -2151,7 +2207,7 @@ export class MemStorage implements IStorage {
         amount: contribution.valuationAmount,
         description: `Góp tài sản: ${contribution.assetName}`,
         contributionType: 'asset',
-        padTokenAmount: contribution.padTokenAmount,
+        vcaDigitalShareAmount: contribution.vcaDigitalShareAmount,
         status: 'completed',
         documentPath: contribution.contractDocumentPath || undefined,
       });
@@ -2175,8 +2231,68 @@ export class MemStorage implements IStorage {
     return updatedContribution;
   }
 
-  // PAD Token operations
-  async getPadTokenHistory(userId?: string): Promise<Array<{date: string; amount: string; type: string; description: string}>> {
+  // Withdrawal operations
+  private withdrawals = new Map<string, any>();
+  private kycRecords = new Map<string, any>();
+
+  async createWithdrawalRequest(withdrawal: any): Promise<any> {
+    this.withdrawals.set(withdrawal.id, withdrawal);
+    return withdrawal;
+  }
+
+  async getWithdrawalHistory(userId: string): Promise<any[]> {
+    const userWithdrawals = Array.from(this.withdrawals.values())
+      .filter(w => w.userId === userId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    return userWithdrawals;
+  }
+
+  async getWithdrawalById(withdrawalId: string): Promise<any | undefined> {
+    return this.withdrawals.get(withdrawalId);
+  }
+
+  async updateWithdrawalStatus(withdrawalId: string, status: string, updatedBy?: string): Promise<any | undefined> {
+    const withdrawal = this.withdrawals.get(withdrawalId);
+    if (!withdrawal) return undefined;
+
+    const updatedWithdrawal = {
+      ...withdrawal,
+      status,
+      updatedAt: new Date().toISOString(),
+      ...(updatedBy && { updatedBy })
+    };
+
+    this.withdrawals.set(withdrawalId, updatedWithdrawal);
+    return updatedWithdrawal;
+  }
+
+  // KYC operations
+  async createKycRecord(kyc: any): Promise<any> {
+    this.kycRecords.set(kyc.id, kyc);
+    return kyc;
+  }
+
+  async getKycByUserId(userId: string): Promise<any | undefined> {
+    return Array.from(this.kycRecords.values()).find(kyc => kyc.userId === userId);
+  }
+
+  async updateKycStatus(kycId: string, status: string, updatedBy?: string): Promise<any | undefined> {
+    const kyc = this.kycRecords.get(kycId);
+    if (!kyc) return undefined;
+
+    const updatedKyc = {
+      ...kyc,
+      status,
+      updatedAt: new Date().toISOString(),
+      ...(updatedBy && { updatedBy })
+    };
+
+    this.kycRecords.set(kycId, updatedKyc);
+    return updatedKyc;
+  }
+
+  // VGB Digital Share operations
+  async getVgbDigitalShareHistory(userId?: string): Promise<Array<{date: string; amount: string; type: string; description: string}>> {
     const transactions = await this.getTransactions();
     let relevantTransactions = transactions;
     
@@ -2184,14 +2300,14 @@ export class MemStorage implements IStorage {
       relevantTransactions = transactions.filter(t => t.userId === userId);
     }
 
-    // Filter transactions that have PAD Token changes
-    const padTokenTransactions = relevantTransactions.filter(t => {
-      return t.padTokenAmount && parseFloat(t.padTokenAmount) > 0;
+    // Filter transactions that have VCA Digital Share changes
+    const vcaDigitalShareTransactions = relevantTransactions.filter(t => {
+      return t.vcaDigitalShareAmount && parseFloat(t.vcaDigitalShareAmount) > 0;
     });
 
-    return padTokenTransactions.map(t => ({
+    return vcaDigitalShareTransactions.map(t => ({
       date: t.date?.toISOString() || new Date().toISOString(),
-      amount: t.padTokenAmount || '0',
+      amount: t.vcaDigitalShareAmount || '0',
       type: t.type,
       description: t.description,
     }));
@@ -2201,8 +2317,8 @@ export class MemStorage implements IStorage {
     const user = await this.getUser(userId);
     if (!user) return [];
 
-    const currentPadToken = parseFloat(user.padToken || '0');
-    const currentValueVnd = currentPadToken * 10000; // 100 PAD = 1M VND, so 1 PAD = 10,000 VND
+    const currentPadToken = parseFloat(user.vcaDigitalShare || '0');
+    const currentValueVnd = currentPadToken * 10000; // 100 VCA = 1M VND, so 1 VCA = 10,000 VND
 
     // Assumed annual return rate: 15% (configurable)
     const annualReturnRate = 0.15;
@@ -2488,6 +2604,11 @@ export class MemStorage implements IStorage {
       default:
         return [];
     }
+  }
+
+  async getUsers() {
+    // Mock implementation - return empty array for now
+    return [];
   }
 }
 

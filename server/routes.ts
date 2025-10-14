@@ -1,7 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import path from "path";
+import { fileURLToPath } from "url";
 import { storage } from "./storage";
 import { setupAuth } from "./auth";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 import { 
   requireAuth, 
   requireRole, 
@@ -9,14 +14,17 @@ import {
   requireAdmin, 
   requireStaff, 
   requireCustomer,
-  requireMinPadToken,
-  addPadTokenCalculations,
+  requireMinVgbToken,
+  addVgbDigitalShareCalculations,
   logUserAction,
-  calculatePadTokenFromAmount,
-  calculateAmountFromPadToken,
-  calculatePadTokenFromRole,
-  calculateReferralPadToken,
-  calculateVipPadToken
+  calculateVgbDigitalShareFromAmount,
+  calculateAmountFromVgbDigitalShare,
+  calculateVgbDigitalShareFromRole,
+  calculateReferralVgbDigitalShare,
+  calculateVipVgbDigitalShare,
+  calculateMaxoutLimit,
+  calculateMaxoutAmount,
+  calculateWithdrawalFee
 } from "./middleware";
 import { 
   insertCardSchema, 
@@ -35,6 +43,32 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 
+// KYC validation schema
+const kycSchema = z.object({
+  fullName: z.string().min(2, "Họ tên phải có ít nhất 2 ký tự"),
+  idNumber: z.string().min(9, "Số CCCD/CMND phải có ít nhất 9 số"),
+  idType: z.enum(["cccd", "cmnd", "passport"], { 
+    errorMap: () => ({ message: "Loại giấy tờ phải là CCCD, CMND hoặc Passport" }) 
+  }),
+  birthDate: z.string().min(1, "Ngày sinh là bắt buộc"),
+  address: z.string().min(10, "Địa chỉ phải có ít nhất 10 ký tự"),
+  phone: z.string().min(10, "Số điện thoại phải có ít nhất 10 số"),
+  email: z.string().email("Email không hợp lệ"),
+  bankAccount: z.string().min(9, "Số tài khoản phải có ít nhất 9 số"),
+  bankName: z.string().min(1, "Tên ngân hàng là bắt buộc"),
+  bankBranch: z.string().min(1, "Chi nhánh ngân hàng là bắt buộc"),
+  accountHolderName: z.string().min(2, "Tên chủ tài khoản phải có ít nhất 2 ký tự"),
+  idFrontImage: z.string().optional(),
+  idBackImage: z.string().optional(),
+  selfieImage: z.string().optional(),
+});
+
+// Withdrawal validation schema (simplified - no bank info needed)
+const withdrawalRequestSchema = z.object({
+  amount: z.number().min(100000, "Số tiền rút tối thiểu là 100,000 VNĐ"),
+  reason: z.string().optional(),
+});
+
 // Legacy validation schema for KPI endpoints (keeping backward compatibility)
 const legacyKpiValidationSchema = z.object({
   branchId: z.string().min(1, "Branch ID is required"),
@@ -48,15 +82,1322 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication
   setupAuth(app);
 
-  // Home page endpoint - Dynamic data from database
-  app.get("/", async (req, res) => {
+  // Home page endpoint - Serve static HTML
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, '../vcare-complete.html'));
+  });
+
+  // Test registration validation
+  app.get("/test-registration-validation.html", (req, res) => {
+    res.sendFile(path.join(__dirname, '../test-registration-validation.html'));
+  });
+
+  // User dashboard
+  app.get("/user-dashboard.html", (req, res) => {
+    res.sendFile(path.join(__dirname, '../user-dashboard.html'));
+  });
+
+  // Test mobile header
+  app.get("/test-mobile-header.html", (req, res) => {
+    res.sendFile(path.join(__dirname, '../test-mobile-header.html'));
+  });
+
+  // Test KYC and Withdrawal
+  app.get("/test-kyc-withdrawal.html", (req, res) => {
+    res.sendFile(path.join(__dirname, '../test-kyc-withdrawal.html'));
+  });
+
+  // Test Hamburger Menu
+  app.get("/test-hamburger-menu.html", (req, res) => {
+    res.sendFile(path.join(__dirname, '../test-hamburger-menu.html'));
+  });
+
+  // API endpoints for homepage functionality
+  app.post("/api/register", async (req, res) => {
+    try {
+      const { 
+        fullName, 
+        phoneNumber, 
+        emailOptional, 
+        idCard,
+        birthDate,
+        address,
+        partnerValue 
+      } = req.body;
+      
+      // Validate required fields
+      if (!fullName || !phoneNumber || !partnerValue) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Vui lòng điền đầy đủ thông tin bắt buộc (Họ tên, Số điện thoại, Loại thành viên)" 
+        });
+      }
+
+      // Validate phone number format
+      const phonePattern = /^[0-9]{10,11}$/;
+      if (!phonePattern.test(phoneNumber)) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "Số điện thoại không hợp lệ. Vui lòng nhập 10-11 chữ số." 
+        });
+      }
+
+      // Validate email format if provided
+      if (emailOptional) {
+        const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+        if (!emailPattern.test(emailOptional)) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Email không hợp lệ. Vui lòng nhập email đúng định dạng." 
+          });
+        }
+      }
+
+      // Validate ID card format if provided
+      if (idCard) {
+        const idCardPattern = /^[0-9]{9,12}$/;
+        if (!idCardPattern.test(idCard)) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Số CMND/CCCD không hợp lệ. Vui lòng nhập 9-12 chữ số." 
+          });
+        }
+      }
+
+      // Validate birth date if provided
+      if (birthDate) {
+        const selectedDate = new Date(birthDate);
+        const today = new Date();
+        const maxDate = new Date('2010-01-01'); // Must be at least 14 years old
+        
+        if (selectedDate > today) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Ngày sinh không hợp lệ. Ngày sinh không thể là ngày tương lai." 
+          });
+        }
+        
+        if (selectedDate > maxDate) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "Bạn phải ít nhất 14 tuổi để đăng ký." 
+          });
+        }
+      }
+
+      // Here you would save to database
+      console.log('Registration data:', { 
+        fullName, 
+        phoneNumber, 
+        emailOptional, 
+        idCard,
+        birthDate,
+        address,
+        partnerValue 
+      });
+      
+      // Generate registration ID
+      const registrationId = `REG-${Date.now()}`;
+      
+      res.json({ 
+        success: true, 
+        message: "Đăng ký thành công! Chúng tôi sẽ liên hệ với bạn sớm nhất.",
+        data: { 
+          registrationId,
+          fullName, 
+          phoneNumber, 
+          partnerValue,
+          email: emailOptional || null,
+          idCard: idCard || null,
+          birthDate: birthDate || null,
+          address: address || null
+        }
+      });
+    } catch (error) {
+      console.error('Registration error:', error);
+      res.status(500).json({ success: false, message: "Lỗi hệ thống. Vui lòng thử lại sau." });
+    }
+  });
+
+  app.post("/api/login", async (req, res) => {
+    try {
+      const { loginId, loginPassword } = req.body;
+      
+      // Demo accounts for testing
+      const demoAccounts = {
+        'admin@vcareglobal.com': { password: 'admin123', role: 'admin', name: 'Admin VCare' },
+        'user@vcareglobal.com': { password: 'user123', role: 'user', name: 'User VCare' },
+        'demo@vcareglobal.com': { password: 'demo123', role: 'demo', name: 'Demo VCare' }
+      };
+      
+      const account = demoAccounts[loginId];
+      
+      if (account && account.password === loginPassword) {
+        res.json({ 
+          success: true, 
+          message: "Đăng nhập thành công!",
+          data: { 
+            user: {
+              email: loginId,
+              name: account.name,
+              role: account.role
+            }
+          }
+        });
+      } else {
+        res.json({ 
+          success: false, 
+          message: "Email hoặc mật khẩu không đúng!" 
+        });
+      }
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Lỗi đăng nhập" });
+    }
+  });
+
+  app.post("/api/select-card", async (req, res) => {
+    try {
+      const { cardType } = req.body;
+      
+      // Here you would process card selection
+      console.log('Card selected:', cardType);
+      
+      res.json({ 
+        success: true, 
+        message: `${cardType.toUpperCase()} Card được chọn! Chức năng đăng ký sẽ được phát triển.`,
+        data: { cardType }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Lỗi chọn thẻ" });
+    }
+  });
+
+  app.post("/api/select-user-type", async (req, res) => {
+    try {
+      const { userType } = req.body;
+      
+      // Here you would process user type selection
+      console.log('User type selected:', userType);
+      
+      res.json({ 
+        success: true, 
+        message: `Đã chọn ${userType.toUpperCase()}! Chức năng đăng ký sẽ được phát triển.`,
+        data: { userType }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Lỗi chọn loại thành viên" });
+    }
+  });
+
+  app.post("/api/submit-card-order", async (req, res) => {
+    try {
+      const { cardType, cardData, customerInfo, paymentInfo } = req.body;
+      
+      // Here you would save card order to database
+      console.log('Card order submitted:', { cardType, cardData, customerInfo, paymentInfo });
+      
+      // Generate user account for customer
+      const orderId = `ORD-${Date.now()}`;
+      const userId = `USER-${Date.now()}`;
+      const userEmail = customerInfo.email || `${customerInfo.phone}@vcareglobal.com`;
+      const userPassword = generatePassword(); // Generate random password
+      
+      // Create user account data
+      const userAccount = {
+        id: userId,
+        email: userEmail,
+        password: userPassword,
+        name: customerInfo.name,
+        phone: customerInfo.phone,
+        address: customerInfo.address,
+        role: 'card_customer',
+        status: 'active',
+        cardType: cardType,
+        cardPrice: cardData.price,
+        cardSessions: cardData.sessions,
+        orderId: orderId,
+        createdAt: new Date().toISOString()
+      };
+      
+      res.json({ 
+        success: true, 
+        message: "Đơn hàng đã được gửi thành công! Tài khoản user đã được tạo.",
+        data: { 
+          orderId,
+          userAccount: {
+            email: userEmail,
+            password: userPassword,
+            name: customerInfo.name
+          },
+          cardType,
+          customerInfo,
+          status: 'pending',
+          redirectTo: '/user-dashboard'
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Lỗi gửi đơn hàng" });
+    }
+  });
+
+  // Helper function to generate password
+  function generatePassword() {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let password = '';
+    for (let i = 0; i < 8; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return password;
+  }
+
+          app.post("/api/admin-login", async (req, res) => {
+            try {
+              const { loginId, loginPassword } = req.body;
+              
+              // Demo accounts for testing
+              const demoAccounts = {
+                'admin@vcareglobal.com': { password: 'admin123', role: 'admin', name: 'Admin VCare' },
+                'user@vcareglobal.com': { password: 'user123', role: 'user', name: 'User VCare' },
+                'demo@vcareglobal.com': { password: 'demo123', role: 'demo', name: 'Demo VCare' }
+              };
+              
+              const account = demoAccounts[loginId];
+              
+              if (account && account.password === loginPassword) {
+                // Create session for admin
+                req.session.user = {
+                  id: 'admin-001',
+                  email: loginId,
+                  name: account.name,
+                  role: account.role
+                };
+                
+                res.json({ 
+                  success: true, 
+                  message: "Đăng nhập thành công!",
+                  data: { 
+                    user: {
+                      email: loginId,
+                      name: account.name,
+                      role: account.role
+                    }
+                  }
+                });
+              } else {
+                res.json({ 
+                  success: false, 
+                  message: "Email hoặc mật khẩu không đúng!" 
+                });
+              }
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi đăng nhập" });
+            }
+          });
+
+          // User type upgrade request endpoint
+          app.post("/api/upgrade-request", async (req, res) => {
+            try {
+              const { targetType, requiredAmount, currentType, paymentMethod, paymentProof, requestDate, status } = req.body;
+              
+              // Here you would save upgrade request to database
+              console.log('User upgrade request:', { targetType, requiredAmount, currentType, paymentMethod, paymentProof, requestDate, status });
+              
+              // Generate request ID
+              const requestId = `UPG-${Date.now()}`;
+              
+              // Create upgrade request data
+              const upgradeRequest = {
+                id: requestId,
+                targetType,
+                requiredAmount,
+                currentType,
+                paymentMethod,
+                paymentProof,
+                requestDate,
+                status: 'pending',
+                createdAt: new Date().toISOString()
+              };
+              
+              res.json({ 
+                success: true, 
+                message: "Yêu cầu nâng cấp đã được gửi thành công!",
+                data: { 
+                  requestId,
+                  upgradeRequest,
+                  message: `Yêu cầu nâng cấp lên ${targetType.toUpperCase()} đã được gửi. Admin sẽ xem xét trong 24-48 giờ.`
+                }
+              });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi gửi yêu cầu nâng cấp" });
+            }
+          });
+
+          // Admin Dashboard API endpoints
+          app.get("/api/admin/users", async (req, res) => {
+            try {
+              // Mock user data for admin dashboard
+              const users = [
+                {
+                  id: "1",
+                  name: "Nguyễn Văn A",
+                  email: "nguyenvana@example.com",
+                  businessTier: "card_customer",
+                  status: "active",
+                  cards: ["Gold Card #1"],
+                  joinDate: "2024-01-15",
+                  totalInvestment: "2000000",
+                  vcaDigitalShare: "200"
+                },
+                {
+                  id: "2", 
+                  name: "Trần Thị B",
+                  email: "tranthib@example.com",
+                  businessTier: "vcare_home",
+                  status: "active",
+                  cards: ["Silver Card #1", "Gold Card #2"],
+                  joinDate: "2024-02-20",
+                  totalInvestment: "5000000",
+                  vcaDigitalShare: "500"
+                },
+                {
+                  id: "3",
+                  name: "Lê Văn C",
+                  email: "levanc@example.com", 
+                  businessTier: "angel",
+                  status: "pending",
+                  cards: ["Platinum Card #1"],
+                  joinDate: "2024-03-10",
+                  totalInvestment: "100000000",
+                  vcaDigitalShare: "30000"
+                }
+              ];
+              
+              res.json({ success: true, data: users });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi lấy danh sách người dùng" });
+            }
+          });
+
+          app.get("/api/admin/cards", async (req, res) => {
+            try {
+              // Mock card data for admin dashboard
+              const cards = [
+                {
+                  id: "1",
+                  cardNumber: "VCG-001",
+                  cardType: "Gold",
+                  customerName: "Nguyễn Văn A",
+                  status: "active",
+                  price: "2000000",
+                  remainingSessions: 12,
+                  issuedDate: "2024-01-15",
+                  expiryDate: "2026-01-15"
+                },
+                {
+                  id: "2",
+                  cardNumber: "VCS-002", 
+                  cardType: "Silver",
+                  customerName: "Trần Thị B",
+                  status: "active",
+                  price: "1500000",
+                  remainingSessions: 8,
+                  issuedDate: "2024-02-20",
+                  expiryDate: "2026-02-20"
+                }
+              ];
+              
+              res.json({ success: true, data: cards });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi lấy danh sách thẻ" });
+            }
+          });
+
+          app.get("/api/admin/transactions", async (req, res) => {
+            try {
+              // Mock transaction data for admin dashboard
+              const transactions = [
+                {
+                  id: "1",
+                  type: "investment",
+                  amount: "100000000",
+                  description: "Đầu tư gói Angel",
+                  status: "pending",
+                  date: "2024-03-10",
+                  userId: "3",
+                  userName: "Lê Văn C"
+                },
+                {
+                  id: "2",
+                  type: "withdrawal",
+                  amount: "5000000",
+                  description: "Rút VCA Digital Share",
+                  status: "pending",
+                  date: "2024-03-09",
+                  userId: "2", 
+                  userName: "Trần Thị B"
+                },
+                {
+                  id: "3",
+                  type: "referral",
+                  amount: "800000",
+                  description: "Hoa hồng referral",
+                  status: "completed",
+                  date: "2024-03-08",
+                  userId: "1",
+                  userName: "Nguyễn Văn A"
+                }
+              ];
+              
+              res.json({ success: true, data: transactions });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi lấy danh sách giao dịch" });
+            }
+          });
+
+          app.get("/api/admin/stats", async (req, res) => {
+            try {
+              // Mock statistics for admin dashboard
+              const stats = {
+                totalUsers: 1247,
+                activeUsers: 1105,
+                pendingUsers: 142,
+                blockedUsers: 23,
+                totalCards: 2156,
+                activeCards: 1987,
+                expiredCards: 169,
+                totalRevenue: 2450000000,
+                monthlyRevenue: 185000000,
+                pendingTransactions: 45,
+                completedTransactions: 2847,
+                failedTransactions: 12
+              };
+              
+              res.json({ success: true, data: stats });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi lấy thống kê hệ thống" });
+            }
+          });
+
+          // Admin action endpoints
+          app.post("/api/admin/users/:userId/status", requireAuth, async (req, res) => {
+            try {
+              const { userId } = req.params;
+              const { status } = req.body;
+              
+              console.log(`Admin changing user ${userId} status to ${status}`);
+              
+              res.json({ 
+                success: true, 
+                message: `Đã thay đổi trạng thái user ${userId} thành ${status}` 
+              });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi thay đổi trạng thái user" });
+            }
+          });
+
+          app.post("/api/admin/transactions/:transactionId/approve", requireAuth, async (req, res) => {
+            try {
+              const { transactionId } = req.params;
+              
+              console.log(`Admin approving transaction ${transactionId}`);
+              
+              res.json({ 
+                success: true, 
+                message: `Đã duyệt giao dịch ${transactionId}` 
+              });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi duyệt giao dịch" });
+            }
+          });
+
+          app.post("/api/admin/transactions/:transactionId/reject", requireAuth, async (req, res) => {
+            try {
+              const { transactionId } = req.params;
+              const { reason } = req.body;
+              
+              console.log(`Admin rejecting transaction ${transactionId}: ${reason}`);
+              
+              res.json({ 
+                success: true, 
+                message: `Đã từ chối giao dịch ${transactionId}` 
+              });
+            } catch (error) {
+              res.status(500).json({ success: false, message: "Lỗi từ chối giao dịch" });
+            }
+          });
+
+  // Favicon route
+app.get("/favicon.svg", (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/favicon.svg'));
+});
+
+
+
+
+
+  // Forgot Password API endpoints
+  app.post("/api/forgot-password", async (req, res) => {
+    try {
+      const { emailOrPhone, code } = req.body;
+      
+      console.log('Forgot password request:', { emailOrPhone, code });
+      
+      // In a real system, you would:
+      // 1. Check if email/phone exists in database
+      // 2. Generate and store reset code
+      // 3. Send email/SMS with code
+      
+      // For demo, we'll simulate success
+      res.json({
+        success: true,
+        message: "Mã xác thực đã được gửi thành công!",
+        data: {
+          emailOrPhone: emailOrPhone,
+          code: code, // In real system, don't return the code
+          message: "Vui lòng kiểm tra email/SMS để lấy mã xác thực"
+        }
+      });
+    } catch (error) {
+      console.error('Forgot password error:', error);
+      res.status(500).json({ success: false, message: "Lỗi gửi mã xác thực" });
+    }
+  });
+
+  app.post("/api/resend-reset-code", async (req, res) => {
+    try {
+      const { emailOrPhone, code } = req.body;
+      
+      console.log('Resend reset code request:', { emailOrPhone, code });
+      
+      // In a real system, generate new code and send again
+      res.json({
+        success: true,
+        message: "Mã xác thực mới đã được gửi!",
+        data: {
+          emailOrPhone: emailOrPhone,
+          code: code,
+          message: "Vui lòng kiểm tra email/SMS để lấy mã xác thực mới"
+        }
+      });
+    } catch (error) {
+      console.error('Resend code error:', error);
+      res.status(500).json({ success: false, message: "Lỗi gửi lại mã xác thực" });
+    }
+  });
+
+  app.post("/api/verify-reset-code", async (req, res) => {
+    try {
+      const { emailOrPhone, code } = req.body;
+      
+      console.log('Verify reset code request:', { emailOrPhone, code });
+      
+      // In a real system, you would:
+      // 1. Check if code is valid and not expired
+      // 2. Return success if valid
+      
+      // For demo, accept any 6-digit code
+      if (code && code.length === 6 && /^[0-9]{6}$/.test(code)) {
+        res.json({
+          success: true,
+          message: "Mã xác thực hợp lệ!",
+          data: {
+            emailOrPhone: emailOrPhone,
+            verified: true
+          }
+        });
+      } else {
+        res.json({
+          success: false,
+          message: "Mã xác thực không hợp lệ hoặc đã hết hạn!"
+        });
+      }
+    } catch (error) {
+      console.error('Verify code error:', error);
+      res.status(500).json({ success: false, message: "Lỗi xác thực mã" });
+    }
+  });
+
+  app.post("/api/reset-password", async (req, res) => {
+    try {
+      const { emailOrPhone, newPassword, code } = req.body;
+      
+      console.log('Reset password request:', { emailOrPhone, newPassword: '***', code });
+      
+      // In a real system, you would:
+      // 1. Verify the reset code is still valid
+      // 2. Hash the new password
+      // 3. Update user's password in database
+      // 4. Invalidate the reset code
+      
+      // For demo, we'll simulate success
+      res.json({
+        success: true,
+        message: "Mật khẩu đã được đặt lại thành công!",
+        data: {
+          emailOrPhone: emailOrPhone,
+          message: "Bạn có thể đăng nhập với mật khẩu mới"
+        }
+      });
+    } catch (error) {
+      console.error('Reset password error:', error);
+      res.status(500).json({ success: false, message: "Lỗi đặt lại mật khẩu" });
+    }
+  });
+
+  // KYC endpoints
+  app.post("/api/kyc/submit", requireAuth, async (req, res) => {
+    try {
+      const validation = kycSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Dữ liệu KYC không hợp lệ",
+          errors: validation.error.errors
+        });
+      }
+
+      const kycData = validation.data;
+      const userId = req.user?.id;
+
+      if (!userId) {
+        return res.status(401).json({ success: false, message: "Không xác thực được người dùng" });
+      }
+
+      // Create KYC record
+      const kycId = `KYC-${Date.now()}`;
+      const kycRecord = {
+        id: kycId,
+        userId: userId,
+        ...kycData,
+        status: "pending", // pending, approved, rejected
+        submittedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Save KYC record
+      await storage.createKycRecord(kycRecord);
+
+      console.log(`User ${userId} submitted KYC: ${kycData.fullName}`);
+
+      res.json({
+        success: true,
+        message: "Thông tin KYC đã được gửi thành công",
+        data: {
+          kycId,
+          status: "pending"
+        }
+      });
+
+    } catch (error) {
+      console.error('KYC submission error:', error);
+      res.status(500).json({ success: false, message: "Lỗi gửi thông tin KYC" });
+    }
+  });
+
+  // Get user's KYC status
+  app.get("/api/kyc/status", requireAuth, async (req, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ success: false, message: "Không xác thực được người dùng" });
+      }
+
+      const kycRecord = await storage.getKycByUserId(userId);
+      
+      res.json({
+        success: true,
+        data: kycRecord || null
+      });
+
+    } catch (error) {
+      console.error('Get KYC status error:', error);
+      res.status(500).json({ success: false, message: "Lỗi lấy thông tin KYC" });
+    }
+  });
+
+  // Withdrawal endpoints
+  app.post("/api/withdrawal/request", requireAuth, async (req, res) => {
+    try {
+      const validation = withdrawalRequestSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: validation.error.errors
+        });
+      }
+
+      const { amount, reason } = validation.data;
+      const userId = req.user?.id;
+
+      if (!userId) {
+        return res.status(401).json({ success: false, message: "Không xác thực được người dùng" });
+      }
+
+      // Check if user has completed KYC
+      const kycRecord = await storage.getKycByUserId(userId);
+      if (!kycRecord || kycRecord.status !== "approved") {
+        return res.status(400).json({
+          success: false,
+          message: "Bạn cần hoàn thành xác thực KYC trước khi rút tiền"
+        });
+      }
+
+      // Get user's current VCA Digital Share balance
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+      }
+
+      // Calculate withdrawal fee (0.1% of amount)
+      const withdrawalFee = calculateWithdrawalFee(amount);
+      const totalAmount = amount + withdrawalFee;
+      
+      // Calculate required VGB Digital Share for total amount (including fee)
+      const requiredVgbDigitalShare = calculateVgbDigitalShareFromAmount(totalAmount);
+      
+      if (user.vgbDigitalShareValue < requiredVgbDigitalShare) {
+        return res.status(400).json({
+          success: false,
+          message: `Không đủ VGB Digital Share. Cần ${requiredVgbDigitalShare.toLocaleString()} VDS (bao gồm phí ${withdrawalFee.toLocaleString()} VNĐ), hiện có ${user.vgbDigitalShareValue.toLocaleString()} VDS`
+        });
+      }
+
+      // Create withdrawal request using KYC bank info
+      const withdrawalId = `WTH-${Date.now()}`;
+      const withdrawalRequest = {
+        id: withdrawalId,
+        userId: userId,
+        amount: amount,
+        withdrawalFee: withdrawalFee,
+        totalAmount: totalAmount,
+        vgbDigitalShareAmount: requiredVgbDigitalShare,
+        bankAccount: kycRecord.bankAccount,
+        bankName: kycRecord.bankName,
+        bankBranch: kycRecord.bankBranch,
+        accountHolderName: kycRecord.accountHolderName,
+        reason: reason || "",
+        status: "pending", // pending, approved, rejected, completed
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Save withdrawal request (you'll need to implement this in storage)
+      await storage.createWithdrawalRequest(withdrawalRequest);
+
+      // Log the action (simplified for now)
+      console.log(`User ${userId} requested withdrawal: ${amount} VNĐ (${requiredVgbDigitalShare} VDS)`);
+
+      res.json({
+        success: true,
+        message: "Yêu cầu rút tiền đã được gửi thành công",
+        data: {
+          withdrawalId,
+          amount,
+          withdrawalFee,
+          totalAmount,
+          vgbDigitalShareAmount: requiredVgbDigitalShare,
+          status: "pending"
+        }
+      });
+
+    } catch (error) {
+      console.error('Withdrawal request error:', error);
+      res.status(500).json({ success: false, message: "Lỗi xử lý yêu cầu rút tiền" });
+    }
+  });
+
+  // Get user's withdrawal history
+  app.get("/api/withdrawal/history", requireAuth, async (req, res) => {
+    try {
+      const userId = req.user?.id;
+      if (!userId) {
+        return res.status(401).json({ success: false, message: "Không xác thực được người dùng" });
+      }
+
+      const withdrawals = await storage.getWithdrawalHistory(userId);
+      
+      res.json({
+        success: true,
+        data: withdrawals
+      });
+
+    } catch (error) {
+      console.error('Get withdrawal history error:', error);
+      res.status(500).json({ success: false, message: "Lỗi lấy lịch sử rút tiền" });
+    }
+  });
+
+  // Get withdrawal request details
+  app.get("/api/withdrawal/:withdrawalId", requireAuth, async (req, res) => {
+    try {
+      const { withdrawalId } = req.params;
+      const userId = req.user?.id;
+
+      if (!userId) {
+        return res.status(401).json({ success: false, message: "Không xác thực được người dùng" });
+      }
+
+      const withdrawal = await storage.getWithdrawalById(withdrawalId);
+      
+      if (!withdrawal) {
+        return res.status(404).json({ success: false, message: "Không tìm thấy yêu cầu rút tiền" });
+      }
+
+      // Check if user owns this withdrawal
+      if (withdrawal.userId !== userId) {
+        return res.status(403).json({ success: false, message: "Không có quyền xem yêu cầu này" });
+      }
+
+      res.json({
+        success: true,
+        data: withdrawal
+      });
+
+    } catch (error) {
+      console.error('Get withdrawal details error:', error);
+      res.status(500).json({ success: false, message: "Lỗi lấy thông tin rút tiền" });
+    }
+  });
+
+  // Referral route handler for vcareglobal.vn
+  app.get("/ref/:referralCode", async (req, res) => {
+    try {
+      const { referralCode } = req.params;
+      
+      // Validate referral code format
+      if (!referralCode || referralCode.length < 6) {
+        return res.redirect('/?error=invalid_referral');
+      }
+
+      // Store referral code in session for later use
+      req.session.referralCode = referralCode;
+      
+      // Log referral access
+      console.log(`Referral accessed: ${referralCode} from IP: ${req.ip}`);
+      
+      // Redirect to homepage with referral tracking
+      res.redirect(`/?ref=${referralCode}`);
+      
+    } catch (error) {
+      console.error('Referral route error:', error);
+      res.redirect('/?error=referral_error');
+    }
+  });
+
+  // Test withdrawal endpoint (no auth required for testing)
+  app.post("/api/test-withdrawal", async (req, res) => {
+    try {
+      const validation = withdrawalRequestSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: validation.error.errors
+        });
+      }
+
+      const { amount, reason } = validation.data;
+
+      // Mock user data for testing
+      const mockUser = {
+        id: "test-user-123",
+        vgbDigitalShareValue: 5000 // Mock VGB Digital Share balance
+      };
+
+      // Calculate withdrawal fee (0.1% of amount)
+      const withdrawalFee = calculateWithdrawalFee(amount);
+      const totalAmount = amount + withdrawalFee;
+      
+      // Calculate required VGB Digital Share for total amount (including fee)
+      const requiredVgbDigitalShare = calculateVgbDigitalShareFromAmount(totalAmount);
+      
+      if (mockUser.vgbDigitalShareValue < requiredVgbDigitalShare) {
+        return res.status(400).json({
+          success: false,
+          message: `Không đủ VGB Digital Share. Cần ${requiredVgbDigitalShare.toLocaleString()} VDS (bao gồm phí ${withdrawalFee.toLocaleString()} VNĐ), hiện có ${mockUser.vgbDigitalShareValue.toLocaleString()} VDS`
+        });
+      }
+
+      // Create withdrawal request
+      const withdrawalId = `WTH-${Date.now()}`;
+      const withdrawalRequest = {
+        id: withdrawalId,
+        userId: mockUser.id,
+        amount: amount,
+        withdrawalFee: withdrawalFee,
+        totalAmount: totalAmount,
+        vgbDigitalShareAmount: requiredVgbDigitalShare,
+        bankAccount: "1234567890", // Mock bank account
+        bankName: "Vietcombank", // Mock bank name
+        accountHolderName: "Test User", // Mock account holder
+        reason: reason || "",
+        status: "pending",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Save withdrawal request (using the correct method signature)
+      await storage.createWithdrawalRequest(withdrawalRequest);
+
+      console.log(`Test withdrawal request: ${amount} VNĐ (${requiredVgbDigitalShare} VDS)`);
+
+      res.json({
+        success: true,
+        message: "Test yêu cầu rút tiền thành công",
+        data: {
+          withdrawalId,
+          amount,
+          withdrawalFee,
+          totalAmount,
+          vgbDigitalShareAmount: requiredVgbDigitalShare,
+          status: "pending"
+        }
+      });
+
+    } catch (error) {
+      console.error('Test withdrawal error:', error);
+      res.status(500).json({ success: false, message: "Lỗi test rút tiền" });
+    }
+  });
+
+  // Test KYC endpoints (no auth required for testing)
+  app.post("/api/test-kyc-submit", async (req, res) => {
+    try {
+      const validation = kycSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Dữ liệu KYC không hợp lệ",
+          errors: validation.error.errors
+        });
+      }
+
+      const kycData = validation.data;
+
+      // Create KYC record
+      const kycId = `KYC-${Date.now()}`;
+      const kycRecord = {
+        id: kycId,
+        userId: "test-user-123",
+        ...kycData,
+        status: "pending",
+        submittedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Save KYC record
+      await storage.createKycRecord(kycRecord);
+
+      console.log(`Test KYC submission: ${kycData.fullName}`);
+
+      res.json({
+        success: true,
+        message: "Test KYC thành công",
+        data: {
+          kycId,
+          status: "pending"
+        }
+      });
+
+    } catch (error) {
+      console.error('Test KYC error:', error);
+      res.status(500).json({ success: false, message: "Lỗi test KYC" });
+    }
+  });
+
+  app.get("/api/test-kyc-status", async (req, res) => {
+    try {
+      // Mock KYC status for testing
+      const mockKyc = {
+        id: "KYC-1736864094123",
+        userId: "test-user-123",
+        fullName: "Nguyễn Văn A",
+        idNumber: "123456789",
+        idType: "cccd",
+        birthDate: "1990-01-01",
+        address: "123 Đường ABC, Quận XYZ, TP.HCM",
+        phone: "0123456789",
+        email: "user@example.com",
+        bankAccount: "1234567890",
+        bankName: "Vietcombank",
+        bankBranch: "Chi nhánh Hà Nội",
+        accountHolderName: "Nguyễn Văn A",
+        status: "approved",
+        submittedAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      res.json({
+        success: true,
+        data: mockKyc
+      });
+
+    } catch (error) {
+      console.error('Test KYC status error:', error);
+      res.status(500).json({ success: false, message: "Lỗi test KYC status" });
+    }
+  });
+
+  app.post("/api/test-withdrawal-kyc", async (req, res) => {
+    try {
+      const validation = withdrawalRequestSchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({
+          success: false,
+          message: "Dữ liệu không hợp lệ",
+          errors: validation.error.errors
+        });
+      }
+
+      const { amount, reason } = validation.data;
+
+      // Mock user with approved KYC
+      const mockUser = {
+        id: "test-user-123",
+        vgbDigitalShareValue: 5000
+      };
+
+      const mockKyc = {
+        bankAccount: "1234567890",
+        bankName: "Vietcombank",
+        bankBranch: "Chi nhánh Hà Nội",
+        accountHolderName: "Nguyễn Văn A"
+      };
+
+      // Calculate withdrawal fee (0.1% of amount)
+      const withdrawalFee = calculateWithdrawalFee(amount);
+      const totalAmount = amount + withdrawalFee;
+      
+      // Calculate required VGB Digital Share for total amount (including fee)
+      const requiredVgbDigitalShare = calculateVgbDigitalShareFromAmount(totalAmount);
+      
+      if (mockUser.vgbDigitalShareValue < requiredVgbDigitalShare) {
+        return res.status(400).json({
+          success: false,
+          message: `Không đủ VGB Digital Share. Cần ${requiredVgbDigitalShare.toLocaleString()} VDS (bao gồm phí ${withdrawalFee.toLocaleString()} VNĐ), hiện có ${mockUser.vgbDigitalShareValue.toLocaleString()} VDS`
+        });
+      }
+
+      // Create withdrawal request using KYC bank info
+      const withdrawalId = `WTH-${Date.now()}`;
+      const withdrawalRequest = {
+        id: withdrawalId,
+        userId: mockUser.id,
+        amount: amount,
+        withdrawalFee: withdrawalFee,
+        totalAmount: totalAmount,
+        vgbDigitalShareAmount: requiredVgbDigitalShare,
+        bankAccount: mockKyc.bankAccount,
+        bankName: mockKyc.bankName,
+        bankBranch: mockKyc.bankBranch,
+        accountHolderName: mockKyc.accountHolderName,
+        reason: reason || "",
+        status: "pending",
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Save withdrawal request (using the correct method signature)
+      await storage.createWithdrawalRequest(withdrawalRequest);
+
+      console.log(`Test withdrawal with KYC: ${amount} VNĐ (${requiredVgbDigitalShare} VDS)`);
+
+      res.json({
+        success: true,
+        message: "Test rút tiền với KYC thành công",
+        data: {
+          withdrawalId,
+          amount,
+          withdrawalFee,
+          totalAmount,
+          vgbDigitalShareAmount: requiredVgbDigitalShare,
+          status: "pending"
+        }
+      });
+
+    } catch (error) {
+      console.error('Test withdrawal KYC error:', error);
+      res.status(500).json({ success: false, message: "Lỗi test rút tiền KYC" });
+    }
+  });
+
+  // Test withdrawal history endpoint (no auth required for testing)
+  app.get("/api/test-withdrawal-history", async (req, res) => {
+    try {
+      // Mock withdrawal history for testing
+      const mockWithdrawals = [
+        {
+          id: "WTH-1736864094123",
+          userId: "test-user-123",
+          amount: 500000,
+          withdrawalFee: 500,
+          totalAmount: 500500,
+          vgbDigitalShareAmount: 50,
+          bankAccount: "1234567890",
+          bankName: "Vietcombank",
+          accountHolderName: "Nguyen Van A",
+          reason: "Test withdrawal",
+          status: "pending",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        },
+        {
+          id: "WTH-1736864094124",
+          userId: "test-user-123",
+          amount: 1000000,
+          withdrawalFee: 1000,
+          totalAmount: 1001000,
+          vgbDigitalShareAmount: 100,
+          bankAccount: "1234567890",
+          bankName: "Vietcombank",
+          accountHolderName: "Nguyen Van A",
+          reason: "Test withdrawal 1M",
+          status: "completed",
+          createdAt: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
+          updatedAt: new Date(Date.now() - 86400000).toISOString()
+        }
+      ];
+
+      res.json({
+        success: true,
+        data: mockWithdrawals
+      });
+
+    } catch (error) {
+      console.error('Test withdrawal history error:', error);
+      res.status(500).json({ success: false, message: "Lỗi test lịch sử rút tiền" });
+    }
+  });
+
+  // Submit user type order (membership package)
+  app.post("/api/submit-user-type-order", async (req, res) => {
+    try {
+      const { orderId, userType, memberInfo, investmentInfo } = req.body;
+      
+      console.log('User type order submission:', { orderId, userType, memberInfo, investmentInfo });
+      
+      // Generate user account for member
+      const finalOrderId = orderId || `UTY-${Date.now()}`;
+      const userId = `USER-${Date.now()}`;
+      const userEmail = memberInfo.email;
+      const userPassword = generatePassword(); // Generate random password
+      
+      // Create user account data
+      const userAccount = {
+        id: userId,
+        email: userEmail,
+        password: userPassword,
+        name: memberInfo.name,
+        phone: memberInfo.phone,
+        address: memberInfo.address,
+        role: userType, // Set role based on user type
+        status: 'active',
+        userType: userType,
+        investmentAmount: investmentInfo.amount,
+        orderId: finalOrderId,
+        createdAt: new Date().toISOString()
+      };
+      
+      // Here you would save to database
+      const newMember = {
+        id: 'member-' + Date.now(),
+        orderId: finalOrderId,
+        userType,
+        ...memberInfo,
+        ...investmentInfo,
+        status: 'pending_approval',
+        createdAt: new Date().toISOString()
+      };
+      
+      res.json({
+        success: true,
+        message: "Đăng ký gói thành viên thành công! Tài khoản user đã được tạo.",
+        data: {
+          orderId: finalOrderId,
+          userAccount: {
+            email: userEmail,
+            password: userPassword,
+            name: memberInfo.name
+          },
+          userType,
+          memberInfo,
+          investmentInfo,
+          status: 'pending_approval',
+          redirectTo: '/user-dashboard'
+        }
+      });
+    } catch (error) {
+      console.error('Error submitting user type order:', error);
+      res.status(500).json({ success: false, message: "Lỗi xử lý đăng ký gói thành viên" });
+    }
+  });
+
+  // Generate QR code for payment
+  app.post("/api/generate-qr-payment", async (req, res) => {
+    try {
+      const { orderId, amount, description } = req.body;
+      
+      // TPBank payment info
+      const bankInfo = {
+        bankCode: "TPB",
+        bankName: "TPBank",
+        accountNumber: "92232558888",
+        accountName: "PHAM VAN SINH"
+      };
+      
+      // Create payment content with order ID
+      const paymentContent = `${orderId || 'VCG' + Date.now()}`;
+      
+                // Generate QR code data (VietQR format - MoMo compatible)
+                const qrData = {
+                  accountNumber: bankInfo.accountNumber,
+                  accountName: bankInfo.accountName,
+                  bankCode: bankInfo.bankCode,
+                  amount: amount || 0,
+                  description: paymentContent,
+                  template: "compact"
+                };
+      
+                // Create VietQR URL - compatible with MoMo and other banking apps
+                const baseUrl = "https://img.vietqr.io/image";
+                const qrUrl = `${baseUrl}/${bankInfo.bankCode}-${bankInfo.accountNumber}-compact.png?amount=${qrData.amount}&addInfo=${encodeURIComponent(paymentContent)}&accountName=${encodeURIComponent(bankInfo.accountName)}`;
+      
+      res.json({
+        success: true,
+        data: {
+          qrUrl,
+          bankInfo,
+          orderId: paymentContent,
+          amount: qrData.amount,
+          description: `Thanh toán đơn hàng ${paymentContent} - VCare Global`
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, message: "Lỗi tạo QR code thanh toán" });
+    }
+  });
+
+  // Admin dashboard route
+  app.get("/admin-dashboard", (req, res) => {
+    res.sendFile(path.join(__dirname, '../admin-dashboard.html'));
+  });
+
+  // User dashboard route
+  app.get("/user-dashboard", (req, res) => {
+    res.sendFile(path.join(__dirname, '../user-dashboard.html'));
+  });
+
+
+  // Home page endpoint - Dynamic data from database (for /home route)
+  app.get("/home", async (req, res) => {
     try {
       // Fetch all data from database
       const [cards, branches, transactions, users] = await Promise.all([
         storage.getCards(),
         storage.getBranches(),
         storage.getTransactions(),
-        storage.getUsers()
+        storage.getAllUsers()
       ]);
 
       // Calculate active cards (cards with status "active")
@@ -70,9 +1411,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .filter(t => t.type === "income")
         .reduce((sum, t) => sum + parseFloat(t.amount || 0), 0);
 
-      // Calculate total PAD Token distributed
+      // Calculate total VCA Digital Share distributed
       const totalPadTokenDistributed = users.reduce((sum, user) => {
-        return sum + parseFloat(user.padToken || 0);
+        return sum + parseFloat(user.vcaDigitalShare || 0);
       }, 0);
 
       // Calculate profit sharing percentage (fixed at 49% as per requirements)
@@ -109,7 +1450,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             price: 12000000, 
             sessions: 12, 
             description: "Thẻ cơ bản với 12 lượt tư vấn",
-            padToken: 1200,
+            vcaDigitalShare: 1200,
             count: cards.filter(c => c.cardType === "Standard").length
           },
           { 
@@ -117,7 +1458,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             price: 15000000, 
             sessions: 15, 
             description: "Thẻ bạc với 15 lượt tư vấn",
-            padToken: 1500,
+            vcaDigitalShare: 1500,
             count: cards.filter(c => c.cardType === "Silver").length
           },
           { 
@@ -125,7 +1466,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             price: 18000000, 
             sessions: 18, 
             description: "Thẻ vàng với 18 lượt tư vấn",
-            padToken: 1800,
+            vcaDigitalShare: 1800,
             count: cards.filter(c => c.cardType === "Gold").length
           },
           { 
@@ -133,7 +1474,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             price: 21000000, 
             sessions: 21, 
             description: "Thẻ bạch kim với 21 lượt tư vấn",
-            padToken: 2100,
+            vcaDigitalShare: 2100,
             count: cards.filter(c => c.cardType === "Platinum").length
           },
           { 
@@ -141,7 +1482,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             price: 24000000, 
             sessions: 24, 
             description: "Thẻ kim cương với 24 lượt tư vấn",
-            padToken: 2400,
+            vcaDigitalShare: 2400,
             count: cards.filter(c => c.cardType === "Diamond").length
           }
         ],
@@ -153,28 +1494,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
             minAmount: 100000000, 
             description: "Đầu tư từ 100 triệu VNĐ",
             count: users.filter(u => u.role === "shareholder").length,
-            padTokenMultiplier: 2.0
+            vcaDigitalShareMultiplier: 2.0
           },
           { 
             name: "Angel", 
             minAmount: 50000000, 
             description: "Đầu tư từ 50 triệu VNĐ",
             count: users.filter(u => u.role === "angel").length,
-            padTokenMultiplier: 1.5
+            vcaDigitalShareMultiplier: 1.5
           },
           { 
             name: "Seed", 
             minAmount: 20000000, 
             description: "Đầu tư từ 20 triệu VNĐ",
             count: users.filter(u => u.role === "seed").length,
-            padTokenMultiplier: 1.2
+            vcaDigitalShareMultiplier: 1.2
           },
           { 
-            name: "Retail", 
+            name: "Vcare Home", 
             minAmount: 1000000, 
             description: "Đầu tư từ 1 triệu VNĐ",
-            count: users.filter(u => u.role === "retail").length,
-            padTokenMultiplier: 1.0
+            count: users.filter(u => u.role === "vcare_home").length,
+            vcaDigitalShareMultiplier: 1.0
           }
         ],
         
@@ -255,14 +1596,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      let padTokenEarned = 0;
+      let vcaDigitalShareEarned = 0;
       let cardCreated = null;
       let tempCardRecord = null;
       let rolesAssigned = [];
 
       // Handle role registration first
       if (roles && roles.length > 0) {
-        const validRoles = ["Cổ đông", "Angel", "Seed", "Retail", "Sáng lập", "Thiên thần", "Phát triển", "Đồng hành"];
+        const validRoles = ["founder", "angel", "seed", "vcare_home", "asset_contributor", "intellectual_contributor", "franchise_branch", "card_customer"];
         
         for (const roleName of roles) {
           if (validRoles.includes(roleName)) {
@@ -282,18 +1623,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
             await storage.assignUserRole(user.id, role.id);
             rolesAssigned.push(roleName);
 
-            // Calculate additional PAD Token based on role
-            const rolePadToken = calculatePadTokenFromRole(roleName, investmentAmount);
+            // Calculate additional VCA Digital Share based on role with correct multipliers
+            const rolePadToken = calculateVcaDigitalShareFromRole(roleName, investmentAmount);
             if (rolePadToken > 0) {
-              padTokenEarned += rolePadToken;
+              vcaDigitalShareEarned += rolePadToken;
               
-              const currentPadToken = parseFloat(user.padToken || "0");
+              const currentPadToken = parseFloat(user.vcaDigitalShare || "0");
               const newPadToken = currentPadToken + rolePadToken;
+              
+              // Calculate maxout limit for this role
+              const maxoutLimit = calculateMaxoutLimit(roleName);
+              const maxoutAmount = calculateMaxoutAmount(investmentAmount, roleName);
               
               await storage.updateUserPadToken(
                 user.id, 
                 newPadToken, 
-                `Đăng ký vai trò ${roleName} - ${investmentAmount.toLocaleString('vi-VN')} VNĐ`,
+                `Đăng ký vai trò ${roleName} - ${investmentAmount.toLocaleString('vi-VN')} VNĐ - Maxout: ${maxoutLimit === 'unlimited' ? 'Unlimited' : maxoutLimit + 'x'}`,
                 user.id
               );
             }
@@ -303,10 +1648,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Handle investment amount
       if (investmentAmount > 0) {
-        const investmentPadToken = calculatePadTokenFromAmount(investmentAmount);
-        padTokenEarned += investmentPadToken;
+        const investmentPadToken = calculateVcaDigitalShareFromAmount(investmentAmount);
+        vcaDigitalShareEarned += investmentPadToken;
         
-        const currentPadToken = parseFloat(user.padToken || "0");
+        const currentPadToken = parseFloat(user.vcaDigitalShare || "0");
         const newPadToken = currentPadToken + investmentPadToken;
         
         await storage.updateUserPadToken(
@@ -315,6 +1660,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
           `Đầu tư ${investmentAmount.toLocaleString('vi-VN')} VNĐ`,
           user.id
         );
+      }
+
+      // Handle referral code processing with 8% commission
+      let referralProcessed = null;
+      let referralCommission = 0;
+      let vipSupportCommission = 0;
+      
+      if (referralCode) {
+        try {
+          // Check if referral code exists and is valid
+          const referral = await storage.getReferralByCode(referralCode);
+          if (referral) {
+            // Calculate 8% referral commission based on card price
+            const cardPrice = cardType ? (cardPrices[cardType] || 0) : 0;
+            referralCommission = Math.floor(cardPrice * 0.08); // 8% commission
+            
+            // Calculate 5% VIP support commission
+            vipSupportCommission = Math.floor(cardPrice * 0.05); // 5% VIP support
+            
+            // Create referral record for tracking
+            referralProcessed = await storage.createReferral({
+              referrerId: referral.referrerId,
+              referredUserId: user.id,
+              referralCode: referralCode,
+              status: "pending",
+              commissionAmount: referralCommission.toString(),
+              vipSupportAmount: vipSupportCommission.toString(),
+              vcaDigitalShareAmount: "0",
+              createdAt: new Date().toISOString()
+            });
+            
+            console.log(`✅ Referral code ${referralCode} processed for user ${user.id}`);
+            console.log(`💰 Referral commission: ${referralCommission.toLocaleString('vi-VN')} VNĐ (8%)`);
+            console.log(`💎 VIP support commission: ${vipSupportCommission.toLocaleString('vi-VN')} VNĐ (5%)`);
+          } else {
+            console.log(`⚠️ Invalid referral code: ${referralCode}`);
+          }
+        } catch (referralError) {
+          console.error(`❌ Referral processing failed:`, referralError);
+        }
       }
 
       // Handle card registration - create temp record if redirecting to card selection
@@ -344,15 +1729,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
 
-        // Calculate PAD Token (100 PAD = 1 million VNĐ)
-        const padToken = calculatePadTokenFromAmount(price);
+        // Calculate VCA Digital Share (100 VCA = 1 million VNĐ)
+        const vcaDigitalShare = calculateVcaDigitalShareFromAmount(price);
 
         if (redirectToCardSelection) {
           // Create temporary card record (not paid yet)
           tempCardRecord = await storage.createCard({
             cardType,
             price: price.toString(),
-            padToken: padToken.toString(),
+            vcaDigitalShare: vcaDigitalShare.toString(),
             consultationSessions: sessions,
             ownerId: user.id,
             status: "pending", // Pending payment
@@ -366,7 +1751,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           cardCreated = await storage.createCard({
             cardType,
             price: price.toString(),
-            padToken: padToken.toString(),
+            vcaDigitalShare: vcaDigitalShare.toString(),
             consultationSessions: sessions,
             ownerId: user.id,
             status: "active",
@@ -374,11 +1759,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
             paymentStatus: "completed"
           });
 
-          padTokenEarned += padToken;
+          vcaDigitalShareEarned += vcaDigitalShare;
 
-          // Update user PAD Token
-          const currentPadToken = parseFloat(user.padToken || "0");
-          const newPadToken = currentPadToken + padToken;
+          // Update user VCA Digital Share
+          const currentPadToken = parseFloat(user.vcaDigitalShare || "0");
+          const newPadToken = currentPadToken + vcaDigitalShare;
           
           await storage.updateUserPadToken(
             user.id, 
@@ -411,7 +1796,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           cardType,
           roles,
           investmentAmount,
-          padTokenEarned,
+          vcaDigitalShareEarned,
           redirectToCardSelection,
           tempCardId: tempCardRecord?.id
         }),
@@ -435,20 +1820,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
             type: cardCreated.cardType,
             price: cardCreated.price,
             sessions: cardCreated.consultationSessions,
-            padToken: cardCreated.padToken,
+            vcaDigitalShare: cardCreated.vcaDigitalShare,
             status: cardCreated.status
           } : tempCardRecord ? {
             id: tempCardRecord.id,
             type: tempCardRecord.cardType,
             price: tempCardRecord.price,
             sessions: tempCardRecord.consultationSessions,
-            padToken: tempCardRecord.padToken,
+            vcaDigitalShare: tempCardRecord.vcaDigitalShare,
             status: tempCardRecord.status
           } : null,
           roles: rolesAssigned,
-          padTokenEarned: padTokenEarned,
-          totalPadToken: parseFloat(user.padToken || "0") + padTokenEarned,
-          redirectToCardSelection: redirectToCardSelection
+          vcaDigitalShareEarned: vcaDigitalShareEarned,
+          totalPadToken: parseFloat(user.vcaDigitalShare || "0") + vcaDigitalShareEarned,
+          redirectToCardSelection: redirectToCardSelection,
+          referral: referralProcessed ? {
+            processed: true,
+            referralCode: referralCode,
+            commissionAmount: referralCommission,
+            vipSupportAmount: vipSupportCommission,
+            commissionRate: "8%",
+            vipSupportRate: "5%",
+            message: `Hoa hồng giới thiệu: ${referralCommission.toLocaleString('vi-VN')} VNĐ (8%), VIP hỗ trợ: ${vipSupportCommission.toLocaleString('vi-VN')} VNĐ (5%)`
+          } : null
         }
       };
 
@@ -525,9 +1919,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Calculate PAD Token (100 PAD = 1 million VNĐ)
-      const padToken = calculatePadTokenFromAmount(price);
-      const padTokenValue = padToken * 10000; // 1 PAD = 10,000 VNĐ
+      // Calculate VCA Digital Share (100 VCA = 1 million VNĐ)
+      const vcaDigitalShare = calculateVcaDigitalShareFromAmount(price);
+      const vcaDigitalShareValue = vcaDigitalShare * 10000; // 1 VCA = 10,000 VNĐ
 
       // Check if user already has this card type
       const existingCards = await storage.getCards();
@@ -547,7 +1941,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const cardCreated = await storage.createCard({
         cardType,
         price: price.toString(),
-        padToken: padToken.toString(),
+        vcaDigitalShare: vcaDigitalShare.toString(),
         consultationSessions: sessions,
         ownerId: user.id,
         status: paymentStatus === "completed" ? "active" : "pending",
@@ -558,10 +1952,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updatedAt: new Date()
       });
 
-      // Update user PAD Token only if payment is completed
-      let newPadToken = parseFloat(user.padToken || "0");
+      // Update user VCA Digital Share only if payment is completed
+      let newPadToken = parseFloat(user.vcaDigitalShare || "0");
       if (paymentStatus === "completed") {
-        newPadToken = newPadToken + padToken;
+        newPadToken = newPadToken + vcaDigitalShare;
         
         await storage.updateUserPadToken(
           user.id, 
@@ -601,7 +1995,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           cardType,
           price,
           sessions,
-          padToken,
+          vcaDigitalShare,
           paymentMethod,
           paymentStatus,
           transactionId: transaction.id
@@ -622,7 +2016,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             type: cardCreated.cardType,
             price: cardCreated.price,
             sessions: cardCreated.consultationSessions,
-            padToken: cardCreated.padToken,
+            vcaDigitalShare: cardCreated.vcaDigitalShare,
             status: cardCreated.status,
             paymentStatus: cardCreated.paymentStatus
           },
@@ -639,7 +2033,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             status: transaction.status,
             description: transaction.description
           },
-          padTokenEarned: paymentStatus === "completed" ? padToken : 0,
+          vcaDigitalShareEarned: paymentStatus === "completed" ? vcaDigitalShare : 0,
           paymentInfo: {
             method: paymentMethod,
             status: paymentStatus,
@@ -723,10 +2117,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updatedAt: new Date()
       });
 
-      // Calculate and update PAD Token
-      const padToken = parseFloat(card.padToken || "0");
-      const currentPadToken = parseFloat(user.padToken || "0");
-      const newPadToken = currentPadToken + padToken;
+      // Calculate and update VCA Digital Share
+      const vcaDigitalShare = parseFloat(card.vcaDigitalShare || "0");
+      const currentPadToken = parseFloat(user.vcaDigitalShare || "0");
+      const newPadToken = currentPadToken + vcaDigitalShare;
       
       await storage.updateUserPadToken(
         user.id, 
@@ -780,7 +2174,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             type: updatedCard.cardType,
             price: updatedCard.price,
             sessions: updatedCard.consultationSessions,
-            padToken: updatedCard.padToken,
+            vcaDigitalShare: updatedCard.vcaDigitalShare,
             status: updatedCard.status,
             paymentStatus: updatedCard.paymentStatus
           },
@@ -791,7 +2185,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             phone: user.phone,
             totalPadToken: newPadToken
           },
-          padTokenEarned: padToken,
+          vcaDigitalShareEarned: vcaDigitalShare,
           paymentInfo: {
             method: paymentMethod,
             reference: paymentReference,
@@ -844,14 +2238,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
             email: user.email,
             name: user.name,
             phone: user.phone,
-            totalPadToken: parseFloat(user.padToken || "0")
+            totalPadToken: parseFloat(user.vcaDigitalShare || "0")
           },
           cards: userCards.map(card => ({
             id: card.id,
             type: card.cardType,
             price: card.price,
             sessions: card.consultationSessions,
-            padToken: card.padToken,
+            vcaDigitalShare: card.vcaDigitalShare,
             status: card.status,
             paymentStatus: card.paymentStatus,
             description: card.description,
@@ -882,11 +2276,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/register/info", async (req, res) => {
     try {
       const cardTypes = [
-        { name: "Standard", price: 2000000, sessions: 12, description: "Thẻ cơ bản với 12 lượt tư vấn", padToken: 200 },
-        { name: "Silver", price: 8000000, sessions: 15, description: "Thẻ bạc với 15 lượt tư vấn", padToken: 800 },
-        { name: "Gold", price: 18000000, sessions: 18, description: "Thẻ vàng với 18 lượt tư vấn", padToken: 1800 },
-        { name: "Platinum", price: 38000000, sessions: 20, description: "Thẻ bạch kim với 20 lượt tư vấn", padToken: 3800 },
-        { name: "Diamond", price: 100000000, sessions: 24, description: "Thẻ kim cương với 24 lượt tư vấn", padToken: 10000 }
+        { name: "Standard", price: 2000000, sessions: 12, description: "Thẻ cơ bản với 12 lượt tư vấn", vcaDigitalShare: 200 },
+        { name: "Silver", price: 8000000, sessions: 15, description: "Thẻ bạc với 15 lượt tư vấn", vcaDigitalShare: 800 },
+        { name: "Gold", price: 18000000, sessions: 18, description: "Thẻ vàng với 18 lượt tư vấn", vcaDigitalShare: 1800 },
+        { name: "Platinum", price: 38000000, sessions: 20, description: "Thẻ bạch kim với 20 lượt tư vấn", vcaDigitalShare: 3800 },
+        { name: "Diamond", price: 100000000, sessions: 24, description: "Thẻ kim cương với 24 lượt tư vấn", vcaDigitalShare: 10000 }
       ];
 
       const investmentRoles = [
@@ -894,56 +2288,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
           name: "Cổ đông", 
           minAmount: 100000000, 
           description: "Đầu tư từ 100 triệu VNĐ",
-          padTokenMultiplier: 2.0,
+          vcaDigitalShareMultiplier: 2.0,
           benefits: ["Quyền biểu quyết", "Chia lãi cao nhất", "Ưu tiên thông tin"]
         },
         { 
           name: "Angel", 
           minAmount: 50000000, 
           description: "Đầu tư từ 50 triệu VNĐ",
-          padTokenMultiplier: 1.5,
+          vcaDigitalShareMultiplier: 1.5,
           benefits: ["Chia lãi ưu đãi", "Tham gia quản lý", "Báo cáo định kỳ"]
         },
         { 
           name: "Seed", 
           minAmount: 20000000, 
           description: "Đầu tư từ 20 triệu VNĐ",
-          padTokenMultiplier: 1.2,
+          vcaDigitalShareMultiplier: 1.2,
           benefits: ["Chia lãi cơ bản", "Cập nhật tiến độ", "Hỗ trợ tư vấn"]
         },
         { 
-          name: "Retail", 
+          name: "Vcare Home", 
           minAmount: 1000000, 
           description: "Đầu tư từ 1 triệu VNĐ",
-          padTokenMultiplier: 1.0,
+          vcaDigitalShareMultiplier: 1.0,
           benefits: ["Chia lãi cơ bản", "Theo dõi đầu tư", "Hỗ trợ cơ bản"]
         },
         { 
           name: "Sáng lập", 
           minAmount: 500000000, 
           description: "Đầu tư từ 500 triệu VNĐ",
-          padTokenMultiplier: 3.0,
+          vcaDigitalShareMultiplier: 3.0,
           benefits: ["Quyền cao nhất", "Chia lãi tối đa", "Tham gia điều hành"]
         },
         { 
           name: "Thiên thần", 
           minAmount: 200000000, 
           description: "Đầu tư từ 200 triệu VNĐ",
-          padTokenMultiplier: 2.5,
+          vcaDigitalShareMultiplier: 2.5,
           benefits: ["Quyền đặc biệt", "Chia lãi cao", "Ưu tiên cao"]
         },
         { 
           name: "Phát triển", 
           minAmount: 100000000, 
           description: "Đầu tư từ 100 triệu VNĐ",
-          padTokenMultiplier: 1.8,
+          vcaDigitalShareMultiplier: 1.8,
           benefits: ["Tham gia phát triển", "Chia lãi ưu đãi", "Cập nhật chi tiết"]
         },
         { 
           name: "Đồng hành", 
           minAmount: 50000000, 
           description: "Đầu tư từ 50 triệu VNĐ",
-          padTokenMultiplier: 1.3,
+          vcaDigitalShareMultiplier: 1.3,
           benefits: ["Hỗ trợ đặc biệt", "Chia lãi tốt", "Thông tin ưu tiên"]
         }
       ];
@@ -953,8 +2347,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         data: {
           cardTypes,
           investmentRoles,
-          padTokenRate: {
-            description: "100 PAD = 1 triệu VNĐ (1 PAD = 10,000 VNĐ)",
+          vcaDigitalShareRate: {
+            description: "100 VCA = 1 triệu VNĐ (1 VCA = 10,000 VNĐ)",
             rate: 100,
             valuePerPad: 10000
           },
@@ -973,7 +2367,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Card routes
-  app.get("/api/cards", requireAuth, addPadTokenCalculations, async (req, res) => {
+  app.get("/api/cards", requireAuth, addVgbDigitalShareCalculations, async (req, res) => {
     try {
       const cards = await storage.getCards();
       res.json(cards);
@@ -986,9 +2380,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const cardData = insertCardSchema.parse(req.body);
       
-      // Tính PAD Token (100 PAD = 1 triệu VNĐ)
+      // Tính VCA Digital Share (100 VCA = 1 triệu VNĐ)
       const price = parseFloat(cardData.price);
-      const padToken = calculatePadTokenFromAmount(price);
+      const vcaDigitalShare = calculateVcaDigitalShareFromAmount(price);
       
       // Set consultation sessions dựa trên loại thẻ
       const consultationSessionsMap: Record<string, number> = {
@@ -1000,20 +2394,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
       const consultationSessions = consultationSessionsMap[cardData.cardType] || 12;
       
-      // Enrich card data với PAD Token và consultation sessions
+      // Enrich card data với VCA Digital Share và consultation sessions
       const enrichedCardData = {
         ...cardData,
-        padToken: padToken.toString(),
+        vcaDigitalShare: vcaDigitalShare.toString(),
         consultationSessions,
         ownerId: req.user?.id // Set owner to current user
       };
       
       const card = await storage.createCard(enrichedCardData);
       
-      // Update user PAD Token
+      // Update user VCA Digital Share
       if (req.user) {
-        const currentPadToken = req.user.padToken || 0;
-        const newPadToken = currentPadToken + padToken;
+        const currentPadToken = req.user.vcaDigitalShare || 0;
+        const newPadToken = currentPadToken + vcaDigitalShare;
         
         await storage.updateUserPadToken(
           req.user.id, 
@@ -1175,7 +2569,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Dashboard metrics
-  app.get("/api/dashboard/metrics", requireAuth, addPadTokenCalculations, async (req, res) => {
+  app.get("/api/dashboard/metrics", requireAuth, addVgbDigitalShareCalculations, async (req, res) => {
     try {
       const transactions = await storage.getTransactions();
       const cards = await storage.getCards();
@@ -1187,13 +2581,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         .filter(t => t.type === "income")
         .reduce((sum, t) => sum + parseFloat(t.amount), 0);
 
-      // Get current user's PAD Token and roles
+      // Get current user's VCA Digital Share and roles
       let userPadToken = 0;
       let userRoles = [];
       let userPadTokenValue = 0;
       
       if (req.user) {
-        userPadToken = req.user.padToken || 0;
+        userPadToken = req.user.vcaDigitalShare || 0;
         userRoles = req.user.roles || [req.user.role];
         userPadTokenValue = calculateAmountFromPadToken(userPadToken);
       }
@@ -1203,8 +2597,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         activeCards: cards.filter(c => c.status === "active").length,
         branches: branches.length,
         staff: staff.length,
-        padToken: userPadToken,
-        padTokenValue: userPadTokenValue,
+        vcaDigitalShare: userPadToken,
+        vcaDigitalShareValue: userPadTokenValue,
         roles: userRoles,
         userInfo: req.user ? {
           id: req.user.id,
@@ -1361,7 +2755,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         connectionCommission: parseFloat(card.connectionCommission || "8"),
         vipSupport: parseFloat(card.vipSupport || "5"),
         profitSharePercentage: parseFloat(card.profitSharePercentage || "49"),
-        padToken: parseFloat(card.padToken || "0"),
+        vcaDigitalShare: parseFloat(card.vcaDigitalShare || "0"),
         consultationSessions: card.consultationSessions || 12,
         isNearMaxout: shareValue >= maxoutLimit * 0.9
       };
@@ -1435,7 +2829,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           deviceRevenue: currentKpis.reduce((sum, k) => sum + parseFloat(k.deviceRevenue || "0"), 0),
           totalRevenue: currentKpis.reduce((sum, k) => sum + parseFloat(k.totalRevenue || "0"), 0),
           isUnderperforming: kpiScore < 70,
-          padTokenValue: parseFloat(branch.padToken || "20000"), // 200 shares = 20,000 PAD
+          vcaDigitalShareValue: parseFloat(branch.vcaDigitalShare || "20000"), // 200 shares = 20,000 VCA
           revenuePredictions
         });
       }
@@ -1630,7 +3024,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const points = await storage.calculateStaffKpiPoints(staffId, period, periodValue);
       const slotsEarned = Math.floor(points / 50); // ≥50 points = 1 slot
       const sharesEarned = slotsEarned * 50; // 1 slot = 50 shares
-      const padTokenEarned = points * 10; // 1 KPI point = 10 PAD Token
+      const vcaDigitalShareEarned = points * 10; // 1 KPI point = 10 VCA Digital Share
       
       res.json({
         staffId,
@@ -1639,7 +3033,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         totalPoints: points,
         slotsEarned,
         sharesEarned,
-        padTokenEarned,
+        vcaDigitalShareEarned,
         isEligible: points >= 50
       });
     } catch (error) {
@@ -1674,9 +3068,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const staffKpis = await storage.getStaffKpis();
       const allStaff = await storage.getStaff();
       
-      // Calculate total PAD Token earned from KPI (19% labor pool)
+      // Calculate total VCA Digital Share earned from KPI (19% labor pool)
       const totalPadTokenFromKpi = staffKpis.reduce((sum, kpi) => {
-        return sum + parseFloat(kpi.padTokenEarned || "0");
+        return sum + parseFloat(kpi.vcaDigitalShareEarned || "0");
       }, 0);
       
       // Calculate total shares from sweat equity
@@ -1684,21 +3078,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return sum + parseFloat(kpi.sharesAwarded || "0");
       }, 0);
       
-      // Get staff with PAD tokens
+      // Get staff with VCA tokens
       const staffWithPadTokens = allStaff.map(s => ({
         id: s.id,
         name: s.name,
         position: s.position,
-        padToken: parseFloat(s.padToken || "0"),
+        vcaDigitalShare: parseFloat(s.vcaDigitalShare || "0"),
         shares: s.shares || 0
-      })).filter(s => s.padToken > 0 || s.shares > 0);
+      })).filter(s => s.vcaDigitalShare > 0 || s.shares > 0);
       
       res.json({
         totalPadTokenFromKpi,
         totalSweatEquityShares,
         laborPoolPercentage: 19,
         staffDistribution: staffWithPadTokens,
-        poolValueInVnd: totalPadTokenFromKpi * 10000 // 100 PAD = 1M VND, so 1 PAD = 10,000 VND
+        poolValueInVnd: totalPadTokenFromKpi * 10000 // 100 VCA = 1M VND, so 1 VCA = 10,000 VND
       });
     } catch (error) {
       res.status(500).json({ message: "Failed to fetch labor pool data" });
@@ -1823,13 +3217,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const pendingCommission = totalCommissionEarned - totalCommissionPaid;
       
-      // Calculate total PAD Token from referrals
+      // Calculate total VCA Digital Share from referrals
       const totalPadTokenFromReferrals = referrals.reduce((sum, r) => {
-        return sum + parseFloat(r.padTokenAmount || "0");
+        return sum + parseFloat(r.vcaDigitalShareAmount || "0");
       }, 0);
       
       // Group by referrer
-      const referrerSummary: Record<string, { name: string; totalCommission: number; totalPaid: number; pending: number; padToken: number; count: number }> = {};
+      const referrerSummary: Record<string, { name: string; totalCommission: number; totalPaid: number; pending: number; vcaDigitalShare: number; count: number }> = {};
       
       for (const ref of referrals) {
         const referrerId = ref.referrerId || 'unknown';
@@ -1839,7 +3233,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             totalCommission: 0,
             totalPaid: 0,
             pending: 0,
-            padToken: 0,
+            vcaDigitalShare: 0,
             count: 0
           };
         }
@@ -1847,7 +3241,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         referrerSummary[referrerId].totalCommission += parseFloat(ref.commissionAmount || "0");
         referrerSummary[referrerId].totalPaid += parseFloat(ref.commissionPaid || "0");
         referrerSummary[referrerId].pending = referrerSummary[referrerId].totalCommission - referrerSummary[referrerId].totalPaid;
-        referrerSummary[referrerId].padToken += parseFloat(ref.padTokenAmount || "0");
+        referrerSummary[referrerId].vcaDigitalShare += parseFloat(ref.vcaDigitalShareAmount || "0");
         referrerSummary[referrerId].count += 1;
       }
       
@@ -2369,13 +3763,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Valuation amount must be a positive number" });
       }
       
-      // Calculate PAD Token: 100 PAD = 1M VND
-      const padTokenAmount = (valuationNum / 1000000) * 100;
+      // Calculate VCA Digital Share: 100 VCA = 1M VND
+      const vcaDigitalShareAmount = (valuationNum / 1000000) * 100;
       
       const contribution = await storage.createAssetContribution({
         ...validatedData,
         valuationAmount: valuationNum.toString(),
-        padTokenAmount: padTokenAmount.toString(),
+        vcaDigitalShareAmount: vcaDigitalShareAmount.toString(),
         status: 'pending',
       });
       
@@ -2454,7 +3848,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // PAD Token routes
+  // VCA Digital Share routes
   app.get("/api/pad-token/history", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     
@@ -2463,7 +3857,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const history = await storage.getPadTokenHistory(user.id);
       res.json(history);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch PAD Token history" });
+      res.status(500).json({ message: "Failed to fetch VCA Digital Share history" });
     }
   });
 
@@ -2563,7 +3957,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update user PAD Token (admin only)
+  // Update user VCA Digital Share (admin only)
   app.post("/api/admin/users/:userId/pad-token", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     
@@ -2574,13 +3968,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     try {
       const { userId } = req.params;
-      const { padToken, reason } = req.body;
+      const { vcaDigitalShare, reason } = req.body;
       
-      if (typeof padToken !== "number" || padToken < 0) {
-        return res.status(400).json({ message: "PAD Token must be a positive number" });
+      if (typeof vcaDigitalShare !== "number" || vcaDigitalShare < 0) {
+        return res.status(400).json({ message: "VCA Digital Share must be a positive number" });
       }
       
-      const updatedUser = await storage.updateUserPadToken(userId, padToken, reason, user.id);
+      const updatedUser = await storage.updateUserPadToken(userId, vcaDigitalShare, reason, user.id);
       
       if (!updatedUser) {
         return res.status(404).json({ message: "User not found" });
@@ -2588,11 +3982,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(updatedUser);
     } catch (error) {
-      res.status(500).json({ message: "Failed to update PAD Token" });
+      res.status(500).json({ message: "Failed to update VCA Digital Share" });
     }
   });
 
-  // Get user PAD Token history (admin only)
+  // Get user VCA Digital Share history (admin only)
   app.get("/api/admin/users/:userId/pad-token-history", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     
@@ -2606,7 +4000,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const history = await storage.getUserPadTokenHistory(userId);
       res.json(history);
     } catch (error) {
-      res.status(500).json({ message: "Failed to fetch PAD Token history" });
+      res.status(500).json({ message: "Failed to fetch VCA Digital Share history" });
     }
   });
 
@@ -2715,7 +4109,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Export PAD Token and benefits report (admin only)
+  // Export VCA Digital Share and benefits report (admin only)
   app.post("/api/admin/reports/pad-token-benefits", async (req, res) => {
     if (!req.isAuthenticated()) return res.sendStatus(401);
     
@@ -2743,7 +4137,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json(data);
     } catch (error) {
-      res.status(500).json({ message: "Failed to export PAD Token benefits report" });
+      res.status(500).json({ message: "Failed to export VCA Digital Share benefits report" });
     }
   });
 

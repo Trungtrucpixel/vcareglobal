@@ -198,7 +198,7 @@ export default function BranchesTab() {
                 <div className="col-md-4 mb-3">
                   <div className="card bg-light h-100">
                     <div className="card-body text-center">
-                      <h3 className="text-primary fw-bold">20,000 PAD</h3>
+                      <h3 className="text-primary fw-bold">20,000 VCA</h3>
                       <p className="mb-1"><strong>200 phần cổ định</strong></p>
                       <small className="text-muted">Tương đương 200 triệu VNĐ vốn góp</small>
                     </div>
@@ -325,7 +325,7 @@ export default function BranchesTab() {
                     <tr>
                       <th className="text-center">#</th>
                       <th>Chi nhánh</th>
-                      <th className="text-center">PAD Token</th>
+                      <th className="text-center">VCA Token</th>
                       <th className="text-center">KPI Score</th>
                       <th className="text-center d-none d-md-table-cell">Bán thẻ</th>
                       <th className="text-center d-none d-md-table-cell">Tái khám (%)</th>
@@ -353,7 +353,7 @@ export default function BranchesTab() {
                         </td>
                         <td className="text-center" data-testid={`pad-token-${branch.id}`}>
                           <span className="fw-bold text-success">{(branch.padTokenValue || 20000).toLocaleString('vi-VN')}</span>
-                          <small className="text-muted d-block">PAD</small>
+                          <small className="text-muted d-block">VCA</small>
                         </td>
                         <td className="text-center">
                           <Badge variant={getKpiVariant(branch.kpiScore)} data-testid={`kpi-score-${branch.id}`}>
@@ -415,7 +415,7 @@ export default function BranchesTab() {
                 <div className="row text-center">
                   <div className="col-6 col-sm-3 mb-2">
                     <div className="fw-bold text-success">{(branch.padTokenValue || 20000).toLocaleString('vi-VN')}</div>
-                    <small className="text-muted">PAD Token</small>
+                    <small className="text-muted">VCA Token</small>
                   </div>
                   <div className="col-6 col-sm-3 mb-2">
                     <div className="fw-bold text-primary">{branch.cardSales}</div>

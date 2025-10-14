@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-6">Simple Button Test</h1>
+    
+    <div class="space-y-4">
+        <button onclick="testAlert()" class="bg-blue-600 text-white px-6 py-2 rounded-lg">
+            Test Alert
+        </button>
+        
+        <button onclick="testConsole()" class="bg-green-600 text-white px-6 py-2 rounded-lg">
+            Test Console
+        </button>
+        
+        <button onclick="testFunction()" class="bg-red-600 text-white px-6 py-2 rounded-lg">
+            Test Function
+        </button>
+    </div>
+
+    <script>
+        function testAlert() {
+            alert('Alert works!');
+        }
+
+        function testConsole() {
+            console.log('Console works!');
+            alert('Check console for log message');
+        }
+
+        function testFunction() {
+            alert('Function call works!');
+        }
+
+        // Test on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded successfully');
+            alert('Page loaded - JavaScript is working!');
+        });
+    </script>
+</body>
+</html>

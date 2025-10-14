@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Comprehensive App - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-7xl mx-auto py-8 px-4">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-900">
+            <i class="fas fa-vial text-blue-600 mr-3"></i>
+            Test Comprehensive App - Phúc An Dương
+        </h1>
+        
+        <!-- Test Status Overview -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Test Status Overview</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-blue-800 font-semibold">Server Status</span>
+                        <span id="server-status" class="text-red-600">❌ Offline</span>
+                    </div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-green-800 font-semibold">Frontend</span>
+                        <span id="frontend-status" class="text-green-600">✅ Ready</span>
+                    </div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-yellow-800 font-semibold">Database</span>
+                        <span id="database-status" class="text-yellow-600">⏳ Testing</span>
+                    </div>
+                </div>
+                <div class="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                    <div class="flex items-center justify-between">
+                        <span class="text-purple-800 font-semibold">API Endpoints</span>
+                        <span id="api-status" class="text-yellow-600">⏳ Testing</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Categories -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- User Registration Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-user-plus text-blue-600 mr-2"></i>
+                    User Registration Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testBasicRegistration()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-user mr-2"></i>Test Basic Registration
+                    </button>
+                    <button onclick="testRegistrationWithCard()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-id-card mr-2"></i>Test Registration + Card Selection
+                    </button>
+                    <button onclick="testRegistrationWithRoles()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-users mr-2"></i>Test Registration + Roles
+                    </button>
+                    <button onclick="testRegistrationWithInvestment()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-dollar-sign mr-2"></i>Test Registration + Investment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Card Package Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-credit-card text-green-600 mr-2"></i>
+                    Card Package Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testAllCardTypes()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-list mr-2"></i>Test All Card Types
+                    </button>
+                    <button onclick="testCardPurchase()" class="w-full bg-teal-600 text-white py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors">
+                        <i class="fas fa-shopping-cart mr-2"></i>Test Card Purchase
+                    </button>
+                    <button onclick="testPaymentConfirmation()" class="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors">
+                        <i class="fas fa-check-circle mr-2"></i>Test Payment Confirmation
+                    </button>
+                    <button onclick="testDuplicateCard()" class="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>Test Duplicate Card Prevention
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Role Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-user-tag text-purple-600 mr-2"></i>
+                    User Role Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testCodoDongRole()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-crown mr-2"></i>Test Cổ đông Role
+                    </button>
+                    <button onclick="testAngelRole()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-angel mr-2"></i>Test Angel Role
+                    </button>
+                    <button onclick="testSeedRole()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-seedling mr-2"></i>Test Seed Role
+                    </button>
+                    <button onclick="testRetailRole()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700 transition-colors">
+                        <i class="fas fa-store mr-2"></i>Test Retail Role
+                    </button>
+                </div>
+            </div>
+
+            <!-- API Endpoint Tests -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h3 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                    <i class="fas fa-plug text-orange-600 mr-2"></i>
+                    API Endpoint Tests
+                </h3>
+                <div class="space-y-3">
+                    <button onclick="testHomeEndpoint()" class="w-full bg-orange-600 text-white py-2 px-4 rounded-lg hover:bg-orange-700 transition-colors">
+                        <i class="fas fa-home mr-2"></i>Test Home Endpoint
+                    </button>
+                    <button onclick="testRegisterEndpoint()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-user-plus mr-2"></i>Test Register Endpoint
+                    </button>
+                    <button onclick="testBuyCardEndpoint()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                        <i class="fas fa-credit-card mr-2"></i>Test Buy Card Endpoint
+                    </button>
+                    <button onclick="testUserCardsEndpoint()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                        <i class="fas fa-list mr-2"></i>Test User Cards Endpoint
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Results -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800 flex items-center">
+                <i class="fas fa-clipboard-list text-gray-600 mr-2"></i>
+                Test Results
+            </h2>
+            <div id="test-results" class="space-y-4 max-h-96 overflow-y-auto">
+                <p class="text-gray-500">Chưa có kết quả test...</p>
+            </div>
+        </div>
+
+        <!-- Test Controls -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mt-8">
+            <h2 class="text-2xl font-bold mb-4 text-gray-800">Test Controls</h2>
+            <div class="flex flex-wrap gap-4">
+                <button onclick="runAllTests()" class="bg-gradient-to-r from-green-600 to-blue-600 text-white py-3 px-6 rounded-lg hover:from-green-700 hover:to-blue-700 transition-all font-semibold">
+                    <i class="fas fa-play mr-2"></i>Run All Tests
+                </button>
+                <button onclick="clearResults()" class="bg-gray-600 text-white py-3 px-6 rounded-lg hover:bg-gray-700 transition-colors font-semibold">
+                    <i class="fas fa-trash mr-2"></i>Clear Results
+                </button>
+                <button onclick="exportResults()" class="bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                    <i class="fas fa-download mr-2"></i>Export Results
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let testResults = [];
+        let currentUser = null;
+
+        // Test server status
+        async function checkServerStatus() {
+            try {
+                const response = await fetch('/');
+                if (response.ok) {
+                    document.getElementById('server-status').innerHTML = '✅ Online';
+                    document.getElementById('server-status').className = 'text-green-600';
+                    return true;
+                } else {
+                    throw new Error('Server not responding');
+                }
+            } catch (error) {
+                document.getElementById('server-status').innerHTML = '❌ Offline';
+                document.getElementById('server-status').className = 'text-red-600';
+                return false;
+            }
+        }
+
+        // Test basic registration
+        async function testBasicRegistration() {
+            const testData = {
+                email: `test${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test User Basic',
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Basic Registration', response.ok ? 'success' : 'error', result);
+                
+                if (result.success) {
+                    currentUser = result.data.user;
+                }
+            } catch (error) {
+                logTestResult('Basic Registration', 'error', { error: error.message });
+            }
+        }
+
+        // Test registration with card selection
+        async function testRegistrationWithCard() {
+            const testData = {
+                email: `test${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test User Card',
+                cardType: 'Standard',
+                redirectToCardSelection: true
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Registration with Card', response.ok ? 'success' : 'error', result);
+                
+                if (result.success) {
+                    currentUser = result.data.user;
+                }
+            } catch (error) {
+                logTestResult('Registration with Card', 'error', { error: error.message });
+            }
+        }
+
+        // Test registration with roles
+        async function testRegistrationWithRoles() {
+            const testData = {
+                email: `test${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test User Roles',
+                roles: ['Cổ đông', 'Angel'],
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Registration with Roles', response.ok ? 'success' : 'error', result);
+                
+                if (result.success) {
+                    currentUser = result.data.user;
+                }
+            } catch (error) {
+                logTestResult('Registration with Roles', 'error', { error: error.message });
+            }
+        }
+
+        // Test registration with investment
+        async function testRegistrationWithInvestment() {
+            const testData = {
+                email: `test${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: 'Test User Investment',
+                investmentAmount: 5000000,
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Registration with Investment', response.ok ? 'success' : 'error', result);
+                
+                if (result.success) {
+                    currentUser = result.data.user;
+                }
+            } catch (error) {
+                logTestResult('Registration with Investment', 'error', { error: error.message });
+            }
+        }
+
+        // Test all card types
+        async function testAllCardTypes() {
+            const cardTypes = ['Standard', 'Silver', 'Gold', 'Platinum', 'Diamond'];
+            const cardPrices = [2000000, 8000000, 18000000, 38000000, 100000000];
+            const cardSessions = [12, 15, 18, 20, 24];
+
+            for (let i = 0; i < cardTypes.length; i++) {
+                const testData = {
+                    userId: currentUser ? currentUser.id : 'test-user-' + Date.now(),
+                    cardType: cardTypes[i],
+                    price: cardPrices[i],
+                    sessions: cardSessions[i],
+                    paymentMethod: 'bank_transfer',
+                    paymentStatus: 'pending'
+                };
+
+                try {
+                    const response = await fetch('/api/buy-card', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(testData)
+                    });
+
+                    const result = await response.json();
+                    logTestResult(`Card Type: ${cardTypes[i]}`, response.ok ? 'success' : 'error', result);
+                } catch (error) {
+                    logTestResult(`Card Type: ${cardTypes[i]}`, 'error', { error: error.message });
+                }
+            }
+        }
+
+        // Test card purchase
+        async function testCardPurchase() {
+            if (!currentUser) {
+                logTestResult('Card Purchase', 'error', 'No user available. Please run registration test first.');
+                return;
+            }
+
+            const testData = {
+                userId: currentUser.id,
+                cardType: 'Gold',
+                price: 18000000,
+                sessions: 18,
+                paymentMethod: 'bank_transfer',
+                paymentStatus: 'pending'
+            };
+
+            try {
+                const response = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult('Card Purchase', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Card Purchase', 'error', { error: error.message });
+            }
+        }
+
+        // Test payment confirmation
+        async function testPaymentConfirmation() {
+            // This would need a card ID from a previous purchase
+            logTestResult('Payment Confirmation', 'info', 'This test requires a card ID from a previous purchase');
+        }
+
+        // Test duplicate card prevention
+        async function testDuplicateCard() {
+            if (!currentUser) {
+                logTestResult('Duplicate Card Test', 'error', 'No user available. Please run registration test first.');
+                return;
+            }
+
+            const testData = {
+                userId: currentUser.id,
+                cardType: 'Standard',
+                price: 2000000,
+                sessions: 12,
+                paymentMethod: 'bank_transfer',
+                paymentStatus: 'pending'
+            };
+
+            try {
+                // First purchase
+                const response1 = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result1 = await response1.json();
+                logTestResult('Duplicate Card - First Purchase', response1.ok ? 'success' : 'error', result1);
+
+                // Second purchase (should fail)
+                const response2 = await fetch('/api/buy-card', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result2 = await response2.json();
+                logTestResult('Duplicate Card - Second Purchase', response2.ok ? 'success' : 'error', result2);
+            } catch (error) {
+                logTestResult('Duplicate Card Test', 'error', { error: error.message });
+            }
+        }
+
+        // Test specific roles
+        async function testCodoDongRole() {
+            await testRoleRegistration('Cổ đông');
+        }
+
+        async function testAngelRole() {
+            await testRoleRegistration('Angel');
+        }
+
+        async function testSeedRole() {
+            await testRoleRegistration('Seed');
+        }
+
+        async function testRetailRole() {
+            await testRoleRegistration('Retail');
+        }
+
+        async function testRoleRegistration(role) {
+            const testData = {
+                email: `test${role.toLowerCase()}${Date.now()}@example.com`,
+                phone: `0123456${Math.floor(Math.random() * 1000)}`,
+                name: `Test User ${role}`,
+                roles: [role],
+                redirectToCardSelection: false
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+                logTestResult(`Role: ${role}`, response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult(`Role: ${role}`, 'error', { error: error.message });
+            }
+        }
+
+        // Test API endpoints
+        async function testHomeEndpoint() {
+            try {
+                const response = await fetch('/');
+                const result = await response.json();
+                logTestResult('Home Endpoint', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Home Endpoint', 'error', { error: error.message });
+            }
+        }
+
+        async function testRegisterEndpoint() {
+            try {
+                const response = await fetch('/api/register/info');
+                const result = await response.json();
+                logTestResult('Register Info Endpoint', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('Register Info Endpoint', 'error', { error: error.message });
+            }
+        }
+
+        async function testBuyCardEndpoint() {
+            logTestResult('Buy Card Endpoint', 'info', 'This endpoint requires user data and card information');
+        }
+
+        async function testUserCardsEndpoint() {
+            if (!currentUser) {
+                logTestResult('User Cards Endpoint', 'error', 'No user available. Please run registration test first.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/user-cards/${currentUser.id}`);
+                const result = await response.json();
+                logTestResult('User Cards Endpoint', response.ok ? 'success' : 'error', result);
+            } catch (error) {
+                logTestResult('User Cards Endpoint', 'error', { error: error.message });
+            }
+        }
+
+        // Run all tests
+        async function runAllTests() {
+            logTestResult('Test Suite', 'info', 'Starting comprehensive test suite...');
+            
+            // Check server status first
+            const serverOnline = await checkServerStatus();
+            if (!serverOnline) {
+                logTestResult('Test Suite', 'error', 'Server is offline. Cannot run tests.');
+                return;
+            }
+
+            // Run tests in sequence
+            await testBasicRegistration();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testRegistrationWithCard();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testRegistrationWithRoles();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testRegistrationWithInvestment();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testAllCardTypes();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testCardPurchase();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testDuplicateCard();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testCodoDongRole();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testAngelRole();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testSeedRole();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testRetailRole();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testHomeEndpoint();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testRegisterEndpoint();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testUserCardsEndpoint();
+            
+            logTestResult('Test Suite', 'success', 'Comprehensive test suite completed!');
+        }
+
+        // Utility functions
+        function logTestResult(testName, status, data) {
+            const timestamp = new Date().toLocaleTimeString();
+            const result = {
+                timestamp,
+                testName,
+                status,
+                data
+            };
+            
+            testResults.push(result);
+            
+            const testResultsDiv = document.getElementById('test-results');
+            const statusClass = status === 'success' ? 'text-green-600' : 
+                              status === 'error' ? 'text-red-600' : 
+                              status === 'info' ? 'text-blue-600' : 'text-gray-600';
+            const statusIcon = status === 'success' ? 'fa-check-circle' : 
+                              status === 'error' ? 'fa-times-circle' : 
+                              status === 'info' ? 'fa-info-circle' : 'fa-question-circle';
+            
+            const resultHtml = `
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center">
+                            <i class="fas ${statusIcon} ${statusClass} mr-2"></i>
+                            <span class="font-semibold">${testName}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-500">${timestamp}</span>
+                            <span class="text-sm ${statusClass} font-semibold">${status.toUpperCase()}</span>
+                        </div>
+                    </div>
+                    <pre class="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-32">${JSON.stringify(data, null, 2)}</pre>
+                </div>
+            `;
+            
+            testResultsDiv.innerHTML = resultHtml + testResultsDiv.innerHTML;
+        }
+
+        function clearResults() {
+            testResults = [];
+            document.getElementById('test-results').innerHTML = '<p class="text-gray-500">Chưa có kết quả test...</p>';
+        }
+
+        function exportResults() {
+            const dataStr = JSON.stringify(testResults, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `test-results-${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkServerStatus();
+        });
+    </script>
+</body>
+</html>
+

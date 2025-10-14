@@ -297,7 +297,7 @@ export default function DashboardTab() {
             <CardHeader>
               <h5 className="mb-0">
                 <i className="bi bi-coin me-2" style={{ color: '#43B0A5' }}></i>
-                PAD Token & Dự đoán giá trị
+                VCA Token & Dự đoán giá trị
               </h5>
             </CardHeader>
             <CardContent>
@@ -307,9 +307,9 @@ export default function DashboardTab() {
                     <div className="display-6 fw-bold" style={{ color: '#43B0A5' }} data-testid="pad-token-amount">
                       {padToken.toLocaleString('vi-VN')}
                     </div>
-                    <div className="text-muted small">PAD Token hiện tại</div>
+                    <div className="text-muted small">VCA Token hiện tại</div>
                     <div className="text-muted small mt-1">
-                      (100 PAD = 1 triệu VNĐ)
+                      (100 VCA = 1 triệu VNĐ)
                     </div>
                   </div>
                 </div>
@@ -319,7 +319,7 @@ export default function DashboardTab() {
                       {padValuePredictions.sixMonths.toLocaleString('vi-VN')} ₫
                     </div>
                     <div className="text-muted small">Dự đoán 6 tháng</div>
-                    <div className="badge bg-success mt-1">12.000₫/PAD</div>
+                    <div className="badge bg-success mt-1">12.000₫/VCA</div>
                   </div>
                 </div>
                 <div className="col-12 col-md-6 col-lg-3 mb-3">
@@ -328,7 +328,7 @@ export default function DashboardTab() {
                       {padValuePredictions.oneYear.toLocaleString('vi-VN')} ₫
                     </div>
                     <div className="text-muted small">Dự đoán 1 năm</div>
-                    <div className="badge bg-info mt-1">15.000₫/PAD</div>
+                    <div className="badge bg-info mt-1">15.000₫/VCA</div>
                   </div>
                 </div>
                 <div className="col-12 col-md-6 col-lg-3 mb-3">
@@ -337,7 +337,7 @@ export default function DashboardTab() {
                       {padValuePredictions.threeYears.toLocaleString('vi-VN')} ₫
                     </div>
                     <div className="text-muted small">Dự đoán 3 năm</div>
-                    <div className="badge bg-warning mt-1">25.000₫/PAD</div>
+                    <div className="badge bg-warning mt-1">25.000₫/VCA</div>
                   </div>
                 </div>
               </div>
@@ -348,7 +348,7 @@ export default function DashboardTab() {
                       {padValuePredictions.fiveYears.toLocaleString('vi-VN')} ₫
                     </div>
                     <div className="text-muted">Dự đoán 5 năm</div>
-                    <div className="badge bg-danger mt-2">40.000₫/PAD</div>
+                    <div className="badge bg-danger mt-2">40.000₫/VCA</div>
                   </div>
                 </div>
               </div>
@@ -453,7 +453,7 @@ export default function DashboardTab() {
               <div className="alert alert-info mt-3" role="alert">
                 <i className="bi bi-info-circle me-2"></i>
                 <small>
-                  Giá trị PAD Token dự đoán: 6 tháng (12.000₫), 1 năm (15.000₫), 3 năm (25.000₫), 5 năm (40.000₫)
+                  Giá trị VCA Token dự đoán: 6 tháng (12.000₫), 1 năm (15.000₫), 3 năm (25.000₫), 5 năm (40.000₫)
                 </small>
               </div>
             </CardContent>

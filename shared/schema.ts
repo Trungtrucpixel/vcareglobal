@@ -14,7 +14,7 @@ export const users = pgTable("users", {
   businessTier: text("business_tier"), // founder, angel, branch, card_customer, staff, affiliate
   investmentAmount: decimal("investment_amount", { precision: 15, scale: 2 }).default("0"), // Total investment for tier determination
   totalShares: decimal("total_shares", { precision: 15, scale: 2 }).default("0"), // Current shares owned
-  padToken: decimal("pad_token", { precision: 15, scale: 2 }).default("0"), // PAD Token balance (100 PAD = 1M VND)
+  vgbDigitalShare: decimal("vgb_digital_share", { precision: 15, scale: 2 }).default("0"), // VGB Digital Share balance (100 VGB = 1M VND)
   maxoutReached: boolean("maxout_reached").default(false), // Whether user reached maxout limit
   inheritanceRight: boolean("inheritance_right").default(false), // Quyền kế thừa cho vai trò Sáng lập
   createdAt: timestamp("created_at").defaultNow(),
@@ -43,7 +43,7 @@ export const assetContributions = pgTable("asset_contributions", {
   assetName: text("asset_name").notNull(), // Tên tài sản
   assetDescription: text("asset_description"), // Mô tả chi tiết
   valuationAmount: decimal("valuation_amount", { precision: 15, scale: 2 }).notNull(), // Giá trị định giá VND
-  padTokenAmount: decimal("pad_token_amount", { precision: 15, scale: 2 }).notNull(), // Số PAD Token tương ứng
+  vgbDigitalShareAmount: decimal("vgb_digital_share_amount", { precision: 15, scale: 2 }).notNull(), // Số VGB Digital Share tương ứng
   contractDocumentPath: text("contract_document_path"), // Link hợp đồng/tài liệu
   status: text("status").notNull().default("pending"), // pending, approved, rejected
   approvedBy: varchar("approved_by").references(() => users.id),
@@ -67,7 +67,7 @@ export const cards = pgTable("cards", {
   connectionCommission: decimal("connection_commission", { precision: 5, scale: 2 }).default("8.0"), // 8%
   vipSupport: decimal("vip_support", { precision: 5, scale: 2 }).default("5.0"), // 5%
   profitSharePercentage: decimal("profit_share_percentage", { precision: 5, scale: 2 }).default("49.0"), // 49% lợi tức sau thuế
-  padToken: decimal("pad_token", { precision: 15, scale: 2 }).default("0"), // PAD Token (100 PAD = 1 triệu VNĐ)
+  vgbDigitalShare: decimal("vgb_digital_share", { precision: 15, scale: 2 }).default("0"), // VGB Digital Share (100 VGB = 1 triệu VNĐ)
   currentShares: decimal("current_shares", { precision: 15, scale: 2 }).default("0"), // Current share value
   maxoutLimit: decimal("maxout_limit", { precision: 15, scale: 2 }).default("0"), // 210% of card price
   issuedDate: timestamp("issued_date").defaultNow(),
@@ -90,7 +90,7 @@ export const branches = pgTable("branches", {
   staffCount: integer("staff_count").default(0),
   currentKpi: decimal("current_kpi", { precision: 5, scale: 2 }).default("0"), // Current KPI percentage
   monthlyTarget: decimal("monthly_target", { precision: 15, scale: 2 }).default("0"), // Monthly sales target
-  padToken: decimal("pad_token", { precision: 15, scale: 2 }).default("20000"), // PAD Token (200 shares = 20,000 PAD for early franchise)
+  vgbDigitalShare: decimal("vgb_digital_share", { precision: 15, scale: 2 }).default("20000"), // VGB Digital Share (200 shares = 20,000 VGB for early franchise)
 });
 
 export const staff = pgTable("staff", {
@@ -101,7 +101,7 @@ export const staff = pgTable("staff", {
   branchId: varchar("branch_id").references(() => branches.id),
   equityPercentage: decimal("equity_percentage", { precision: 5, scale: 2 }).default("0"),
   shares: integer("shares").default(0), // Number of shares owned
-  padToken: decimal("pad_token", { precision: 15, scale: 2 }).default("0"), // PAD Token earned from KPI (1 KPI point = 10 PAD)
+  vgbDigitalShare: decimal("vgb_digital_share", { precision: 15, scale: 2 }).default("0"), // VGB Digital Share earned from KPI (1 KPI point = 10 VGB)
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
@@ -111,7 +111,7 @@ export const transactions = pgTable("transactions", {
   amount: decimal("amount", { precision: 15, scale: 2 }).notNull(),
   description: text("description").notNull(),
   contributionType: text("contribution_type"), // cash (tiền mặt), asset (tài sản), effort (công sức), card (thẻ)
-  padTokenAmount: decimal("pad_token_amount", { precision: 15, scale: 2 }).default("0"), // Số PAD Token tương ứng
+  vgbDigitalShareAmount: decimal("vgb_digital_share_amount", { precision: 15, scale: 2 }).default("0"), // Số VGB Digital Share tương ứng
   branchId: varchar("branch_id").references(() => branches.id),
   cardId: varchar("card_id").references(() => cards.id),
   userId: varchar("user_id").references(() => users.id), // User who made the transaction
@@ -166,7 +166,7 @@ export const staffKpis = pgTable("staff_kpis", {
   bonusAmount: decimal("bonus_amount", { precision: 15, scale: 2 }).default("0"), // Bonus earned
   slotsEarned: integer("slots_earned").default(0), // Number of slots (1 slot = 50 shares)
   sharesAwarded: decimal("shares_awarded", { precision: 15, scale: 2 }).default("0"), // Total shares from this period
-  padTokenEarned: decimal("pad_token_earned", { precision: 15, scale: 2 }).default("0"), // PAD Token earned (1 KPI point = 10 PAD)
+  vgbDigitalShareEarned: decimal("vgb_digital_share_earned", { precision: 15, scale: 2 }).default("0"), // VGB Digital Share earned (1 KPI point = 10 VGB)
   profitShareAmount: decimal("profit_share_amount", { precision: 15, scale: 2 }).default("0"), // 49% profit share
   isProcessed: boolean("is_processed").default(false), // End-of-quarter processing status
   createdAt: timestamp("created_at").defaultNow(),
@@ -184,7 +184,7 @@ export const referrals = pgTable("referrals", {
   commissionRate: decimal("commission_rate", { precision: 5, scale: 2 }).default("8.0"), // 8% commission
   commissionAmount: decimal("commission_amount", { precision: 15, scale: 2 }).default("0"), // Calculated commission
   commissionPaid: decimal("commission_paid", { precision: 15, scale: 2 }).default("0"), // Amount already paid
-  padTokenAmount: decimal("pad_token_amount", { precision: 15, scale: 2 }).default("0"), // PAD Token from 8% CTV commission
+  vgbDigitalShareAmount: decimal("vgb_digital_share_amount", { precision: 15, scale: 2 }).default("0"), // VGB Digital Share from 8% CTV commission
   status: text("status").notNull().default("pending"), // pending, paid, cancelled
   referralDate: timestamp("referral_date").defaultNow(),
   paidDate: timestamp("paid_date"),
@@ -213,7 +213,7 @@ export const profitDistribution = pgTable("profit_distribution", {
   distributionType: text("distribution_type").notNull().default("capital"), // capital (30% vốn - góp vốn/tài sản/thẻ), labor (19% công - KPI/chi nhánh)
   sharesOwned: integer("shares_owned").default(0), // Shares owned at distribution time
   distributionAmount: decimal("distribution_amount", { precision: 15, scale: 2 }).default("0"), // Amount distributed
-  padTokenAmount: decimal("pad_token_amount", { precision: 15, scale: 2 }).default("0"), // PAD Token phân phối
+  vgbDigitalShareAmount: decimal("vgb_digital_share_amount", { precision: 15, scale: 2 }).default("0"), // VGB Digital Share phân phối
   paymentStatus: text("payment_status").notNull().default("pending"), // pending, paid, cancelled
   paidAt: timestamp("paid_at"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -281,8 +281,8 @@ export const userSharesHistory = pgTable("user_shares_history", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-// PAD Token history for tracking PAD Token changes
-export const padTokenHistory = pgTable("pad_token_history", {
+// VGB Digital Share history for tracking VGB Digital Share changes
+export const vgbDigitalShareHistory = pgTable("vgb_digital_share_history", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").references(() => users.id).notNull(),
   previousAmount: decimal("previous_amount", { precision: 15, scale: 2 }).notNull(),
@@ -400,7 +400,7 @@ export const insertUserSharesHistorySchema = createInsertSchema(userSharesHistor
   createdAt: true,
 });
 
-export const insertPadTokenHistorySchema = createInsertSchema(padTokenHistory).omit({
+export const insertPadTokenHistorySchema = createInsertSchema(vgbDigitalShareHistory).omit({
   id: true,
   createdAt: true,
 });
@@ -528,7 +528,7 @@ export type InsertUserSharesHistory = z.infer<typeof insertUserSharesHistorySche
 export type UserSharesHistory = typeof userSharesHistory.$inferSelect;
 
 export type InsertPadTokenHistory = z.infer<typeof insertPadTokenHistorySchema>;
-export type PadTokenHistory = typeof padTokenHistory.$inferSelect;
+export type PadTokenHistory = typeof vgbDigitalShareHistory.$inferSelect;
 
 export type InsertBusinessTierConfig = z.infer<typeof insertBusinessTierConfigSchema>;
 export type BusinessTierConfig = typeof businessTierConfigs.$inferSelect;
@@ -643,15 +643,31 @@ export const userProfileUpdateSchema = z.object({
 });
 
 // Business tier determination helper
-export const determineBusinessTier = (investmentAmount: number): string => {
-  if (investmentAmount >= 245000000) {
-    return "founder"; // ≥245M VND, unlimited shares
-  } else if (investmentAmount >= 100000000) {
-    return "angel"; // ≥100M VND, x5 maxout
-  } else if (investmentAmount > 0) {
-    return "card_customer"; // Any investment, 210% maxout, 5% support
+export const determineBusinessTier = (investmentAmount: number, role?: string): string => {
+  // If role is provided, use it directly
+  if (role) {
+    return role;
   }
-  return "staff"; // Default tier
+  
+  // Fallback to amount-based determination for 8 user types
+  if (investmentAmount >= 245000000) {
+    return "founder"; // ≥245M VND, unlimited maxout
+  } else if (investmentAmount >= 100000000) {
+    return "angel"; // ≥100M VND, 5x maxout
+  } else if (investmentAmount >= 50000000) {
+    return "seed"; // ≥50M VND, 4x maxout
+  } else if (investmentAmount >= 30000000) {
+    return "vcare_home"; // ≥30M VND, 3x maxout
+  } else if (investmentAmount >= 20000000) {
+    return "asset_contributor"; // ≥20M VND for asset contribution, 2x maxout
+  } else if (investmentAmount >= 10000000) {
+    return "intellectual_contributor"; // ≥10M VND for intellectual contribution, 2.5x maxout
+  } else if (investmentAmount >= 5000000) {
+    return "franchise_branch"; // ≥5M VND for franchise, 1.5x maxout
+  } else if (investmentAmount >= 2000000) {
+    return "card_customer"; // Card purchase, 2.1x maxout
+  }
+  return "card_customer"; // Default fallback
 };
 
 // Share calculation helper
@@ -665,7 +681,15 @@ export const calculateShares = (amount: number, tier: string): number => {
       return baseShares; // 1:1 ratio, unlimited
     case "angel":
       return baseShares; // 1:1 ratio, but 5x maxout
-    case "branch":
+    case "seed":
+      return baseShares; // 1:1 ratio, 4x maxout
+    case "vcare_home":
+      return baseShares; // 1:1 ratio, 3x maxout
+    case "asset_contributor":
+      return baseShares; // 1:1 ratio, 2x maxout
+    case "intellectual_contributor":
+      return baseShares; // 1:1 ratio, 2.5x maxout
+    case "franchise_branch":
       return 200; // Fixed 200 shares, KPI-based bonuses
     case "card_customer":
       return baseShares; // 1:1 ratio, 210% maxout

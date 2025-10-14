@@ -478,10 +478,10 @@ export default function CardsTab() {
                     <div className="text-center p-4 rounded" style={{ backgroundColor: '#e8f5f3', border: '2px solid #43B0A5' }}>
                       <h6 className="text-muted mb-2">
                         <i className="bi bi-coin me-2"></i>
-                        PAD Token
+                        VCA Token
                       </h6>
                       <div className="display-5 fw-bold" style={{ color: '#43B0A5' }} data-testid="card-pad-token">
-                        {cardBenefits.padToken.toLocaleString('vi-VN')} PAD
+                        {cardBenefits.padToken.toLocaleString('vi-VN')} VCA
                       </div>
                       <small className="text-muted">
                         Giá trị: {(cardBenefits.padToken / 100).toLocaleString('vi-VN')} triệu VNĐ
@@ -531,7 +531,7 @@ export default function CardsTab() {
                   <h6>Chi tiết quyền lợi:</h6>
                   <ul className="list-unstyled">
                     <li>💰 Giá trị thẻ: {(cardBenefits.price / 1000000).toLocaleString('vi-VN')}M VNĐ</li>
-                    <li>🪙 PAD Token: {cardBenefits.padToken.toLocaleString('vi-VN')} PAD (100 PAD = 1 triệu VNĐ)</li>
+                    <li>🪙 VCA Token: {cardBenefits.padToken.toLocaleString('vi-VN')} VCA (100 VCA = 1 triệu VNĐ)</li>
                     <li>📈 Cổ phần hiện tại: {cardBenefits.currentShares.toLocaleString('vi-VN')}</li>
                     <li>🎯 Giới hạn Maxout: {(cardBenefits.maxoutLimit / 1000000).toLocaleString('vi-VN')}M VNĐ</li>
                     <li>🔗 Hoa hồng kết nối: {cardBenefits.connectionCommission}%</li>

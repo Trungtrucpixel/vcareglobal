@@ -55,7 +55,7 @@ export function verifyJWT(token: string): any {
   return jwt.verify(token, JWT_SECRET);
 }
 
-// Load user with roles and PAD Token
+// Load user with roles and VCA Token
 async function loadUserWithRoles(userId: string): Promise<any> {
   const user = await storage.getUser(userId);
   if (!user) return null;

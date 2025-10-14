@@ -32,7 +32,9 @@ import type {
   AuditLog,
   UserRoleUpdate,
   SystemConfigUpdate,
-  ReportExport
+  ReportExport,
+  Role,
+  UserRole
 } from "@shared/schema";
 
 // Utility functions
@@ -70,7 +72,297 @@ const getStatusBadgeVariant = (status: string) => {
   }
 };
 
-// User Management Component
+// Multi-Role Management Component
+const MultiRoleManagement = () => {
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [showPadTokenForm, setShowPadTokenForm] = useState(false);
+  const [padTokenAmount, setPadTokenAmount] = useState("");
+  const [padTokenReason, setPadTokenReason] = useState("");
+  const { toast } = useToast();
+
+  const { data: users = [], isLoading: usersLoading } = useQuery<User[]>({ 
+    queryKey: ['/api/admin/users'] 
+  });
+
+  const { data: roles = [], isLoading: rolesLoading } = useQuery<Role[]>({ 
+    queryKey: ['/api/admin/roles'] 
+  });
+
+  const { data: userRoles = [], isLoading: userRolesLoading } = useQuery<UserRole[]>({ 
+    queryKey: selectedUser ? [`/api/admin/users/${selectedUser.id}/roles`] : [],
+    enabled: !!selectedUser
+  });
+
+  const assignRolesMutation = useMutation({
+    mutationFn: async ({ userId, roleIds }: { userId: string, roleIds: string[] }) => {
+      const response = await apiRequest('POST', `/api/admin/users/${userId}/roles`, { roleIds });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({ description: "Cập nhật vai trò thành công!" });
+      setSelectedUser(null);
+      setSelectedRoles([]);
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+    },
+    onError: (error: any) => {
+      toast({ variant: "destructive", description: "Lỗi: " + (error.message || "Không thể cập nhật vai trò") });
+    }
+  });
+
+  const updatePadTokenMutation = useMutation({
+    mutationFn: async ({ userId, padToken, reason }: { userId: string, padToken: number, reason: string }) => {
+      const response = await apiRequest('POST', `/api/admin/users/${userId}/pad-token`, { padToken, reason });
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({ description: "Cập nhật VCA Token thành công!" });
+      setShowPadTokenForm(false);
+      setPadTokenAmount("");
+      setPadTokenReason("");
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+    },
+    onError: (error: any) => {
+      toast({ variant: "destructive", description: "Lỗi: " + (error.message || "Không thể cập nhật VCA Token") });
+    }
+  });
+
+  const handleRoleManagement = (user: User) => {
+    setSelectedUser(user);
+    setSelectedRoles(userRoles.map(ur => ur.roleId));
+  };
+
+  const handleSaveRoles = () => {
+    if (!selectedUser) return;
+    assignRolesMutation.mutate({ userId: selectedUser.id, roleIds: selectedRoles });
+  };
+
+  const handlePadTokenUpdate = (user: User) => {
+    setSelectedUser(user);
+    setShowPadTokenForm(true);
+    setPadTokenAmount(user.padToken?.toString() || "0");
+  };
+
+  const handleSavePadToken = () => {
+    if (!selectedUser || !padTokenAmount) return;
+    updatePadTokenMutation.mutate({ 
+      userId: selectedUser.id, 
+      padToken: parseFloat(padTokenAmount), 
+      reason: padTokenReason 
+    });
+  };
+
+  const getUserRoles = (user: User) => {
+    // This would typically come from the userRoles query
+    // For now, we'll show the legacy single role
+    return [user.role];
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5 text-blue-500" />
+            Quản lý người dùng và vai trò
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {usersLoading ? (
+            <div className="text-center py-8">Đang tải...</div>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="whitespace-nowrap">Tên</TableHead>
+                    <TableHead className="whitespace-nowrap">Email</TableHead>
+                    <TableHead className="whitespace-nowrap">Vai trò hiện tại</TableHead>
+                    <TableHead className="whitespace-nowrap">VCA Token</TableHead>
+                    <TableHead className="whitespace-nowrap">Trạng thái</TableHead>
+                    <TableHead className="whitespace-nowrap">Thao tác</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="whitespace-nowrap" data-testid={`text-user-name-${user.id}`}>
+                        {user.name}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap" data-testid={`text-user-email-${user.id}`}>
+                        {user.email}
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap" data-testid={`badge-user-role-${user.id}`}>
+                        <div className="flex flex-wrap gap-1">
+                          {getUserRoles(user).map((role, index) => (
+                            <Badge key={index} variant={getRoleBadgeVariant(role)}>
+                              {role === "admin" ? "Quản trị viên" :
+                               role === "accountant" ? "Kế toán" :
+                               role === "branch" ? "Chi nhánh" :
+                               role === "staff" ? "Nhân viên" :
+                               role === "customer" ? "Khách hàng" :
+                               role === "shareholder" ? "Cổ đông đồng sáng lập" :
+                               role}
+                            </Badge>
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap" data-testid={`text-user-pad-token-${user.id}`}>
+                        {parseFloat(user.padToken || "0").toLocaleString()} VCA
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap" data-testid={`badge-user-status-${user.id}`}>
+                        <Badge variant={getStatusBadgeVariant(user.status)}>
+                          {user.status === "active" ? "Hoạt động" : "Ngừng hoạt động"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap">
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleRoleManagement(user)}
+                            data-testid={`button-edit-roles-${user.id}`}
+                          >
+                            Quản lý vai trò
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handlePadTokenUpdate(user)}
+                            data-testid={`button-edit-pad-token-${user.id}`}
+                          >
+                            VCA Token
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Role Management Modal */}
+      {selectedUser && !showPadTokenForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-2xl mx-4">
+            <CardHeader>
+              <CardTitle>Quản lý vai trò cho {selectedUser.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label>Vai trò hiện tại</Label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {getUserRoles(selectedUser).map((role, index) => (
+                    <Badge key={index} variant="outline">
+                      {role}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <Label>Chọn vai trò mới</Label>
+                <div className="grid grid-cols-2 gap-2 mt-2">
+                  {roles.map((role) => (
+                    <div key={role.id} className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id={`role-${role.id}`}
+                        checked={selectedRoles.includes(role.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedRoles([...selectedRoles, role.id]);
+                          } else {
+                            setSelectedRoles(selectedRoles.filter(id => id !== role.id));
+                          }
+                        }}
+                        data-testid={`checkbox-role-${role.id}`}
+                      />
+                      <label htmlFor={`role-${role.id}`} className="text-sm">
+                        {role.displayName}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={handleSaveRoles}
+                  disabled={assignRolesMutation.isPending}
+                  data-testid="button-save-roles"
+                >
+                  {assignRolesMutation.isPending ? "Đang lưu..." : "Lưu vai trò"}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setSelectedUser(null)}
+                  data-testid="button-cancel-roles"
+                >
+                  Hủy
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* VCA Token Management Modal */}
+      {selectedUser && showPadTokenForm && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <Card className="w-full max-w-md mx-4">
+            <CardHeader>
+              <CardTitle>Cập nhật VCA Token cho {selectedUser.name}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="padTokenAmount">Số VCA Token</Label>
+                <Input
+                  id="padTokenAmount"
+                  type="number"
+                  value={padTokenAmount}
+                  onChange={(e) => setPadTokenAmount(e.target.value)}
+                  placeholder="Nhập số VCA Token"
+                  data-testid="input-pad-token-amount"
+                />
+              </div>
+              <div>
+                <Label htmlFor="padTokenReason">Lý do cập nhật</Label>
+                <Textarea
+                  id="padTokenReason"
+                  value={padTokenReason}
+                  onChange={(e) => setPadTokenReason(e.target.value)}
+                  placeholder="Nhập lý do cập nhật VCA Token..."
+                  rows={3}
+                  data-testid="textarea-pad-token-reason"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  onClick={handleSavePadToken}
+                  disabled={updatePadTokenMutation.isPending}
+                  data-testid="button-save-pad-token"
+                >
+                  {updatePadTokenMutation.isPending ? "Đang lưu..." : "Lưu VCA Token"}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setShowPadTokenForm(false)}
+                  data-testid="button-cancel-pad-token"
+                >
+                  Hủy
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// User Management Component (Legacy - for backward compatibility)
 const UserManagement = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [newRole, setNewRole] = useState("");
@@ -531,7 +823,16 @@ const ReportsAndAudit = () => {
 
   const exportMutation = useMutation({
     mutationFn: async (exportData: any) => {
-      const response = await apiRequest('POST', '/api/admin/reports/export', exportData);
+      let endpoint = '/api/admin/reports/export';
+      
+      // Use specific endpoints for new report types
+      if (exportData.reportType === 'pad_token_benefits') {
+        endpoint = '/api/admin/reports/pad-token-benefits';
+      } else if (exportData.reportType === 'roles_permissions') {
+        endpoint = '/api/admin/reports/roles-permissions';
+      }
+      
+      const response = await apiRequest('POST', endpoint, exportData);
       return response.json();
     },
     onSuccess: (data) => {
@@ -619,6 +920,10 @@ const ReportsAndAudit = () => {
           line = `${index + 1}. ${formatDate(item.date || new Date())} - ${item.type || 'N/A'} - ${formatCurrency(item.amount || 0)}`;
         } else if (reportType === 'audit') {
           line = `${index + 1}. ${formatDateTime(item.timestamp || new Date())} - ${item.action || 'N/A'} - ${item.userId || 'N/A'}`;
+        } else if (reportType === 'pad_token_benefits') {
+          line = `${index + 1}. ${item.name || 'N/A'} - VCA: ${item.padToken || 0} - Vai trò: ${item.role || 'N/A'} - Lợi ích: ${item.benefits?.padTokenValue || 0} VND`;
+        } else if (reportType === 'roles_permissions') {
+          line = `${index + 1}. ${item.displayName || 'N/A'} - Số người dùng: ${item.userCount || 0} - Quyền: ${(item.permissions || []).join(', ')}`;
         } else {
           // Generic formatting
           const displayText = typeof item === 'object' 
@@ -675,6 +980,8 @@ const ReportsAndAudit = () => {
       case "tax": return "Thuế";
       case "transactions": return "Giao dịch";
       case "users": return "Người dùng";
+      case "pad_token_benefits": return "VCA Token & Quyền lợi";
+      case "roles_permissions": return "Vai trò & Quyền hạn";
       default: return type;
     }
   };
@@ -709,6 +1016,8 @@ const ReportsAndAudit = () => {
                   <SelectItem value="tax">Báo cáo thuế</SelectItem>
                   <SelectItem value="transactions">Báo cáo giao dịch</SelectItem>
                   <SelectItem value="users">Báo cáo người dùng</SelectItem>
+                  <SelectItem value="pad_token_benefits">Báo cáo VCA Token & Quyền lợi</SelectItem>
+                  <SelectItem value="roles_permissions">Báo cáo Vai trò & Quyền hạn</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -847,7 +1156,7 @@ export default function AdminTab() {
         </TabsList>
 
         <TabsContent value="users">
-          <UserManagement />
+          <MultiRoleManagement />
         </TabsContent>
 
         <TabsContent value="approvals">

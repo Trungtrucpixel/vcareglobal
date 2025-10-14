@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test KYC System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">🏦 Test Hệ Thống KYC</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- KYC Form -->
+            <div class="space-y-4">
+                <h2 class="text-lg font-semibold text-gray-800">📋 Thông tin KYC</h2>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">👤 Họ và tên</label>
+                    <input type="text" id="kycFullName" placeholder="Nguyễn Văn A" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📅 Ngày sinh</label>
+                    <input type="date" id="kycBirthDate" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📞 Số điện thoại</label>
+                    <input type="tel" id="kycPhone" placeholder="0123456789" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📧 Email</label>
+                    <input type="email" id="kycEmail" placeholder="user@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">🏠 Địa chỉ</label>
+                    <textarea id="kycAddress" rows="2" placeholder="123 Đường ABC, Quận XYZ, TP.HCM" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📄 Loại giấy tờ</label>
+                    <select id="kycIdType" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                        <option value="">Chọn loại giấy tờ</option>
+                        <option value="cccd">Căn cước công dân</option>
+                        <option value="cmnd">Chứng minh nhân dân</option>
+                        <option value="passport">Hộ chiếu</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">🔢 Số giấy tờ</label>
+                    <input type="text" id="kycIdNumber" placeholder="123456789" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">🏦 Tên ngân hàng</label>
+                    <input type="text" id="kycBankName" placeholder="Vietcombank" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">🏢 Chi nhánh</label>
+                    <input type="text" id="kycBankBranch" placeholder="Chi nhánh Hà Nội" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">💳 Số tài khoản</label>
+                    <input type="text" id="kycBankAccount" placeholder="1234567890" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">👤 Tên chủ tài khoản</label>
+                    <input type="text" id="kycAccountHolderName" placeholder="Nguyễn Văn A" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <button onclick="testKycSubmit()" class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700">
+                    🚀 Test Gửi KYC
+                </button>
+
+                <button onclick="testKycStatus()" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                    📊 Test Kiểm tra KYC Status
+                </button>
+            </div>
+
+            <!-- Test Withdrawal -->
+            <div class="space-y-4">
+                <h2 class="text-lg font-semibold text-gray-800">💰 Test Rút Tiền (Sau KYC)</h2>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">💰 Số tiền rút (VNĐ)</label>
+                    <input type="number" id="withdrawAmount" min="100000" step="10000" placeholder="500000" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📝 Lý do rút tiền</label>
+                    <textarea id="withdrawReason" rows="2" placeholder="Cần tiền chi tiêu..." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"></textarea>
+                </div>
+
+                <button onclick="testWithdrawal()" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                    💰 Test Rút Tiền
+                </button>
+
+                <button onclick="testWithdrawalHistory()" class="w-full bg-yellow-600 text-white py-2 px-4 rounded-lg hover:bg-yellow-700">
+                    📊 Test Lịch Sử Rút Tiền
+                </button>
+            </div>
+        </div>
+
+        <div id="result" class="mt-6 p-4 bg-gray-50 rounded-lg hidden">
+            <h3 class="font-semibold text-gray-800 mb-2">Kết quả:</h3>
+            <pre id="resultContent" class="text-sm text-gray-700 whitespace-pre-wrap"></pre>
+        </div>
+    </div>
+
+    <script>
+        async function testKycSubmit() {
+            const fullName = document.getElementById('kycFullName').value;
+            const birthDate = document.getElementById('kycBirthDate').value;
+            const phone = document.getElementById('kycPhone').value;
+            const email = document.getElementById('kycEmail').value;
+            const address = document.getElementById('kycAddress').value;
+            const idType = document.getElementById('kycIdType').value;
+            const idNumber = document.getElementById('kycIdNumber').value;
+            const bankName = document.getElementById('kycBankName').value;
+            const bankBranch = document.getElementById('kycBankBranch').value;
+            const bankAccount = document.getElementById('kycBankAccount').value;
+            const accountHolderName = document.getElementById('kycAccountHolderName').value;
+
+            if (!fullName || !birthDate || !phone || !email || !address || !idType || !idNumber || !bankName || !bankBranch || !bankAccount || !accountHolderName) {
+                alert('Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/test-kyc-submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fullName,
+                        idNumber,
+                        idType,
+                        birthDate,
+                        address,
+                        phone,
+                        email,
+                        bankAccount,
+                        bankName,
+                        bankBranch,
+                        accountHolderName
+                    })
+                });
+
+                const result = await response.json();
+                
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = JSON.stringify(result, null, 2);
+
+                if (result.success) {
+                    alert(`✅ Test KYC thành công!\n\n📋 Mã KYC: ${result.data.kycId}\n📋 Trạng thái: ${result.data.status}`);
+                } else {
+                    alert(`❌ Test KYC thất bại: ${result.message}`);
+                }
+
+            } catch (error) {
+                console.error('KYC test error:', error);
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = `Error: ${error.message}`;
+                alert('❌ Có lỗi xảy ra khi test KYC. Vui lòng thử lại.');
+            }
+        }
+
+        async function testKycStatus() {
+            try {
+                const response = await fetch('/api/test-kyc-status');
+                const result = await response.json();
+                
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = JSON.stringify(result, null, 2);
+
+                if (result.success) {
+                    if (result.data) {
+                        alert(`✅ KYC Status: ${result.data.status}`);
+                    } else {
+                        alert('ℹ️ Chưa có thông tin KYC');
+                    }
+                } else {
+                    alert(`❌ Test KYC status thất bại: ${result.message}`);
+                }
+
+            } catch (error) {
+                console.error('KYC status test error:', error);
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = `Error: ${error.message}`;
+                alert('❌ Có lỗi xảy ra khi test KYC status. Vui lòng thử lại.');
+            }
+        }
+
+        async function testWithdrawal() {
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const reason = document.getElementById('withdrawReason').value;
+
+            if (!amount) {
+                alert('Vui lòng nhập số tiền!');
+                return;
+            }
+
+            if (amount < 100000) {
+                alert('Số tiền rút tối thiểu là 100,000 VNĐ!');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/test-withdrawal-kyc', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: amount,
+                        reason: reason || ''
+                    })
+                });
+
+                const result = await response.json();
+                
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = JSON.stringify(result, null, 2);
+
+                if (result.success) {
+                    alert(`✅ Test rút tiền thành công!\n\n💰 Số tiền: ${amount.toLocaleString('vi-VN')} VNĐ\n📋 Mã yêu cầu: ${result.data.withdrawalId}`);
+                } else {
+                    alert(`❌ Test rút tiền thất bại: ${result.message}`);
+                }
+
+            } catch (error) {
+                console.error('Withdrawal test error:', error);
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = `Error: ${error.message}`;
+                alert('❌ Có lỗi xảy ra khi test rút tiền. Vui lòng thử lại.');
+            }
+        }
+
+        async function testWithdrawalHistory() {
+            try {
+                const response = await fetch('/api/test-withdrawal-history');
+                const result = await response.json();
+                
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = JSON.stringify(result, null, 2);
+
+                if (result.success) {
+                    alert(`✅ Test lịch sử thành công!\n\n📊 Số yêu cầu: ${result.data.length}`);
+                } else {
+                    alert(`❌ Test lịch sử thất bại: ${result.message}`);
+                }
+
+            } catch (error) {
+                console.error('Withdrawal history test error:', error);
+                document.getElementById('result').classList.remove('hidden');
+                document.getElementById('resultContent').textContent = `Error: ${error.message}`;
+                alert('❌ Có lỗi xảy ra khi test lịch sử rút tiền. Vui lòng thử lại.');
+            }
+        }
+    </script>
+</body>
+</html>

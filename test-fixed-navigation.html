@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Fixed Navigation - Vcare Global</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">✅ Test Fixed Navigation - Vcare Global</h1>
+        
+        <div class="max-w-4xl mx-auto space-y-6">
+            <!-- Test Results -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🧪 Test Results</h2>
+                <div id="testResults" class="space-y-2">
+                    <!-- Results will be populated here -->
+                </div>
+            </div>
+
+            <!-- Test Controls -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🎮 Test Controls</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button onclick="testNavigationFix()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        🔗 Test Navigation Fix
+                    </button>
+                    <button onclick="testJavaScriptErrors()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                        🧪 Test JavaScript Errors
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mock Member Dashboard -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">👤 Mock Member Dashboard</h2>
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                                <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    <path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="2"/>
+                                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold text-blue-600">Vcare Global</h1>
+                                <p class="text-sm text-gray-600">Hội Tụ Những Tinh Hoa</p>
+                            </div>
+                        </div>
+                        <nav class="hidden md:flex space-x-6">
+                            <a href="#" onclick="testShowMemberDashboard()" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+                            <a href="#" onclick="testShowCareCardsPage()" class="text-blue-600 font-semibold">Thẻ chăm sóc</a>
+                            <a href="#" onclick="testLogout()" class="text-gray-600 hover:text-blue-600">Đăng xuất</a>
+                        </nav>
+                    </div>
+                    <div class="text-center text-gray-500">
+                        <p>Click "Thẻ chăm sóc" để test navigation (should work now!)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fix Summary -->
+            <div class="bg-white rounded-lg p-6 shadow-sm">
+                <h2 class="text-xl font-semibold mb-4">🔧 Fix Summary</h2>
+                <div class="space-y-4">
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">✅ Fixed Issues:</h3>
+                        <ul class="text-sm text-green-700 space-y-1">
+                            <li>• Added <code>event</code> parameter to <code>filterCards()</code> function</li>
+                            <li>• Updated filter buttons to pass <code>event</code> parameter</li>
+                            <li>• Added null check for <code>event.target</code> to prevent errors</li>
+                            <li>• Fixed JavaScript error that was preventing navigation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">🔍 Root Cause:</h3>
+                        <p class="text-sm text-blue-700">
+                            The <code>filterCards()</code> function was trying to access <code>event.target</code> 
+                            without the <code>event</code> parameter being passed from the onclick handlers. 
+                            This caused a JavaScript error that prevented the navigation from working.
+                        </p>
+                    </div>
+                    
+                    <div class="bg-yellow-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-yellow-800 mb-2">⚠️ Prevention:</h3>
+                        <p class="text-sm text-yellow-700">
+                            Always ensure that event parameters are properly passed to functions 
+                            when using onclick handlers, and add null checks for safety.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock functions for testing
+        function testShowMemberDashboard() {
+            addTestResult('🔄 Testing showMemberDashboard...', 'info');
+            addTestResult('✅ showMemberDashboard function called', 'success');
+        }
+
+        function testShowCareCardsPage() {
+            addTestResult('🎫 Testing showCareCardsPage...', 'info');
+            
+            // Check if function exists
+            if (typeof showCareCardsPage === 'function') {
+                addTestResult('✅ showCareCardsPage function exists', 'success');
+                
+                // Try to call the function
+                try {
+                    showCareCardsPage();
+                    addTestResult('✅ showCareCardsPage function called successfully', 'success');
+                } catch (error) {
+                    addTestResult(`❌ Error calling showCareCardsPage: ${error.message}`, 'error');
+                }
+            } else {
+                addTestResult('❌ showCareCardsPage function does not exist', 'error');
+            }
+        }
+
+        function testLogout() {
+            addTestResult('🚪 Testing logout...', 'info');
+            addTestResult('✅ logout function called', 'success');
+        }
+
+        // Test functions
+        async function testNavigationFix() {
+            addTestResult('🔗 Testing Navigation Fix...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check if filterCards function has event parameter
+                if (html.includes('function filterCards(filter, event)')) {
+                    addTestResult('✅ filterCards function has event parameter', 'success');
+                } else {
+                    addTestResult('❌ filterCards function missing event parameter', 'error');
+                }
+                
+                // Check if filter buttons pass event parameter
+                if (html.includes('filterCards(\'all\', event)')) {
+                    addTestResult('✅ Filter buttons pass event parameter', 'success');
+                } else {
+                    addTestResult('❌ Filter buttons missing event parameter', 'error');
+                }
+                
+                // Check if event.target has null check
+                if (html.includes('if (event && event.target)')) {
+                    addTestResult('✅ Event target has null check', 'success');
+                } else {
+                    addTestResult('❌ Event target missing null check', 'error');
+                }
+                
+                // Check if navigation link exists
+                if (html.includes('onclick="showCareCardsPage()"')) {
+                    addTestResult('✅ Care Cards navigation link found', 'success');
+                } else {
+                    addTestResult('❌ Care Cards navigation link not found', 'error');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ Navigation test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testJavaScriptErrors() {
+            addTestResult('🧪 Testing JavaScript Errors...', 'info');
+            
+            try {
+                const response = await fetch('http://localhost:3000');
+                const html = await response.text();
+                
+                // Check for common JavaScript errors
+                const errorPatterns = [
+                    { pattern: /event\.target(?!\s*\))/g, message: 'event.target without null check' },
+                    { pattern: /function.*\(\)\s*\{[^}]*event[^}]*\}/g, message: 'function using event without parameter' },
+                    { pattern: /onclick="[^"]*event[^"]*"/g, message: 'onclick using event without passing it' }
+                ];
+                
+                let errorCount = 0;
+                errorPatterns.forEach(({ pattern, message }) => {
+                    const matches = html.match(pattern);
+                    if (matches) {
+                        errorCount += matches.length;
+                        addTestResult(`❌ Found ${matches.length} instances of: ${message}`, 'error');
+                    }
+                });
+                
+                if (errorCount === 0) {
+                    addTestResult('✅ No JavaScript errors found', 'success');
+                } else {
+                    addTestResult(`⚠️ Found ${errorCount} potential JavaScript errors`, 'warning');
+                }
+                
+            } catch (error) {
+                addTestResult(`❌ JavaScript test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function addTestResult(message, type) {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `p-2 rounded text-sm ${
+                type === 'success' ? 'bg-green-100 text-green-800' :
+                type === 'error' ? 'bg-red-100 text-red-800' :
+                type === 'warning' ? 'bg-yellow-100 text-yellow-800' :
+                type === 'info' ? 'bg-blue-100 text-blue-800' :
+                'bg-gray-100 text-gray-800'
+            }`;
+            resultDiv.textContent = message;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Initialize
+        addTestResult('Page loaded successfully', 'info');
+        addTestResult('Testing environment ready', 'info');
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Cards Display</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-6">Test Cards Display</h1>
+    
+    <!-- Test buttons -->
+    <div class="mb-6 space-x-4">
+        <button onclick="testDemoUser()" class="bg-blue-600 text-white px-4 py-2 rounded">Test Demo User</button>
+        <button onclick="testNewUser()" class="bg-green-600 text-white px-4 py-2 rounded">Test New User</button>
+        <button onclick="testFounder()" class="bg-purple-600 text-white px-4 py-2 rounded">Test Founder</button>
+        <button onclick="clearData()" class="bg-red-600 text-white px-4 py-2 rounded">Clear Data</button>
+    </div>
+    
+    <!-- Display area -->
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-xl font-semibold mb-4">Member Cards</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="memberCardsContainer">
+            <!-- Cards will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        // Copy the functions from index.html
+        function generateMockCards(memberData) {
+            const cards = [];
+            
+            // Always show some default cards for demo user or users without cards
+            if (memberData.name === 'Nguyễn Văn Demo' || !memberData.selectedValues || memberData.selectedValues.length === 0) {
+                cards.push({
+                    id: 'card-001',
+                    name: 'Gold Card • TH-001',
+                    value: 18000000,
+                    sessions: 18,
+                    padToken: 1800,
+                    status: 'active',
+                    usedSessions: 8,
+                    maxSessions: 18,
+                    benefitsUsed: 6500000,
+                    maxBenefits: 37800000
+                });
+                
+                cards.push({
+                    id: 'card-002',
+                    name: 'Diamond Card • TH-002',
+                    value: 100000000,
+                    sessions: 24,
+                    padToken: 10000,
+                    status: 'active',
+                    usedSessions: 3,
+                    maxSessions: 24,
+                    benefitsUsed: 12000000,
+                    maxBenefits: 210000000
+                });
+            } else {
+                // Generate cards based on user's investment/registration
+                const role = memberData.role || 'customer';
+                const totalInvestment = memberData.totalInvestment || 0;
+                
+                // Add cards based on investment amount and role
+                if (totalInvestment >= 100000000) {
+                    // High investment - Diamond card
+                    cards.push({
+                        id: 'card-diamond',
+                        name: 'Diamond Card • TH-001',
+                        value: 100000000,
+                        sessions: 24,
+                        padToken: 10000,
+                        status: 'active',
+                        usedSessions: Math.floor(Math.random() * 5) + 1,
+                        maxSessions: 24,
+                        benefitsUsed: Math.floor(Math.random() * 20000000) + 5000000,
+                        maxBenefits: 210000000
+                    });
+                }
+                
+                if (totalInvestment >= 18000000) {
+                    // Medium investment - Gold card
+                    cards.push({
+                        id: 'card-gold',
+                        name: 'Gold Card • TH-002',
+                        value: 18000000,
+                        sessions: 18,
+                        padToken: 1800,
+                        status: 'active',
+                        usedSessions: Math.floor(Math.random() * 10) + 2,
+                        maxSessions: 18,
+                        benefitsUsed: Math.floor(Math.random() * 10000000) + 2000000,
+                        maxBenefits: 37800000
+                    });
+                }
+                
+                if (totalInvestment >= 8000000) {
+                    // Lower investment - Silver card
+                    cards.push({
+                        id: 'card-silver',
+                        name: 'Silver Card • TH-003',
+                        value: 8000000,
+                        sessions: 15,
+                        padToken: 800,
+                        status: 'active',
+                        usedSessions: Math.floor(Math.random() * 8) + 1,
+                        maxSessions: 15,
+                        benefitsUsed: Math.floor(Math.random() * 5000000) + 1000000,
+                        maxBenefits: 16800000
+                    });
+                }
+                
+                // Always add at least one card based on role
+                if (cards.length === 0) {
+                    // Default card based on role
+                    const defaultCard = getDefaultCardForRole(role, totalInvestment);
+                    cards.push(defaultCard);
+                }
+                
+                // Add role-specific cards
+                addRoleSpecificCards(cards, role, totalInvestment);
+            }
+            
+            return cards;
+        }
+
+        function getDefaultCardForRole(role, totalInvestment) {
+            const cardConfigs = {
+                'founder': {
+                    name: 'Founder Premium Card • TH-001',
+                    value: 245000000,
+                    sessions: 30,
+                    padToken: 24500,
+                    maxBenefits: 514500000
+                },
+                'angel': {
+                    name: 'Angel VIP Card • TH-002',
+                    value: 100000000,
+                    sessions: 24,
+                    padToken: 10000,
+                    maxBenefits: 210000000
+                },
+                'seed': {
+                    name: 'Seed Elite Card • TH-003',
+                    value: 50000000,
+                    sessions: 20,
+                    padToken: 5000,
+                    maxBenefits: 105000000
+                },
+                'retail': {
+                    name: 'Retail Standard Card • TH-004',
+                    value: 30000000,
+                    sessions: 18,
+                    padToken: 3000,
+                    maxBenefits: 63000000
+                },
+                'asset_contributor': {
+                    name: 'Asset Partner Card • TH-005',
+                    value: 50000000,
+                    sessions: 20,
+                    padToken: 5000,
+                    maxBenefits: 105000000
+                },
+                'intellectual_contributor': {
+                    name: 'Intellectual Partner Card • TH-006',
+                    value: Math.max(totalInvestment, 20000000),
+                    sessions: 16,
+                    padToken: Math.max(Math.floor(totalInvestment / 10000), 2000),
+                    maxBenefits: Math.max(totalInvestment * 2.1, 42000000)
+                },
+                'franchise_branch': {
+                    name: 'Franchise Business Card • TH-007',
+                    value: 200000000,
+                    sessions: 25,
+                    padToken: 20000,
+                    maxBenefits: 420000000
+                },
+                'card_customer': {
+                    name: 'Customer Care Card • TH-008',
+                    value: Math.max(totalInvestment, 2000000),
+                    sessions: 12,
+                    padToken: Math.max(Math.floor(totalInvestment / 10000), 200),
+                    maxBenefits: Math.max(totalInvestment * 2.1, 4200000)
+                }
+            };
+            
+            const config = cardConfigs[role] || cardConfigs['card_customer'];
+            
+            return {
+                id: `card-${role}-001`,
+                name: config.name,
+                value: config.value,
+                sessions: config.sessions,
+                padToken: config.padToken,
+                status: 'active',
+                usedSessions: Math.floor(Math.random() * Math.min(config.sessions, 10)) + 1,
+                maxSessions: config.sessions,
+                benefitsUsed: Math.floor(Math.random() * Math.min(config.maxBenefits * 0.3, 10000000)) + 1000000,
+                maxBenefits: config.maxBenefits
+            };
+        }
+
+        function addRoleSpecificCards(cards, role, totalInvestment) {
+            // Add additional cards based on role
+            switch(role) {
+                case 'founder':
+                    cards.push({
+                        id: 'card-founder-bonus',
+                        name: 'Founder Bonus Card • TH-009',
+                        value: 50000000,
+                        sessions: 15,
+                        padToken: 5000,
+                        status: 'active',
+                        usedSessions: 2,
+                        maxSessions: 15,
+                        benefitsUsed: 2000000,
+                        maxBenefits: 105000000
+                    });
+                    break;
+                case 'angel':
+                    cards.push({
+                        id: 'card-angel-bonus',
+                        name: 'Angel Bonus Card • TH-010',
+                        value: 20000000,
+                        sessions: 12,
+                        padToken: 2000,
+                        status: 'active',
+                        usedSessions: 1,
+                        maxSessions: 12,
+                        benefitsUsed: 1000000,
+                        maxBenefits: 42000000
+                    });
+                    break;
+            }
+        }
+
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        function loadMemberCards() {
+            const memberData = JSON.parse(localStorage.getItem('memberData') || '{}');
+            const cards = generateMockCards(memberData);
+            
+            const container = document.getElementById('memberCardsContainer');
+            if (!container) {
+                console.error('memberCardsContainer not found');
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            // If no cards generated, show a default message
+            if (cards.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-gray-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                        <p class="text-lg">Chưa có thẻ chăm sóc nào</p>
+                        <p class="text-sm">Hãy mua thẻ để bắt đầu sử dụng dịch vụ</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            cards.forEach(card => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300';
+                cardElement.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="font-semibold text-gray-800">${card.name}</h3>
+                            <p class="text-sm text-gray-600">${formatCurrency(card.value)}</p>
+                        </div>
+                        <span class="px-2 py-1 text-xs font-medium rounded-full ${card.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${card.status === 'active' ? 'Hoạt động' : 'Không hoạt động'}
+                        </span>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Lượt trị liệu</span>
+                                <span class="font-medium">${card.usedSessions}/${card.maxSessions}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: ${(card.usedSessions / card.maxSessions) * 100}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="text-gray-600">Quyền lợi đã nhận</span>
+                                <span class="font-medium">${formatCurrency(card.benefitsUsed)}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: ${(card.benefitsUsed / card.maxBenefits) * 100}%"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-2 border-t border-gray-200">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-600">VCA Token:</span>
+                                <span class="font-semibold text-blue-600">${card.padToken.toLocaleString()} VCA</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 flex space-x-2">
+                        <button class="flex-1 bg-blue-600 text-white text-xs py-2 px-3 rounded-lg hover:bg-blue-700 transition-colors">
+                            Đặt lịch
+                        </button>
+                        <button class="flex-1 bg-green-600 text-white text-xs py-2 px-3 rounded-lg hover:bg-green-700 transition-colors">
+                            Sử dụng
+                        </button>
+                    </div>
+                `;
+                container.appendChild(cardElement);
+            });
+        }
+
+        // Test functions
+        function testDemoUser() {
+            localStorage.setItem('memberData', JSON.stringify({
+                name: 'Nguyễn Văn Demo',
+                role: 'demo'
+            }));
+            loadMemberCards();
+            console.log('Testing Demo User');
+        }
+
+        function testNewUser() {
+            localStorage.setItem('memberData', JSON.stringify({
+                name: 'Nguyễn Thị Mới',
+                role: 'customer',
+                totalInvestment: 5000000,
+                selectedValues: [{
+                    type: 'Card Customer',
+                    minValue: 5000000
+                }]
+            }));
+            loadMemberCards();
+            console.log('Testing New User');
+        }
+
+        function testFounder() {
+            localStorage.setItem('memberData', JSON.stringify({
+                name: 'Nguyễn Văn Sáng Lập',
+                role: 'founder',
+                totalInvestment: 245000000,
+                selectedValues: [{
+                    type: 'Founding Shareholder',
+                    minValue: 245000000
+                }]
+            }));
+            loadMemberCards();
+            console.log('Testing Founder');
+        }
+
+        function clearData() {
+            localStorage.removeItem('memberData');
+            loadMemberCards();
+            console.log('Data cleared');
+        }
+
+        // Load cards on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMemberCards();
+        });
+    </script>
+</body>
+</html>

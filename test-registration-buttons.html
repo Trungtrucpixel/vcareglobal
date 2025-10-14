@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Registration Buttons</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-6">Test Registration Buttons</h1>
+    
+    <!-- Test buttons -->
+    <div class="space-y-4">
+        <button onclick="openRegistrationModal()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            Đăng ký ngay
+        </button>
+        
+        <button onclick="openRegistrationModal()" class="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700">
+            Bắt đầu đăng ký
+        </button>
+        
+        <button onclick="testFunction()" class="bg-green-600 text-white px-4 py-2 rounded-lg">
+            Test Function
+        </button>
+    </div>
+    
+    <!-- Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-gray-200">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-2xl">✨</span>
+                        <h2 class="text-xl font-bold text-gray-800">Đăng ký đồng hành nhanh</h2>
+                    </div>
+                    <button onclick="closeRegistrationModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                        ×
+                    </button>
+                </div>
+                
+                <div class="p-6">
+                    <div class="text-center">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Modal hoạt động!</h3>
+                        <p class="text-gray-600 mb-6">Nút đăng ký đã hoạt động bình thường.</p>
+                        <button onclick="closeRegistrationModal()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openRegistrationModal() {
+            console.log('Opening registration modal...');
+            const modal = document.getElementById('registrationModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                console.log('Modal opened successfully');
+            } else {
+                console.error('Registration modal not found!');
+            }
+        }
+
+        function closeRegistrationModal() {
+            const modal = document.getElementById('registrationModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                console.log('Modal closed');
+            }
+        }
+
+        function testFunction() {
+            alert('Test function hoạt động!');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded successfully!');
+        });
+    </script>
+</body>
+</html>

@@ -673,7 +673,7 @@ const AssetContribution = () => {
               />
               {assetForm.valuationAmount && (
                 <p className="text-sm text-gray-600 mt-1">
-                  PAD Token tương ứng: <strong>{((parseFloat(assetForm.valuationAmount) / 1000000) * 100).toFixed(2)} PAD</strong>
+                  VCA Token tương ứng: <strong>{((parseFloat(assetForm.valuationAmount) / 1000000) * 100).toFixed(2)} VCA</strong>
                 </p>
               )}
             </div>
@@ -729,7 +729,7 @@ const AssetContribution = () => {
                 <TableRow>
                   <TableHead>Tên tài sản</TableHead>
                   <TableHead>Giá trị</TableHead>
-                  <TableHead>PAD Token</TableHead>
+                  <TableHead>VCA Token</TableHead>
                   <TableHead>Trạng thái</TableHead>
                   <TableHead>Ngày tạo</TableHead>
                 </TableRow>
@@ -744,7 +744,7 @@ const AssetContribution = () => {
                       {formatCurrency(contribution.valuationAmount)}
                     </TableCell>
                     <TableCell data-testid={`text-asset-pad-${contribution.id}`}>
-                      {contribution.padTokenAmount} PAD
+                      {contribution.padTokenAmount} VCA
                     </TableCell>
                     <TableCell data-testid={`badge-asset-status-${contribution.id}`}>
                       <Badge variant={getStatusBadgeVariant(contribution.status)}>
@@ -773,7 +773,7 @@ const AssetContribution = () => {
   );
 };
 
-// PAD Token Component
+// VCA Token Component
 const PadToken = () => {
   const { data: history = [] } = useQuery<PadTokenHistory[]>({ 
     queryKey: ['/api/pad-token/history'] 
@@ -815,7 +815,7 @@ const PadToken = () => {
           </div>
           {roiProjection.length === 0 && (
             <div className="text-center py-8 text-gray-500">
-              Chưa có dữ liệu PAD Token để dự đoán
+              Chưa có dữ liệu VCA Token để dự đoán
             </div>
           )}
           <div className="mt-4 p-4 bg-blue-50 rounded-lg">
@@ -827,12 +827,12 @@ const PadToken = () => {
         </CardContent>
       </Card>
 
-      {/* PAD Token History */}
+      {/* VCA Token History */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <DollarSign className="h-5 w-5 text-yellow-500" />
-            Lịch sử PAD Token
+            Lịch sử VCA Token
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -842,7 +842,7 @@ const PadToken = () => {
                 <TableRow>
                   <TableHead>Ngày</TableHead>
                   <TableHead>Loại giao dịch</TableHead>
-                  <TableHead>Số lượng PAD</TableHead>
+                  <TableHead>Số lượng VCA</TableHead>
                   <TableHead>Mô tả</TableHead>
                 </TableRow>
               </TableHeader>
@@ -862,7 +862,7 @@ const PadToken = () => {
                     </TableCell>
                     <TableCell data-testid={`text-pad-amount-${index}`}>
                       <span className="font-medium text-green-600">
-                        +{item.amount} PAD
+                        +{item.amount} VCA
                       </span>
                     </TableCell>
                     <TableCell data-testid={`text-pad-description-${index}`}>
@@ -875,7 +875,7 @@ const PadToken = () => {
           </div>
           {history.length === 0 && (
             <div className="text-center py-8 text-gray-500">
-              Chưa có lịch sử PAD Token
+              Chưa có lịch sử VCA Token
             </div>
           )}
         </CardContent>
@@ -915,7 +915,7 @@ export default function CashFlowTab() {
           </TabsTrigger>
           <TabsTrigger value="padtoken" data-testid="tab-padtoken">
             <DollarSign className="h-4 w-4 mr-2" />
-            PAD Token
+            VCA Token
           </TabsTrigger>
           <TabsTrigger value="history" data-testid="tab-history">
             <FileText className="h-4 w-4 mr-2" />

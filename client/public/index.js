@@ -224,7 +224,7 @@ class HomepageManager {
             const cardData = this.getCardData(this.selectedCard);
             if (cardData) {
                 benefits.push(`<div class="flex items-center"><i class="fas fa-id-card text-blue-600 mr-2"></i><span>Thẻ ${cardData.name}: ${cardData.sessions} lượt tư vấn/2 năm</span></div>`);
-                benefits.push(`<div class="flex items-center"><i class="fas fa-coins text-yellow-600 mr-2"></i><span>PAD Token: ${cardData.padToken} PAD</span></div>`);
+                benefits.push(`<div class="flex items-center"><i class="fas fa-coins text-yellow-600 mr-2"></i><span>VCA Token: ${cardData.padToken} VCA</span></div>`);
                 benefits.push(`<div class="flex items-center"><i class="fas fa-qrcode text-green-600 mr-2"></i><span>Check-in QR code</span></div>`);
             }
         }
@@ -234,13 +234,13 @@ class HomepageManager {
         if (selectedRoles.length > 0) {
             benefits.push(`<div class="flex items-center"><i class="fas fa-users text-purple-600 mr-2"></i><span>Vai trò: ${selectedRoles.join(', ')}</span></div>`);
             
-            // Calculate PAD Token bonus for roles
+            // Calculate VCA Token bonus for roles
             const investmentAmount = parseInt(document.getElementById('reg-investment').value) || 0;
             if (investmentAmount > 0) {
                 const totalRolePadToken = selectedRoles.reduce((total, role) => {
                     return total + this.calculateRolePadToken(role, investmentAmount);
                 }, 0);
-                benefits.push(`<div class="flex items-center"><i class="fas fa-star text-orange-600 mr-2"></i><span>PAD Token bonus vai trò: ${totalRolePadToken} PAD</span></div>`);
+                benefits.push(`<div class="flex items-center"><i class="fas fa-star text-orange-600 mr-2"></i><span>VCA Token bonus vai trò: ${totalRolePadToken} VCA</span></div>`);
             }
         }
 
@@ -269,7 +269,7 @@ class HomepageManager {
         return cardTypes[cardType];
     }
 
-    // Calculate PAD Token for role
+    // Calculate VCA Token for role
     calculateRolePadToken(roleName, investmentAmount) {
         const roleMultipliers = {
             "Cổ đông": 2.0,
@@ -283,7 +283,7 @@ class HomepageManager {
         };
         
         const multiplier = roleMultipliers[roleName] || 1.0;
-        const basePadToken = (investmentAmount / 1000000) * 100; // 100 PAD = 1 million VNĐ
+        const basePadToken = (investmentAmount / 1000000) * 100; // 100 VCA = 1 million VNĐ
         return Math.round(basePadToken * multiplier);
     }
 
@@ -357,8 +357,8 @@ class HomepageManager {
                 <div class="space-y-1 text-sm text-green-700">
                     <p><strong>Họ tên:</strong> ${data.user.name}</p>
                     <p><strong>Email:</strong> ${data.user.email}</p>
-                    <p><strong>PAD Token nhận được:</strong> ${data.padTokenEarned}</p>
-                    <p><strong>Tổng PAD Token:</strong> ${data.totalPadToken}</p>
+                    <p><strong>VCA Token nhận được:</strong> ${data.padTokenEarned}</p>
+                    <p><strong>Tổng VCA Token:</strong> ${data.totalPadToken}</p>
                     ${data.card ? `<p><strong>Thẻ:</strong> ${data.card.type} - ${parseInt(data.card.price).toLocaleString('vi-VN')} VNĐ</p>` : ''}
                     ${data.roles.length > 0 ? `<p><strong>Vai trò:</strong> ${data.roles.join(', ')}</p>` : ''}
                 </div>
@@ -523,8 +523,8 @@ class HomepageManager {
                     <p><strong>Gói thẻ:</strong> ${cardType}</p>
                     <p><strong>Giá:</strong> ${this.formatCurrency(price)}</p>
                     <p><strong>Lượt tư vấn:</strong> ${sessions} lượt/2 năm</p>
-                    <p><strong>PAD Token nhận được:</strong> ${data.padTokenEarned || 0}</p>
-                    <p><strong>Tổng PAD Token:</strong> ${data.user.totalPadToken}</p>
+                    <p><strong>VCA Token nhận được:</strong> ${data.padTokenEarned || 0}</p>
+                    <p><strong>Tổng VCA Token:</strong> ${data.user.totalPadToken}</p>
                     <p><strong>Họ tên:</strong> ${data.user.name}</p>
                     <p><strong>Email:</strong> ${data.user.email}</p>
                     <p><strong>Trạng thái thẻ:</strong> ${data.card.status}</p>
@@ -605,7 +605,7 @@ class HomepageManager {
                         <span class="font-semibold">${sessions} lượt/2 năm</span>
                     </div>
                     <div class="flex justify-between">
-                        <span class="text-gray-600">PAD Token:</span>
+                        <span class="text-gray-600">VCA Token:</span>
                         <span class="font-semibold text-blue-600">${data.padTokenEarned || 0}</span>
                     </div>
                     <div class="flex justify-between">

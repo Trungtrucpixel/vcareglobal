@@ -849,28 +849,28 @@ export class PostgresStorage implements IStorage {
     return this.getUser(userId);
   }
 
-  async updateUserPadToken(userId: string, padToken: number, reason: string, adminId: string): Promise<User | undefined> {
+  async updateUserPadToken(userId: string, vcaDigitalShare: number, reason: string, adminId: string): Promise<User | undefined> {
     // Get current user to track previous amount
     const currentUser = await this.getUser(userId);
     if (!currentUser) return undefined;
 
-    const previousAmount = parseFloat(currentUser.padToken || "0");
-    const changeAmount = padToken - previousAmount;
+    const previousAmount = parseFloat(currentUser.vcaDigitalShare || "0");
+    const changeAmount = vcaDigitalShare - previousAmount;
 
-    // Update user PAD Token
+    // Update user VCA Digital Share
     const [updated] = await db.update(schema.users)
       .set({ 
-        padToken: padToken.toString(),
+        vcaDigitalShare: vcaDigitalShare.toString(),
         updatedAt: new Date()
       })
       .where(eq(schema.users.id, userId))
       .returning();
 
-    // Create PAD Token history record
-    await db.insert(schema.padTokenHistory).values({
+    // Create VCA Digital Share history record
+    await db.insert(schema.vcaDigitalShareHistory).values({
       userId,
       previousAmount: previousAmount.toString(),
-      newAmount: padToken.toString(),
+      newAmount: vcaDigitalShare.toString(),
       changeAmount: changeAmount.toString(),
       changeType: "admin_update",
       reason: reason || "Cập nhật bởi admin",
@@ -884,7 +884,7 @@ export class PostgresStorage implements IStorage {
       entityType: "user",
       entityId: userId,
       oldValue: previousAmount.toString(),
-      newValue: padToken.toString(),
+      newValue: vcaDigitalShare.toString(),
       ipAddress: null,
       userAgent: null,
     });
@@ -894,9 +894,9 @@ export class PostgresStorage implements IStorage {
 
   async getUserPadTokenHistory(userId: string): Promise<any[]> {
     return await db.select()
-      .from(schema.padTokenHistory)
-      .where(eq(schema.padTokenHistory.userId, userId))
-      .orderBy(desc(schema.padTokenHistory.createdAt));
+      .from(schema.vcaDigitalShareHistory)
+      .where(eq(schema.vcaDigitalShareHistory.userId, userId))
+      .orderBy(desc(schema.vcaDigitalShareHistory.createdAt));
   }
 
   // Role management methods
@@ -986,12 +986,12 @@ export class PostgresStorage implements IStorage {
       email: user.email,
       role: user.role,
       businessTier: user.businessTier,
-      padToken: parseFloat(user.padToken || "0"),
+      vcaDigitalShare: parseFloat(user.vcaDigitalShare || "0"),
       totalShares: parseFloat(user.totalShares || "0"),
       investmentAmount: parseFloat(user.investmentAmount || "0"),
       status: user.status,
       createdAt: user.createdAt,
-      // Calculate benefits based on role and PAD Token
+      // Calculate benefits based on role and VCA Digital Share
       benefits: this.calculateUserBenefits(user)
     }));
   }
@@ -1024,11 +1024,11 @@ export class PostgresStorage implements IStorage {
   }
 
   private calculateUserBenefits(user: User): any {
-    const padToken = parseFloat(user.padToken || "0");
+    const vcaDigitalShare = parseFloat(user.vcaDigitalShare || "0");
     const shares = parseFloat(user.totalShares || "0");
     
     return {
-      padTokenValue: padToken * 10000, // 100 PAD = 1M VND, so 1 PAD = 10,000 VND
+      vcaDigitalShareValue: vcaDigitalShare * 10000, // 100 VCA = 1M VND, so 1 VCA = 10,000 VND
       sharesValue: shares * 1000000, // 1 share = 1M VND
       connectionCommission: user.role === "staff" ? 8 : 0, // 8% for staff
       vipSupport: user.role === "staff" ? 5 : 0, // 5% for staff
@@ -1054,23 +1054,79 @@ export class PostgresStorage implements IStorage {
 
   private getConsultationSessions(businessTier: string): number {
     const sessionsMap: Record<string, number> = {
-      "founder": 24,
-      "angel": 21,
+      "founder": 24,                    // Unlimited consultation
+      "angel": 21,                      // High-tier consultation
+      "seed": 18,                       // Medium-tier consultation
+      "vcare_home": 15,                 // Standard consultation
+      "asset_contributor": 18,          // Asset contributor benefits
+      "intellectual_contributor": 20,   // Intellectual contributor benefits
+      "franchise_branch": 18,           // Franchise benefits
+      "card_customer": 12,              // Basic card benefits
+      // Legacy support
       "branch": 18,
-      "card_customer": 12,
       "staff": 15
     };
     return sessionsMap[businessTier] || 12;
   }
 
-  private getMaxoutLimit(businessTier: string): number {
-    const limitMap: Record<string, number> = {
-      "founder": 0, // unlimited
-      "angel": 5, // 5x
+  private getMaxoutLimit(businessTier: string): number | 'unlimited' {
+    const limitMap: Record<string, number | 'unlimited'> = {
+      "founder": 'unlimited',           // No limit
+      "angel": 5.0,                     // 5x (500%)
+      "seed": 4.0,                      // 4x (400%)
+      "vcare_home": 3.0,                // 3x (300%)
+      "asset_contributor": 2.0,         // 2x (200%)
+      "intellectual_contributor": 2.5,  // 2.5x (250%)
+      "franchise_branch": 1.5,          // 1.5x (150%)
+      "card_customer": 2.1,             // 2.1x (210%)
+      // Legacy support
       "branch": 2.1, // 210%
-      "card_customer": 2.1, // 210%
       "staff": 1 // 100%
     };
     return limitMap[businessTier] || 1;
+  }
+
+  // Withdrawal operations
+  async createWithdrawalRequest(withdrawal: any): Promise<any> {
+    // For now, just return the withdrawal data
+    // In production, you'd insert into a withdrawals table
+    return withdrawal;
+  }
+
+  async getWithdrawalHistory(userId: string): Promise<any[]> {
+    // For now, return empty array
+    // In production, you'd query the withdrawals table
+    return [];
+  }
+
+  async getWithdrawalById(withdrawalId: string): Promise<any | undefined> {
+    // For now, return undefined
+    // In production, you'd query the withdrawals table
+    return undefined;
+  }
+
+  async updateWithdrawalStatus(withdrawalId: string, status: string, updatedBy?: string): Promise<any | undefined> {
+    // For now, return undefined
+    // In production, you'd update the withdrawals table
+    return undefined;
+  }
+
+  // KYC operations
+  async createKycRecord(kyc: any): Promise<any> {
+    // For now, just return the kyc data
+    // In production, you'd insert into a kyc_records table
+    return kyc;
+  }
+
+  async getKycByUserId(userId: string): Promise<any | undefined> {
+    // For now, return undefined
+    // In production, you'd query the kyc_records table
+    return undefined;
+  }
+
+  async updateKycStatus(kycId: string, status: string, updatedBy?: string): Promise<any | undefined> {
+    // For now, return undefined
+    // In production, you'd update the kyc_records table
+    return undefined;
   }
 }

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Referral System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">🔗 Test Hệ Thống Referral</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Test Referral Links -->
+            <div class="space-y-4">
+                <h2 class="text-lg font-semibold text-gray-800">🧪 Test Referral Links</h2>
+                
+                <div class="space-y-3">
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-blue-800 mb-2">Link Test 1:</h3>
+                        <p class="text-sm text-blue-700 mb-2">https://vcareglobal.vn/ref/USER123456</p>
+                        <button onclick="testReferralLink('USER123456')" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                            🚀 Test Link
+                        </button>
+                    </div>
+
+                    <div class="bg-green-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-green-800 mb-2">Link Test 2:</h3>
+                        <p class="text-sm text-green-700 mb-2">https://vcareglobal.vn/ref/ADMIN789</p>
+                        <button onclick="testReferralLink('ADMIN789')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                            🚀 Test Link
+                        </button>
+                    </div>
+
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-semibold text-purple-800 mb-2">Link Test 3:</h3>
+                        <p class="text-sm text-purple-700 mb-2">https://vcareglobal.vn/ref/VIP001</p>
+                        <button onclick="testReferralLink('VIP001')" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                            🚀 Test Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Test Results -->
+            <div class="space-y-4">
+                <h2 class="text-lg font-semibold text-gray-800">📊 Kết Quả Test</h2>
+                
+                <div id="testResults" class="bg-gray-50 p-4 rounded-lg min-h-64">
+                    <p class="text-gray-600">Click vào các link test để xem kết quả...</p>
+                </div>
+
+                <div class="bg-yellow-50 p-4 rounded-lg">
+                    <h3 class="font-semibold text-yellow-800 mb-2">⚠️ Lưu ý:</h3>
+                    <ul class="text-sm text-yellow-700 space-y-1">
+                        <li>• Referral links sử dụng domain vcareglobal.vn</li>
+                        <li>• Links sẽ redirect về homepage với tracking</li>
+                        <li>• Referral code được lưu trong session</li>
+                        <li>• Hiển thị notification khi có referral</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direct Test Section -->
+        <div class="mt-8 p-6 bg-gray-50 rounded-lg">
+            <h2 class="text-lg font-semibold text-gray-800 mb-4">🔧 Direct API Test</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="testDirectReferral('USER123456')" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+                    🧪 Test API Direct
+                </button>
+                
+                <button onclick="checkCurrentReferral()" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
+                    📋 Check Current Referral
+                </button>
+                
+                <button onclick="clearReferralData()" class="bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700">
+                    🗑️ Clear Referral Data
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testReferralLink(referralCode) {
+            const link = `http://localhost:3000/ref/${referralCode}`;
+            const resultsDiv = document.getElementById('testResults');
+            
+            resultsDiv.innerHTML = `
+                <div class="space-y-2">
+                    <p class="font-semibold">🔗 Testing: ${link}</p>
+                    <p class="text-sm text-gray-600">Opening link in new tab...</p>
+                    <div class="bg-blue-100 p-3 rounded">
+                        <p class="text-sm">✅ Link sẽ redirect về: <code>/?ref=${referralCode}</code></p>
+                        <p class="text-sm">✅ Referral code sẽ được lưu trong session</p>
+                        <p class="text-sm">✅ Hiển thị notification trên homepage</p>
+                    </div>
+                </div>
+            `;
+            
+            // Open link in new tab
+            window.open(link, '_blank');
+        }
+
+        async function testDirectReferral(referralCode) {
+            try {
+                const response = await fetch(`http://localhost:3000/ref/${referralCode}`, {
+                    method: 'GET',
+                    redirect: 'manual'
+                });
+                
+                const resultsDiv = document.getElementById('testResults');
+                
+                if (response.status === 302 || response.status === 301) {
+                    const redirectUrl = response.headers.get('Location');
+                    resultsDiv.innerHTML = `
+                        <div class="space-y-2">
+                            <p class="font-semibold text-green-600">✅ API Test Thành Công!</p>
+                            <p class="text-sm">Status: ${response.status}</p>
+                            <p class="text-sm">Redirect to: <code>${redirectUrl}</code></p>
+                            <p class="text-sm">Referral Code: ${referralCode}</p>
+                        </div>
+                    `;
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="space-y-2">
+                            <p class="font-semibold text-red-600">❌ API Test Thất Bại</p>
+                            <p class="text-sm">Status: ${response.status}</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Direct API test error:', error);
+                document.getElementById('testResults').innerHTML = `
+                    <div class="space-y-2">
+                        <p class="font-semibold text-red-600">❌ Error: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function checkCurrentReferral() {
+            const referralCode = localStorage.getItem('referralCode');
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlRef = urlParams.get('ref');
+            
+            const resultsDiv = document.getElementById('testResults');
+            
+            resultsDiv.innerHTML = `
+                <div class="space-y-2">
+                    <p class="font-semibold">📋 Current Referral Status:</p>
+                    <p class="text-sm">LocalStorage: <code>${referralCode || 'None'}</code></p>
+                    <p class="text-sm">URL Parameter: <code>${urlRef || 'None'}</code></p>
+                    <p class="text-sm">Current URL: <code>${window.location.href}</code></p>
+                </div>
+            `;
+        }
+
+        function clearReferralData() {
+            localStorage.removeItem('referralCode');
+            document.getElementById('testResults').innerHTML = `
+                <div class="space-y-2">
+                    <p class="font-semibold text-green-600">✅ Referral Data Cleared!</p>
+                    <p class="text-sm">LocalStorage referral code đã được xóa</p>
+                </div>
+            `;
+        }
+
+        // Check for referral code on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const referralCode = urlParams.get('ref');
+            
+            if (referralCode) {
+                document.getElementById('testResults').innerHTML = `
+                    <div class="space-y-2">
+                        <p class="font-semibold text-green-600">🎉 Referral Code Detected!</p>
+                        <p class="text-sm">Code: <code>${referralCode}</code></p>
+                        <p class="text-sm">This page was accessed via referral link</p>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

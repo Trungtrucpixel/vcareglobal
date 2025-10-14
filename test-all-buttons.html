@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test All Buttons</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-6">Test All Buttons</h1>
+    
+    <!-- Test buttons -->
+    <div class="space-y-4">
+        <button onclick="testRegistration()" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+            Đăng ký ngay
+        </button>
+        
+        <button onclick="testLogin()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
+            Đăng nhập
+        </button>
+        
+        <button onclick="testBenefits()" class="border-2 border-blue-600 text-blue-600 px-6 py-2 rounded-lg hover:bg-blue-50">
+            Xem quyền lợi thẻ
+        </button>
+        
+        <button onclick="testFunction()" class="bg-purple-600 text-white px-4 py-2 rounded-lg">
+            Test Function
+        </button>
+    </div>
+    
+    <!-- Test section for scrolling -->
+    <div class="mt-20 p-8 bg-white rounded-lg">
+        <h2 id="benefits" class="text-2xl font-bold text-gray-800 mb-4">Benefits Section (Scroll Target)</h2>
+        <p class="text-gray-600">This is the section that should be scrolled to when clicking "Xem quyền lợi thẻ"</p>
+    </div>
+
+    <script>
+        function testRegistration() {
+            console.log('Testing registration button...');
+            alert('Nút Đăng ký ngay hoạt động!');
+        }
+
+        function testLogin() {
+            console.log('Testing login button...');
+            alert('Nút Đăng nhập hoạt động!');
+        }
+
+        function testBenefits() {
+            console.log('Testing benefits button...');
+            try {
+                const benefitsSection = document.getElementById('benefits');
+                if (benefitsSection) {
+                    benefitsSection.scrollIntoView({ behavior: 'smooth' });
+                    console.log('Scrolled to benefits section successfully');
+                    alert('Scroll to benefits hoạt động!');
+                } else {
+                    console.error('Benefits section not found!');
+                    alert('Không tìm thấy benefits section!');
+                }
+            } catch (error) {
+                console.error('Error scrolling to benefits:', error);
+                alert('Lỗi khi scroll: ' + error.message);
+            }
+        }
+
+        function testFunction() {
+            alert('Test function hoạt động!');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Test page loaded successfully!');
+            console.log('All functions are available:', {
+                testRegistration: typeof testRegistration,
+                testLogin: typeof testLogin,
+                testBenefits: typeof testBenefits,
+                testFunction: typeof testFunction
+            });
+        });
+    </script>
+</body>
+</html>

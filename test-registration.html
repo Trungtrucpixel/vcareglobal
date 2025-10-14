@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Registration - Phúc An Dương</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto py-8 px-4">
+        <h1 class="text-3xl font-bold text-center mb-8">Test Registration API - Phúc An Dương</h1>
+        
+        <!-- Registration Form -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Đăng ký thẻ và vai trò</h2>
+            
+            <form id="registrationForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                        <input type="email" id="email" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                               placeholder="user@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại *</label>
+                        <input type="tel" id="phone" required 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                               placeholder="0123456789">
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Họ và tên *</label>
+                    <input type="text" id="name" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                           placeholder="Nguyễn Văn A">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Loại thẻ</label>
+                    <select id="cardType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        <option value="">Chọn loại thẻ</option>
+                        <option value="Standard">Standard - 12,000,000 VNĐ (1,200 PAD)</option>
+                        <option value="Silver">Silver - 15,000,000 VNĐ (1,500 PAD)</option>
+                        <option value="Gold">Gold - 18,000,000 VNĐ (1,800 PAD)</option>
+                        <option value="Platinum">Platinum - 21,000,000 VNĐ (2,100 PAD)</option>
+                        <option value="Diamond">Diamond - 24,000,000 VNĐ (2,400 PAD)</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Vai trò đầu tư (có thể chọn nhiều)</label>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Cổ đông" class="mr-2">
+                            <span class="text-sm">Cổ đông</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Angel" class="mr-2">
+                            <span class="text-sm">Angel</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Seed" class="mr-2">
+                            <span class="text-sm">Seed</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Retail" class="mr-2">
+                            <span class="text-sm">Retail</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Sáng lập" class="mr-2">
+                            <span class="text-sm">Sáng lập</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Thiên thần" class="mr-2">
+                            <span class="text-sm">Thiên thần</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Phát triển" class="mr-2">
+                            <span class="text-sm">Phát triển</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="roles" value="Đồng hành" class="mr-2">
+                            <span class="text-sm">Đồng hành</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Số tiền đầu tư (VNĐ)</label>
+                    <input type="number" id="investmentAmount" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                           placeholder="1000000" min="0">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Mã giới thiệu (tùy chọn)</label>
+                    <input type="text" id="referralCode" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500"
+                           placeholder="REF123">
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-teal-600 text-white py-3 px-4 rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 font-semibold">
+                    <i class="fas fa-paper-plane mr-2"></i>Đăng ký ngay
+                </button>
+            </form>
+        </div>
+        
+        <!-- API Info -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-bold mb-4">Thông tin API</h2>
+            <div class="space-y-2 text-sm">
+                <p><strong>Endpoint:</strong> POST /api/register</p>
+                <p><strong>Method:</strong> POST</p>
+                <p><strong>Content-Type:</strong> application/json</p>
+            </div>
+        </div>
+        
+        <!-- Response Display -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-bold mb-4">Kết quả đăng ký</h2>
+            <div id="response" class="bg-gray-100 p-4 rounded-md min-h-[200px]">
+                <p class="text-gray-500">Chưa có dữ liệu...</p>
+            </div>
+        </div>
+        
+        <!-- Test Buttons -->
+        <div class="mt-8 flex gap-4 justify-center">
+            <button onclick="testGetInfo()" 
+                    class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700">
+                <i class="fas fa-info-circle mr-2"></i>Test GET /api/register/info
+            </button>
+            <button onclick="testRegistration()" 
+                    class="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700">
+                <i class="fas fa-play mr-2"></i>Test Registration
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Test GET /api/register/info
+        async function testGetInfo() {
+            try {
+                const response = await fetch('/api/register/info');
+                const data = await response.json();
+                
+                document.getElementById('response').innerHTML = `
+                    <h3 class="font-bold text-green-600 mb-2">GET /api/register/info - Success</h3>
+                    <pre class="text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('response').innerHTML = `
+                    <h3 class="font-bold text-red-600 mb-2">GET /api/register/info - Error</h3>
+                    <p class="text-red-600">${error.message}</p>
+                `;
+            }
+        }
+
+        // Test registration with sample data
+        async function testRegistration() {
+            const sampleData = {
+                email: "test@example.com",
+                phone: "0123456789",
+                name: "Nguyễn Văn Test",
+                cardType: "Diamond",
+                roles: ["Cổ đông", "Angel"],
+                investmentAmount: 150000000,
+                referralCode: "TEST123"
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(sampleData)
+                });
+                
+                const data = await response.json();
+                
+                document.getElementById('response').innerHTML = `
+                    <h3 class="font-bold text-green-600 mb-2">POST /api/register - Success</h3>
+                    <pre class="text-sm overflow-auto">${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                document.getElementById('response').innerHTML = `
+                    <h3 class="font-bold text-red-600 mb-2">POST /api/register - Error</h3>
+                    <p class="text-red-600">${error.message}</p>
+                `;
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const roles = Array.from(document.querySelectorAll('input[name="roles"]:checked')).map(cb => cb.value);
+            
+            const data = {
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                name: document.getElementById('name').value,
+                cardType: document.getElementById('cardType').value || null,
+                roles: roles,
+                investmentAmount: parseInt(document.getElementById('investmentAmount').value) || 0,
+                referralCode: document.getElementById('referralCode').value || null
+            };
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    document.getElementById('response').innerHTML = `
+                        <h3 class="font-bold text-green-600 mb-2">Đăng ký thành công!</h3>
+                        <div class="space-y-2">
+                            <p><strong>User ID:</strong> ${result.data.user.id}</p>
+                            <p><strong>Email:</strong> ${result.data.user.email}</p>
+                            <p><strong>Tên:</strong> ${result.data.user.name}</p>
+                            <p><strong>PAD Token nhận được:</strong> ${result.data.padTokenEarned}</p>
+                            <p><strong>Tổng PAD Token:</strong> ${result.data.totalPadToken}</p>
+                            ${result.data.card ? `<p><strong>Thẻ:</strong> ${result.data.card.type} - ${result.data.card.price} VNĐ</p>` : ''}
+                            ${result.data.roles.length > 0 ? `<p><strong>Vai trò:</strong> ${result.data.roles.join(', ')}</p>` : ''}
+                        </div>
+                        <details class="mt-4">
+                            <summary class="cursor-pointer font-medium">Chi tiết JSON</summary>
+                            <pre class="text-xs mt-2 bg-gray-100 p-2 rounded overflow-auto">${JSON.stringify(result, null, 2)}</pre>
+                        </details>
+                    `;
+                } else {
+                    document.getElementById('response').innerHTML = `
+                        <h3 class="font-bold text-red-600 mb-2">Đăng ký thất bại</h3>
+                        <p class="text-red-600">${result.message}</p>
+                        <pre class="text-xs mt-2 bg-gray-100 p-2 rounded overflow-auto">${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('response').innerHTML = `
+                    <h3 class="font-bold text-red-600 mb-2">Lỗi kết nối</h3>
+                    <p class="text-red-600">${error.message}</p>
+                `;
+            }
+        });
+
+        // Auto-load API info on page load
+        window.addEventListener('load', () => {
+            testGetInfo();
+        });
+    </script>
+</body>
+</html>
+
